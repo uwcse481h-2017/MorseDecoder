@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Morse Decoder</title>
+
+		<!-- BOOTSTRAP --> 
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<!-- Latest compiled JavaScript -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		
+		<!-- ANGULAR -->
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+		<!-- PERSONAL -->
+		<!-- CSS --> 
+		<link rel="stylesheet" type="text/css" href="../css/morse.css">
+		<!-- JS --> 
+		<script  type="text/javascript" src="../js/morse.js"></script>
+		<!-- ICON -->
+    	<link rel="shortcut icon" href="../data/morse128.png">
+	</head>
+
+	<body>
+		<audio id="audio" src="../data/beep.wav"></audio>
+
+		<h1><img src="../data/tap.png" alt="Tap">Morse Decode</h1>
+
+		<div id="centered">
+			<div class="form-group" id="training">
+				<label for="trainingWord">Training Word:</label>
+				<input class="form-control form-fixed-width" id="trainingWord" type="text" placeholder="Training Word">
+				<button class="btn btn-primary" id="confirmWord">Confirm</button>
+			</div>
+
+			<div id="displayDiv">
+				<div id="morseInput">
+					<div class="btn btn-info" id="codeInput">Input</div>
+					<div id ="buttonDiv">
+						<button class="btn btn-primary" id="train">Calibrate</button>
+						<button id="test" class="btn btn-success" disabled>Decode</button>
+						<button id="clear" class="btn btn-default">Clear</button>
+					</div>
+				</div>
+				<br>
+				<div id="letterDiv">
+					<legend class="Translated signals">Letters:</legend>
+					<h2 id="letter"></h2>
+					<button class="btn btn-default" id="copy" data-copytarget="#letter">Copy to clipboard</button>
+				</div>
+			</div>
+		</div>
+
+		<div id ="canvasDiv">
+			<h3>Dots/Dashes</h3>
+			<canvas id="liveStreamCanvas" width="1000" height="60" ></canvas>
+
+			<h3>All Signals</h3>
+			<canvas id="myCanvas" width="1000" height="120"></canvas>
+		</div>
+
+		<br/>
+		<br/>
+
+		<table class="legend">
+			<tr>
+				<td class="color" id="blue"></td>
+				<td>Dot</td>
+				<td class="color" id="pink"></td>
+				<td>Dash</td>
+				<td class="color" id="red"></td>
+				<td>Element Space</td>
+				<td class="color" id="green"></td>
+				<td>Character Space</td>
+				<td class="color" id="black"></td>
+				<td>Unclassified Signal</td>
+			</tr>
+		</table>
+
+	</body>
+</html>

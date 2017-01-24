@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Morse Decode",
+  "version": "1.0.0",
+
+  "description": "Using a machine learning algorithm, Morse Decode provides an interface for mobility impaired users to communicate using Morse code input.",
+
+  "icons": {
+    "16" : "morse.png",
+    "32" : "morse32.png",
+    "48" : "morse48.png",
+    "128" : "morse128.png"
+  },
+
+  "browser_action": {
+    "default_icon": "morse.png",
+    "default_popup": "morse.html"
+  }
+}

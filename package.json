@@ -1,0 +1,31 @@
+{
+  "name": "morse_decoder",
+  "version": "1.0.0",
+  "description": "---------",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.5",
+    "express": "^4.14.0",
+    "express-session": "^1.15.0",
+    "mongoose": "^4.7.8",
+    "morgan": "^1.7.0",
+    "passport": "^0.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uwcse481h-2017/MorseDecoder.git"
+  },
+  "author": "Tisha Trongtham and Matthew Yang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uwcse481h-2017/MorseDecoder/issues"
+  },
+  "homepage": "https://github.com/uwcse481h-2017/MorseDecoder#readme"
+}

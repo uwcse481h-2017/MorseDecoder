@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+html, body {
+    height: 500px;
+}
+
+body {
+	font-family: Lato, "Open Sans", sans-serif;
+    text-align: center;
+    background-color: #f7f8f8;
+    min-width: 780px;
+}
+
+#codeInput {
+    cursor: pointer;
+    width: 120px;
+    height: 60px;
+    line-height: 50px;
+    border-radius: 30px;
+    background-color: #25b6b4;
+}
+
+h1 {
+  color: #FFFFFF;
+  background-color: #25b6b4;
+  margin-top: 0;
+  text-align: left;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+h2 {
+  margin-top:5px;
+}
+
+h3 {
+  color: #25b6b4;
+}
+
+#liveStreamCanvas {
+  width: 100%;
+  height: 60px;
+  background-color: white;
+}
+
+#morseInput {
+	display: none;
+	padding: 5px;
+}
+
+#timing {
+	overflow: auto;
+	height: 100px;
+	width: 300px;
+	clear: left;
+	font-size: 12px;
+}
+
+#displayDiv {
+	text-align: center;
+}
+
+#buttonDiv {
+	padding: 12px;
+	text-align: center;
+}
+
+#letterDiv {
+	display: none;
+}
+
+#letter {
+    background: none;
+    border: none;
+}
+
+input:focus {
+    outline:none;
+}
+
+#canvasDiv {
+	  display: inline-block;
+    text-align: center;
+    width: 100%;
+    max-width: 1000px;
+}
+
+#myCanvas {
+    margin: auto;
+    display: block;
+    width: 100%;
+    height: 120px;
+    background-color: white;
+    border: 0px;
+}
+
+canvas {
+    border: 1px solid #d3d3d3;
+}
+
+.color {
+  display: inline-block;
+  width : 25px;
+  height : 25px;
+  border-radius: 25px;
+    margin-left: 50px;
+ 
+}
+
+.legend {
+  font-size: 10pt;
+}
+
+#red {
+  background-color: #ff9457;
+}
+
+#green {
+  background-color: #6ad26d;
+}
+
+#blue {
+  background-color: #25b6b4;
+}
+
+#pink {
+  background-color: #a96bcc;
+}
+
+#black {
+  background-color: black;
+}
+
+.legend div {
+  vertical-align: middle;
+}
+
+table {
+    margin: auto;
+}
+
+td, th {
+    padding: 5px;
+    text-align: center;
+}
+
+.form-fixed-width {
+    width: 220px !important;
+    display: inline-block;
+}
+
+#test {
+
+  display: none;
+}
