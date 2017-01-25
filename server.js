@@ -5,27 +5,28 @@
 // Loading required modules... 
 var express = require('express');
 var passport = require('passport');
+var flash = require('connect-flash');
 
-// var morgan = require('morgan');                         
-// var bodyParser = require('body-parser');                
-// var cookieParser = require('cookie-parser');
-// var session = require('express-session');
+var morgan = require('morgan');                         
+var bodyParser = require('body-parser');                
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 
-// var mongoose = require('mongoose');
-// var configDB = require('./config/db.js');
+var mongoose = require('mongoose');
+var configDB = require('./config/db.js');
 
 // CONFIG ================================================================
 
 // Configure connection to database
-// mongoose.connect(configDB.url);		
+mongoose.connect(configDB.url);		
 
 // Create and set up the Express application
 var app = express();
-// app.use(morgan('dev'));				//log requests
-// app.use(bodyParser.json());			//parse JSON in the request body
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(cookieParser()); 			// read cookies (needed for auth)
-// app.use(bodyParser()); 				// get information from html forms
+app.use(morgan('dev'));				//log requests
+app.use(bodyParser.json());			//parse JSON in the request body
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser()); 			// read cookies (needed for auth)
+app.use(bodyParser()); 				// get information from html forms
 
 // Allow "ejs" files, basically HTML embedded with JavaScript
 app.set('view engine', 'ejs'); 
@@ -33,13 +34,13 @@ app.engine('html', require('ejs').renderFile);
 app.set('views', __dirname + '/views');
 
 // Configure and set up Passport for user authentication
-// require('./config/passport')(passport); 
-// app.use(session({ 
-// 	secret: 'baf8127b-a160-4092-8a63-8b33ab520054' 
-// }));								// session secret
-// app.use(passport.initialize());
-// app.use(passport.session()); 		// persistent login sessions
-// app.use(flash()); 					// use connect-flash for flash messages stored in session
+require('./config/passport')(passport); 
+app.use(session({ 
+	secret: 'D1BC0816-37CC-429E-99EC-E5A7EE429E07' 
+}));								// session secret
+app.use(passport.initialize());
+app.use(passport.session()); 		// persistent login sessions
+app.use(flash()); 					// use connect-flash for flash messages stored in session
 
 // Configure routes 
 

@@ -21,7 +21,7 @@ body {
     background-color: #25b6b4;
 }
 
-h1 {
+/*h1 {
   color: #FFFFFF;
   background-color: #25b6b4;
   margin-top: 0;
@@ -29,7 +29,7 @@ h1 {
   padding-left: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
-}
+}*/
 
 h2 {
   margin-top:5px;
@@ -154,4 +154,20 @@ td, th {
 #test {
 
   display: none;
+}
+
+#mynav {
+  background-color: #25b6b4;
+}
+
+#mynav a {
+  color: #FFFFFF;
+}
+
+#rightnav a:active, #rightnav a:hover {
+  color: #25b6b4;
+}
+
+#logo {
+  height: 20px;
 }
