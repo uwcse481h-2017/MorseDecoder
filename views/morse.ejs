@@ -14,6 +14,12 @@
 		<!-- ANGULAR -->
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 
+		<!-- FONT AWESOME -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+		<!-- RESPONSIVE VOICE (TTS) -->
+		<script src="http://code.responsivevoice.org/responsivevoice.js"></script>
+
 		<!-- PERSONAL -->
 		<!-- CSS --> 
 		<link rel="stylesheet" type="text/css" href="../css/morse.css">
@@ -60,11 +66,13 @@
     <!-- /.Nav -->
 
 		<div class="container-fluid text-center">
+
 			<div>
 				<div class="form-group" id="training">
 					<label for="trainingWord">Training Word:</label>
 					<input class="form-control form-fixed-width" id="trainingWord" type="text" placeholder="Training Word">
-					<button class="btn btn-primary" id="confirmWord">Confirm</button>
+					<button class="btn btn-primary" id="confirmWord" onclick="hello()">Confirm</button>
+					
 				</div>
 
 				<div id="displayDiv">
@@ -80,7 +88,8 @@
 					<div id="letterDiv">
 						<legend class="Translated signals">Letters:</legend>
 						<h2 id="letter"></h2>
-						<button class="btn btn-default" id="copy" data-copytarget="#letter">Copy to clipboard</button>
+						<button class="btn btn-default" id="copy" data-copytarget="#letter"><i class="fa fa-clipboard" aria-hidden="true"></i>Copy to Clipboard</button>
+						<button class="btn btn-default" onclick="responsiveVoice.speak($('#letter').text().trim().toLowerCase()); console.log($('#letter').text().trim().toLowerCase())" type="button" value="Play"><i class="fa fa-play" aria-hidden="true"></i>Play</button>
 					</div>
 				</div>
 			</div>
@@ -114,3 +123,10 @@
 
 	</body>
 </html>
+
+<script>
+function hello() {
+	responsiveVoice.speak("hello world");
+	console.log('hi')
+}
+</script>

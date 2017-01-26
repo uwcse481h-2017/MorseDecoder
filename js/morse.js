@@ -59,9 +59,6 @@
                 test();
             }     
         }
-
-
-      
     };
 
     var copy = function(e) {
