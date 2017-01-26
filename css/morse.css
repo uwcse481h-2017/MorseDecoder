@@ -7,9 +7,8 @@ html, body {
 
 body {
 	font-family: Lato, "Open Sans", sans-serif;
-    text-align: center;
-    background-color: #f7f8f8;
-    min-width: 780px;
+  background-color: #f7f8f8;
+  min-width: 780px;
 }
 
 #codeInput {
@@ -164,8 +163,12 @@ td, th {
   color: #FFFFFF;
 }
 
-#rightnav a:active, #rightnav a:hover {
-  color: #25b6b4;
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
+  color: #25b6b4 !important;
+}
+
+.dropdown-menu>li>a {
+  color: black !important;
 }
 
 #logo {

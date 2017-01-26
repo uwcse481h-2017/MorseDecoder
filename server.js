@@ -43,7 +43,6 @@ app.use(passport.session()); 		// persistent login sessions
 app.use(flash()); 					// use connect-flash for flash messages stored in session
 
 // Configure routes 
-
 // serve static files from the /static subdirectory
 app.use(express.static(__dirname + '/views'));
 app.use('/js', express.static(__dirname + '/js'));

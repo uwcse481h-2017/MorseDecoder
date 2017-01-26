@@ -1,0 +1,27 @@
+body {
+	background-color: #25b6b4;
+}
+
+.wrapper {
+	margin: 30px 0 10px 0;
+}
+
+#brand {
+	color: white;
+    font-size: 20pt;
+}
+
+#brand:hover, #brand:active {
+	text-decoration: none;
+}
+
+.user-form {
+	background-color: white;
+	border: 1px solid #e7e7e7;
+	border-radius: 5px;
+	padding: 20px;
+}
+
+#btn-login {
+	width: 100%;
+}
