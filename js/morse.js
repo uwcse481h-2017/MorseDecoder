@@ -37,6 +37,7 @@
         Z: ["dash", "elementSpace", "dash", "elementSpace", "dot", "elementSpace", "dot", "charSpace"]
     };
 
+    // adds event handlers to different buttons 
     window.onload = function() {
         document.getElementById("train").onclick = train;
         document.getElementById("test").onclick = test;
@@ -61,6 +62,7 @@
         }
     };
 
+    // copy to clipboard 
     var copy = function(e) {
         var t = e.target,
             c = t.dataset.copytarget,
