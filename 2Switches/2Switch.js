@@ -1,20 +1,39 @@
 var timeout = null;
+var spaceTimer = null;
+var timerIsRunning = false;
+var timeToDotDashMap = {
+
+
+};
+
+
 
 $(document).ready(function(){
 
+	spaceTimer = new Stopwatch(); 
 
 	/*
 	Listens for switch inputs. 
 	*/
 	document.addEventListener("keydown", function(event) {
-		
+
+		//gets information about the time between inputs
+		if(timerIsRunning == true) {
+			console.log(spaceTimer.stop());
+			spaceTimer.reset();
+		} 
 		
 		replace(event);  
+
+		//starts timer 
+		spaceTimer.start();
+		timerIsRunning = true;
 	
 		if(timeout != null) {
 			clearTimeout(timeout);
 		}
 		
+		//append break " " or "/" to textarea after some time
 		timeout = setTimeout(function() {append(" ")}, 3000);
 		
 	});
@@ -40,12 +59,10 @@ Replaces bluetooth switch interface input with correspond dot/dash
 function replace(event) {
 
 	if(event.which == 32) {
-		console.log(event);
 		var dot = ".";
 		append(dot);
 
 	} else if(event.which == 13) {
-		console.log(event);
 		var dash = "-";
 		append(dash);
 
@@ -63,8 +80,6 @@ Inserts "." or "-" to the textarea
 
 */
 function append(morseCode) {
-	console.log(morseCode);
-
 	$('textarea').append(morseCode);
 
 }
