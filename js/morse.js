@@ -335,6 +335,8 @@
     NodeList.prototype.classify = function() {
         this.getUnknown();
 
+        console.log(this.unknownNode);
+
         this.numUnlabeled = this.unknownNode.length;
 
         if (this.numUnlabeled > 0) {
