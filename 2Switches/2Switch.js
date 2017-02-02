@@ -97,38 +97,9 @@ function recordSpacetime() {
 		spaceTimer.reset();
 	} 
 
-
 }
 
 
-function trainOnUserInput() {
-
-	train = true;
-
-	var practiceChar = ".";
-	
-	enter(practiceChar);
-
-}
-
-function enter(practiceChar) {
-
-	alert("enter: " + practiceChar);
-
-	checkInput(practiceChar);
-
-}
-
-function checkInput(practiceChar) {
-
-	if($("#calibrate").val() == practiceChar) {
-		alert("matches");
-
-	} else {
-		alert("no match");
-	}
-
-}
 
 
 
