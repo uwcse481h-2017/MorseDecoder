@@ -7,7 +7,7 @@ var Spacetime = require('../models/spacetime.js');
 module.exports = function(app, passport) {
 	// redirect default root to morse page
     app.get('/', function (req, res){
-        res.render('morse.ejs', {
+        res.render('index.html', {
             user : req.user // get the user out of session and pass to template
         });
     });
@@ -131,7 +131,6 @@ module.exports = function(app, passport) {
         });
 
 }
-
 
 // Route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {

@@ -346,7 +346,7 @@
                 this.determineClosest(this.currentUnknown); //this.closest is created
 
                 this.searchIndex = this.k;
-                this.possibleNodes = [];
+                this.possibles = [];
 
                 // compare closest neighbors, regardless of state
                 for(var j = 0; j < this.searchIndex; j++) {
