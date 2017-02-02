@@ -3,26 +3,22 @@ var spaceTimer = null;
 var timerIsRunning = false;
 var timeToDotDashMap = {
 
-
 };
 
+var train = false;
 
 
 $(document).ready(function(){
 
 	spaceTimer = new Stopwatch(); 
 
+	calibrateButton.onclick = trainOnUserInput;
+
 	/*
 	Listens for switch inputs. 
 	*/
 	document.addEventListener("keydown", function(event) {
 
-		//gets information about the time between inputs
-		if(timerIsRunning == true) {
-			console.log(spaceTimer.stop());
-			spaceTimer.reset();
-		} 
-		
 		replace(event);  
 
 		//starts timer 
@@ -35,6 +31,7 @@ $(document).ready(function(){
 		
 		//append break " " or "/" to textarea after some time
 		timeout = setTimeout(function() {append(" ")}, 3000);
+
 		
 	});
 
@@ -65,7 +62,6 @@ function replace(event) {
 	} else if(event.which == 13) {
 		var dash = "-";
 		append(dash);
-
 	}
 }
 
@@ -80,6 +76,59 @@ Inserts "." or "-" to the textarea
 
 */
 function append(morseCode) {
-	$('textarea').append(morseCode);
+
+	recordSpacetime();
+	
+	$("#text").append(morseCode);
+
+	if(train == true) {
+		$("#calibrate").append(morseCode);
+	}
 
 }
+
+function recordSpacetime() {
+
+	//gets information about the time between inputs
+	if(timerIsRunning == true) {
+		var time = spaceTimer.stop();
+		console.log(time);
+		$("#time").append(time.totalMs + " ");
+		spaceTimer.reset();
+	} 
+
+
+}
+
+
+function trainOnUserInput() {
+
+	train = true;
+
+	var practiceChar = ".";
+	
+	enter(practiceChar);
+
+}
+
+function enter(practiceChar) {
+
+	alert("enter: " + practiceChar);
+
+	checkInput(practiceChar);
+
+}
+
+function checkInput(practiceChar) {
+
+	if($("#calibrate").val() == practiceChar) {
+		alert("matches");
+
+	} else {
+		alert("no match");
+	}
+
+}
+
+
+
