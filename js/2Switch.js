@@ -63,7 +63,7 @@ $(document).ready(function() {
 		var idleInterval = setInterval(timerIncrement, WORD_SPACE);
 
 		/*
-		Listens for switch inputs. 
+		Listens for switch inputs
 		*/
 		var word = "";
 		document.addEventListener("keydown", function(event) {
