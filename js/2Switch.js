@@ -52,9 +52,18 @@ var idleTime = 0;
 var wordStarted = false;
 var breakStarted = false; 
 
-var train = true;
+var needCalib = true;
 
 $(document).ready(function(){
+
+	if(needCalib) {
+		$('#calibMsg').show();
+
+	} else {
+		$('#calibMsg').hide();
+
+	}
+
 	spaceTimer = new Stopwatch();
 	var idleInterval = setInterval(timerIncrement, LONG_SPACE);
 
@@ -63,6 +72,7 @@ $(document).ready(function(){
 	*/
 	var word = "";
 	document.addEventListener("keydown", function(event) {
+
 		idleTime = 0 ;
 		breakStarted = false;
 		wordStarted = true;
@@ -93,12 +103,28 @@ $(document).ready(function(){
 			word = appendAndRecord(word, "-");
 		}
 
-		// after some time, translate the letter 
-		timeout = setTimeout(function() {
-			$('#text').append("/");
-			$('#translation').append(morseDictionary[word]);
-			word = "";
-		}, 1000);
+		if(needCalib) {
+			
+			if(morseDictionary[word] == "H") {
+				
+				$('#translation').append(morseDictionary[word]);
+				$('#text').append("/");
+
+				//alert("found H");
+			}
+
+
+		} else {
+
+			// after some time, translate the letter 
+			timeout = setTimeout(function() {
+				$('#text').append("/");
+				$('#translation').append(morseDictionary[word]);
+				word = "";
+			}, 1000);
+
+		}
+		
 	});
 
 	/*
@@ -168,10 +194,6 @@ Inserts "." or "-" to the textarea
 function appendAndRecord(word, input) {
 	recordSpacetime();
 
-	if (train) {
-		$("#calibrate").append(input);
-	}
-	
 	$('#text').append(input);
 	return word += input;
 }
@@ -186,3 +208,6 @@ function recordSpacetime() {
 	} 
 
 }
+
+
+
