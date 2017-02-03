@@ -51,7 +51,7 @@ var idleTime = 0;
 var wordStarted = false;
 var breakStarted = false; 
 
-var needCalib = true;
+var needCalib = false;
 var calibNum;
 var spaceTimerRunning = null;
 var spaceTimeArr = [];
@@ -126,7 +126,8 @@ $(document).ready(function(){
 
 			
 			if(morseDictionary[word] == string.charAt(calibNum)) {
-				
+		
+
 				$('#translation').append(morseDictionary[word]);
 				word = ""
 				spaceTimer.start();
