@@ -45,7 +45,6 @@ var SHORT_SPACE = 1000;
 var LONG_SPACE = 1500;
 
 var timeout = null;
-var spaceTimer = null;
 var timerIsRunning = false; 
 var idleTime = 0;
 
@@ -53,11 +52,16 @@ var wordStarted = false;
 var breakStarted = false; 
 
 var needCalib = true;
+var calibNum;
+var spaceTimerRunning = null;
 
 $(document).ready(function(){
 
+	visual();
+
 	if(needCalib) {
 		$('#calibMsg').show();
+		calibNum = 0;
 
 	} else {
 		$('#calibMsg').hide();
@@ -77,8 +81,7 @@ $(document).ready(function(){
 		breakStarted = false;
 		wordStarted = true;
 
-		//start timer 
-		spaceTimer.start();
+
 		if(timeout != null) {
 			timerIsRunning = true;
 			clearTimeout(timeout);
@@ -104,15 +107,30 @@ $(document).ready(function(){
 		}
 
 		if(needCalib) {
-			
-			if(morseDictionary[word] == "H") {
-				
-				$('#translation').append(morseDictionary[word]);
-				$('#text').append("/");
 
-				//alert("found H");
+			if(spaceTimerRunning != null) {
+				console.log("time between: " + spaceTimer.stop().totalMs);
+				spaceTimer.reset();
+				spaceTimerRunning = null;
+				document.getElementById("spaceVisual").style.backgroundColor = "blue";
 			}
 
+			var string = "HELLO";
+
+			console.log("needCalib string: " + string);
+			console.log("needCalib calibNum: " + string.charAt(calibNum));
+
+			
+			if(morseDictionary[word] == string.charAt(calibNum)) {
+				
+				$('#translation').append(morseDictionary[word]);
+				word = ""
+				spaceTimer.start();
+				spaceTimerRunning = true;
+				document.getElementById("spaceVisual").style.backgroundColor = "green";
+				calibNum++;
+
+			}
 
 		} else {
 
@@ -192,22 +210,21 @@ Inserts "." or "-" to the textarea
 
 */
 function appendAndRecord(word, input) {
-	recordSpacetime();
 
 	$('#text').append(input);
+	console.log("word and input: " + word + input);
 	return word += input;
 }
 
-function recordSpacetime() {
-	//gets information about the time between inputs
-	if(timerIsRunning == true) {
-		var time = spaceTimer.stop();
-		console.log(time);
-		$("#time").append(time.totalMs + " ");
-		spaceTimer.reset();
-	} 
+function visual() {
+
+	document.getElementById("spaceVisual").style.backgroundColor = "blue";
+	document.getElementById("spaceVisual").style.width = "300px";
+	document.getElementById("spaceVisual").style.height = "300px";
 
 }
+
+
 
 
 
