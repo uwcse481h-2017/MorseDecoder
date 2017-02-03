@@ -7,7 +7,6 @@ var timeToDotDashMap = {
 
 var train = false;
 
-
 $(document).ready(function(){
 
 	spaceTimer = new Stopwatch(); 

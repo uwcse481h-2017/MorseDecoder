@@ -104,9 +104,8 @@ module.exports = function(app, passport) {
             });
 		});
 
-    // Get user's average short and long spacetimes 
-    app.route('/api/v1/getAverageSpaces/:uid')
-        .get(function(req, res) {
+    // Get user's average character and word spacetimes 
+    app.get('/getAverageSpaces/:uid', function(req, res) {
             Spacetime.find({uid: req.params.uid}).exec(function(err, info) {
                 if (err) {
                     res.send(err);
@@ -128,8 +127,8 @@ module.exports = function(app, passport) {
                 }
 
                 res.json({
-                    "averageShort": shortSum/(numShorts * 1.0),
-                    "averageLong": longSum/(numLongs * 1.0)
+                    "aveCharSpace": shortSum/(numShorts * 1.0),
+                    "aveWordSpace": longSum/(numLongs * 1.0)
                 });
             });
         });
