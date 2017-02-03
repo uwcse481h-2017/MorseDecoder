@@ -54,6 +54,7 @@ var breakStarted = false;
 var needCalib = true;
 var calibNum;
 var spaceTimerRunning = null;
+var spaceTimeArr = [];
 
 $(document).ready(function(){
 
@@ -109,13 +110,16 @@ $(document).ready(function(){
 		if(needCalib) {
 
 			if(spaceTimerRunning != null) {
-				console.log("time between: " + spaceTimer.stop().totalMs);
+				var timeOfSpace = spaceTimer.stop().totalMs;
+				console.log("time between: " + timeOfSpace);
+				spaceTimeArr.push(timeOfSpace);
+				console.log(spaceTimeArr);
 				spaceTimer.reset();
 				spaceTimerRunning = null;
 				document.getElementById("spaceVisual").style.backgroundColor = "blue";
 			}
 
-			var string = "HELLO";
+			var string = "HELLO HELLO";
 
 			console.log("needCalib string: " + string);
 			console.log("needCalib calibNum: " + string.charAt(calibNum));
@@ -129,8 +133,13 @@ $(document).ready(function(){
 				spaceTimerRunning = true;
 				document.getElementById("spaceVisual").style.backgroundColor = "green";
 				calibNum++;
+ 
+			} else if(string.charAt(calibNum) == " ") {
+				$('#translation').append(" ");
+				calibNum++;
 
 			}
+
 
 		} else {
 
