@@ -16,6 +16,10 @@ module.exports = function(app, passport) {
         res.render('2Switch.html')
     })
 
+    app.get('/switchCalib', function(req, res) {
+        res.render('2SwitchCalib.html')
+    })
+
     // USER AUTHENTICATION ===============================================
 
     // SIGNIN ////////////////////////////////////////////////////////////
