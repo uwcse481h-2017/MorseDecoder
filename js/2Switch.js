@@ -52,94 +52,6 @@ var idleTime = 0;
 var wordStarted = false;
 var breakStarted = false; 
 
-var needCalib = false;
-var calibNum;
-var spaceTimerRunning = null;
-var spaceTimeArr = [];
-
-$(document).ready(function(){
-
-	visual();
-
-	if(needCalib) {
-		$('#calibMsg').show();
-		calibNum = 0;
-
-	} else {
-		$('#calibMsg').hide();
-
-	}
-
-	spaceTimer = new Stopwatch();
-	var idleInterval = setInterval(timerIncrement, LONG_SPACE);
-
-	/*
-	Listens for switch inputs. 
-	*/
-	var word = "";
-	document.addEventListener("keydown", function(event) {
-
-		idleTime = 0 ;
-		breakStarted = false;
-		wordStarted = true;
-
-
-		if(timeout != null) {
-			timerIsRunning = true;
-			clearTimeout(timeout);
-		}
-
-		// delete last character
-		if (event.which == BACKSPACE) {
-			// do not allow backspacing of individual dots or dashes, only whole letters or word spaces 
-			var sentence = $('#text').val();
-			if (sentence.length > 0) {
-				if (sentence[sentence.length-1] == '/' || sentence[sentence.length-1] == '_') {
-					backspace();
-					return 
-				}
-			} 
-		}
-
-		// only translate dots and dashes 
-		if (event.which == DOT) {
-			word = appendAndRecord(word, ".");
-		} else if (event.which == DASH) {
-			word = appendAndRecord(word, "-");
-		}
-
-		if(needCalib) {
-
-			if(spaceTimerRunning != null) {
-				var timeOfSpace = spaceTimer.stop().totalMs;
-				console.log("time between: " + timeOfSpace);
-				spaceTimeArr.push(timeOfSpace);
-				console.log(spaceTimeArr);
-				spaceTimer.reset();
-				spaceTimerRunning = null;
-				document.getElementById("spaceVisual").style.backgroundColor = "blue";
-			}
-
-			var string = "HELLO HELLO";
-
-			console.log("needCalib string: " + string);
-			console.log("needCalib calibNum: " + string.charAt(calibNum));
-
-			
-			if(morseDictionary[word] == string.charAt(calibNum)) {
-		
-
-				$('#translation').append(morseDictionary[word]);
-				word = ""
-				spaceTimer.start();
-				spaceTimerRunning = true;
-				document.getElementById("spaceVisual").style.backgroundColor = "green";
-				calibNum++;
- 
-			} else if(string.charAt(calibNum) == " ") {
-				$('#translation').append(" ");
-				calibNum++;
-
 var train = true;
 
 $(document).ready(function() {
@@ -151,7 +63,7 @@ $(document).ready(function() {
 		var idleInterval = setInterval(timerIncrement, WORD_SPACE);
 
 		/*
-		Listens for switch inputs
+		Listens for switch inputs. 
 		*/
 		var word = "";
 		document.addEventListener("keydown", function(event) {
