@@ -2,6 +2,7 @@
 
 var User = require('../models/user.js');
 var Spacetime = require('../models/spacetime.js');
+var Abbreviation = require('../models/abbreviation.js');
 
 // Expose API routes
 module.exports = function(app, passport) {
@@ -12,13 +13,13 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.get('/switch', function(req, res) {
-        res.render('2Switch.html')
-    })
+    // app.get('/switch', function(req, res) {
+    //     res.render('2Switch.html', { user: req.user });
+    // });
 
     app.get('/switchCalib', function(req, res) {
-        res.render('2SwitchCalib.html')
-    })
+        res.render('2SwitchCalib.ejs', { user: req.user } );
+    });
 
     // USER AUTHENTICATION ===============================================
 
@@ -30,11 +31,27 @@ module.exports = function(app, passport) {
     });
 
 	// process the login form
-    app.post('/signin', passport.authenticate('local-login', {
-        successRedirect : '/', // redirect to the secure profile section
-        failureRedirect : '/signin', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+    app.post('/signin', function(req, res, next) {
+        passport.authenticate('local-login', function(err, user) {
+            if (err) {
+                return next(err);
+            }
+            if (!user) {
+                return res.redirect('/signin');
+            }
+            req.logIn(user, function(err) {
+                if (err) {
+                    return next(err); 
+                }
+                console.log(JSON.stringify(user))
+                if (user.trainingCompleted == true) {
+                    return res.redirect('/')
+                } else {
+                    return res.redirect('/switchCalib')
+                }
+            });
+        })(req, res, next);
+    });
 
     // SIGNUP ////////////////////////////////////////////////////////////
 
@@ -46,7 +63,7 @@ module.exports = function(app, passport) {
 
     // process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/', // redirect to the secure profile section
+        successRedirect : '/switchCalib', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
@@ -76,7 +93,6 @@ module.exports = function(app, passport) {
     });
 
     // TRAINING DATA =====================================================
-    // Test Uid: 588a3e5339631e1ed7556e85
 
     // Retrieve training info 
     app.get('/getTrainingInfo/:uid', function(req, res) {
@@ -129,6 +145,106 @@ module.exports = function(app, passport) {
                 res.json({
                     "aveCharSpace": shortSum/(numShorts * 1.0),
                     "aveWordSpace": longSum/(numLongs * 1.0)
+                });
+            });
+        });
+
+    // Update user so that training is marked as completed 
+    app.route('/api/v1/markTrainingCompleted/:uid')
+        .post(function(req, res) {
+            User.findById(req.params.uid, function(err, user) {
+                if (err) {
+                    res.send(err);
+                }
+
+                user.trainingCompleted = 1 
+
+                user.save(function(err) {
+                    if (err) {
+                        res.send(err);
+                    }
+                    res.json(user);
+                });
+            });
+        });
+
+    // ABBREVIATIONS =====================================================
+    
+    // Get a user's saved abbreviations 
+    app.get('/getAbbreviations/:uid', function(req, res) {
+        Abbreviation.find({uid: req.params.uid}).exec(function(err, info) {
+           if (err) {
+               res.send(err);
+           }
+           res.json(info);
+       });
+    })
+
+    // Create a new abbreviation 
+    app.route('/api/v1/createAbbreviation/:uid/:abbr/:full')
+        .post(function(req, res) {
+            var abbreviation = new Abbreviation();
+            abbreviation.uid = req.params.uid; 
+            abbreviation.abbr = req.params.abbr; 
+            abbreviation.full = req.params.full;
+
+            abbreviation.save(function(err) {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(abbreviation);
+            });
+        });
+
+    // Check if abbreviation exists for user; returns abbreviation if exists, otherwise returns empty array 
+    app.get('/checkAbbreviation/:uid/:abbr', function(req, res) {
+        Abbreviation.find({uid:req.params.uid, abbr: req.params.abbr}).exec(function(err, info) {
+            if (err) {
+                res.send(err); 
+            }
+
+            if (info.length > 0) {
+                res.json({"exists": 1, "full": info[0].full})
+            } else {
+                res.json({"exists": 0})
+            }
+        });
+    });
+
+    // Delete an abbreviation 
+    app.route('/api/v1/deleteAbbreviation/:aid')
+        .post(function(req, res) {
+            Abbreviation.findById(req.params.aid, function(err, abbreviation) {
+                if (err) {
+                    res.send(err);
+                }
+
+                abbreviation.remove(function(err) {
+                    if (err) {
+                        res.send(err);
+                    }
+
+                    res.json(abbreviation)
+                })
+            });
+        });
+
+    // Edit an abbreviation 
+    app.route('/api/v1/editAbbreviation/:aid/:abbr/:full')
+        .post(function(req, res) {
+            Abbreviation.findById(req.params.aid, function(err, abbreviation) {
+                if (err) {
+                    res.send(err);
+                }
+
+                abbreviation.abbr = req.params.abbr; 
+                abbreviation.full = req.params.full;
+
+                abbreviation.save(function(err) {
+                    if (err) {
+                        res.send(err);
+                    }
+                    res.json(abbreviation);
                 });
             });
         });

@@ -54,10 +54,21 @@ var breakStarted = false;
 
 var train = true;
 
+var wait = true;
 $(document).ready(function() {
-	$.get("/getAverageSpaces/588a3e5339631e1ed7556e85", function(data) {
-		CHAR_SPACE = JSON.stringify(data.aveCharSpace)
-		WORD_SPACE = JSON.stringify(data.aveWordSpace)/2
+	var userId = $('#uid').text().trim()
+	$.get("/getAverageSpaces/" + userId, function(data) {
+		var aveCharSpace = Number(JSON.stringify(data.aveCharSpace))
+		var aveWordSpace = Number(JSON.stringify(data.aveWordSpace))
+
+		CHAR_SPACE = aveCharSpace + (aveWordSpace - aveCharSpace)/2
+		// WORD_SPACE = CHAR_SPACE
+		WORD_SPACE = aveWordSpace
+
+		console.log('ave char space: ' + aveCharSpace)
+		console.log('ave word space: ' + aveWordSpace)
+		console.log('char space is anything < ' + CHAR_SPACE)
+		console.log('word space is anything >= ' + WORD_SPACE)
 	}).then(function() {
 		spaceTimer = new Stopwatch();
 		var idleInterval = setInterval(timerIncrement, WORD_SPACE);
@@ -102,6 +113,7 @@ $(document).ready(function() {
 				$('#text').append("/");
 				$('#translation').append(morseDictionary[word]);
 				word = "";
+				getSuggestions()
 			}, CHAR_SPACE);
 		});
 
@@ -109,7 +121,9 @@ $(document).ready(function() {
 		Add functions to buttons.
 		*/ 
 		$('#playBtn').click(function() {
-			responsiveVoice.speak($('#translation').text().trim().toLowerCase()); 
+			var sentence = $('#translation').text().trim().toLowerCase();
+			console.log(sentence)
+			responsiveVoice.speak(getFullWord(userId, sentence)); 
 		});
 
 		/*
@@ -118,8 +132,66 @@ $(document).ready(function() {
 		$('textarea').on('keydown', function (e) {
 			e.preventDefault();
 		});
+
+		// $('#translation').on('change keyup input', function() {
+		// 	alert('hi')
+		// 	var text = $('#translation').val();
+		// 	console.log(text);
+		// 	var url = "https://api.datamuse.com/sug?s=" + text 
+		// 	console.log(url)
+		// 	$.get(url, function(data) {
+		// 		var html = "<ul>"
+		// 		for (var i = 0; i < data.length; i++) {
+		// 			html += "<li> " + data[i].word + "</li>"
+		// 		}
+		// 		html += "<ul>"
+		// 		$('#suggestionBox').html(html);
+		// 	});
+		// });
+
 	});
 });
+
+function getSuggestions() {
+	var text = $('#translation').val();
+	console.log(text);
+	var url = "https://api.datamuse.com/sug?s=" + text 
+	console.log(url)
+	$.get(url, function(data) {
+		var html = "<ul>"
+		for (var i = 0; i < data.length; i++) {
+			html += "<li> " + data[i].word + "</li>"
+		}
+		html += "<ul>"
+		$('#suggestionBox').html(html);
+	});
+}
+
+function getFullSentence(uid, sentence) {
+	var newSentence = ""
+	var words = sentence.split()
+	console.log(words);
+	for (var i = 0; i < words.length; i++) {
+		var word = words[i];
+		newSentence += getFullWord(uid, word);
+	}
+	return newSentence;
+}
+
+function getFullWord(uid, abbr) {
+	$.ajax({
+		async: false,
+		type: 'GET',
+		url: "/checkAbbreviation/" + uid + "/" + abbr,
+		success: function(data) {
+			if (data.exists) {
+				return data.full;
+			} else {
+				return abbr; 
+			}
+		}
+	});
+}
 
 function timerIncrement() {
 	idleTime += 1; 
@@ -186,5 +258,4 @@ function recordSpacetime() {
 		$("#time").append(time.totalMs + " ");
 		spaceTimer.reset();
 	} 
-
 }

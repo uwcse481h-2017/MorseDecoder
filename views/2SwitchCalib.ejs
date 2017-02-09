@@ -61,6 +61,11 @@
         </div>
     </nav>
     <!-- /.Nav -->
+
+	<!-- Hidden div for storing user id --> 
+	<% if(locals.user){ %>
+	<div id="uid" class="hidden"><%= user._id %></div>
+	<% } %>
 		
 	<div class="container-fluid">
 		<h3> Click in here and press a key. </h3>
@@ -76,9 +81,6 @@
 			
 		</div>
 
-
-		<br/>
-
 		<h4> English Translation </h4>
 		<div class="input-group">
 			<textarea id="translation" class="form-control custom-control" rows="3" style="resize:none"></textarea>     
@@ -88,7 +90,5 @@
 	</div>
 
 	</body>
-
-
 
 </html>
