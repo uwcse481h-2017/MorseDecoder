@@ -44,11 +44,17 @@ var DASH = 13
 var calibNum;
 var spaceTimerRunning = null;
 var spaceTimeArr = [];
-var shortSpace = true;
+var es = false;
+var cs = false;
+var ws = false;
 
 $(document).ready(function(){
 
 	visual();
+
+	$('#restart').click(function () {
+		restart();
+	});
 
 	$('#calibMsg').show();
 	calibNum = 0;
@@ -62,20 +68,27 @@ $(document).ready(function(){
 	var word = "";
 	document.addEventListener("keydown", function(event) {
 
-		// only translate dots and dashes 
-		if (event.which == DOT) {
-			word = appendAndRecord(word, ".");
-		} else if (event.which == DASH) {
-			word = appendAndRecord(word, "-");
-		}
-
 
 		if(spaceTimerRunning != null) {
 			var timeOfSpace = spaceTimer.stop().totalMs;
+
+			var type = null;
+
+			if(ws) {
+
+				type = "ws";
+			} else if(cs) {
+				type = "cs";
+
+			} else if(es) {
+
+				type = "es";
+			}
 			
 			var timeObj = {
+
 				time: timeOfSpace,
-				isShort: shortSpace
+				type: type
 			}
 
 			spaceTimeArr.push(timeObj);
@@ -84,7 +97,28 @@ $(document).ready(function(){
 			spaceTimer.reset();
 			spaceTimerRunning = null;
 			document.getElementById("spaceVisual").style.backgroundColor = "blue";
+			es = false;
+			cs = false;
+			ws = false;
 		}
+
+
+		// only translate dots and dashes 
+		if (event.which == DOT) {
+			word = appendAndRecord(word, ".");
+			spaceTimer.start();
+			spaceTimerRunning = true;
+			es = true;
+
+			
+		} else if (event.which == DASH) {
+			word = appendAndRecord(word, "-");
+			spaceTimer.start();
+			spaceTimerRunning = true;
+			es = true;
+
+		}
+
 
 		var string = "HELLO HELLO";
 		
@@ -99,12 +133,12 @@ $(document).ready(function(){
 
 			if(string.charAt(calibNum) == " ") {
 				$('#text').append("  7 ");
-				shortSpace = false;
+				ws = true;
 
 			} else if(calibNum < string.length) {
 
 				$('#text').append("  3 ");
-				shortSpace = true;
+				cs = true;
 			}
 
 			if(calibNum == string.length) {
@@ -173,6 +207,13 @@ function sendToServer(uid, spacetimeArr) {
 
 }
 
+function restart() {
+
+	calibNum = 0;
+	spaceTimer = new Stopwatch();
+	$('#text').text('');
+	$('#translation').text('');
+}
 
 
 
