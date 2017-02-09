@@ -49,7 +49,7 @@ var cs = false;
 var ws = false;
 
 $(document).ready(function(){
-
+	var userId = $('#uid').text().trim()
 	visual();
 
 	$('#restart').click(function () {
@@ -143,7 +143,14 @@ $(document).ready(function(){
 
 			if(calibNum == string.length) {
 				alert('calibration complete');
-				sendToServer("588a3e5339631e1ed7556e85", spaceTimeArr);
+				sendToServer(userId, spaceTimeArr);
+				var url = '/api/v1/markTrainingCompleted/' + userId;
+				$.post(url, function() {
+					console.log("call to " + url + " completed");
+				}).then(function() {
+					$.get('/')
+
+				})
 			}	
 
 
@@ -193,16 +200,14 @@ function visual() {
 
 
 function sendToServer(uid, spacetimeArr) {
-
 	for(var i = 0; i < spaceTimeArr.length; i++) {
 
 		var apiCall = 'api/v1/addTrainingInfo/'+uid+'/'+spaceTimeArr[i].time+'/'+spaceTimeArr[i].isShort;
 		console.log(apiCall);
 
 		$.post(apiCall, function() {
-			alert("api call finished");
+			console.log("api call finished");
 		});
-		
 	}
 
 }

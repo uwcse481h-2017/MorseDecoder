@@ -10,9 +10,6 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 		<!-- Latest compiled JavaScript -->
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		
-		<!-- ANGULAR -->
-		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 
 		<!-- FONT AWESOME -->
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -23,16 +20,16 @@
 		<!-- PERSONAL -->
 		<!-- CSS --> 
 		<link rel="stylesheet" type="text/css" href="../css/morse.css">
+		<link href="../css/2Switch.css" type="text/css" rel="stylesheet" />
 		<!-- JS --> 
-		<script  type="text/javascript" src="../js/morse.js"></script>
+		<script src="../js/2Switch.js" type="text/javascript"></script>
+		<script src="../js/stopwatch.js" type="text/javascript"></script>
 		<!-- ICON -->
     	<link rel="shortcut icon" href="../data/tap.png">
 	</head>
 
 	<body>
 	<audio id="audio" src="../data/beep.wav"></audio>
-
-		<!--<h1><img src="../data/tap.png" alt="Tap">Morse Decode</h1>-->
 
     <!-- Nav -->
     <nav id="mynav" class="navbar">
@@ -65,68 +62,59 @@
     </nav>
     <!-- /.Nav -->
 
-		<div class="container-fluid text-center">
+	<!-- Hidden div for storing user id --> 
+	<% if(locals.user){ %>
+	<div id="uid" class="hidden"><%= user._id %></div>
+	<% } %>
 
-			<div>
-				<div class="form-group" id="training">
-					<label for="trainingWord">Training Word:</label>
-					<input class="form-control form-fixed-width" id="trainingWord" type="text" placeholder="Training Word">
-					<button class="btn btn-primary" id="confirmWord" onclick="hello()">Confirm</button>
-					
-				</div>
+	<div class="container-fluid">
+		<h3> Click in here and press a key. </h3>
 
-				<div id="displayDiv">
-					<div id="morseInput">
-						<div class="btn btn-info" id="codeInput">Input</div>
-						<div id ="buttonDiv">
-							<button class="btn btn-primary" id="train">Calibrate</button>
-							<button id="test" class="btn btn-success" disabled>Decode</button>
-							<button id="clear" class="btn btn-default">Clear</button>
-						</div>
-					</div>
-					<br>
-					<div id="letterDiv">
-						<legend class="Translated signals">Letters:</legend>
-						<h2 id="letter"></h2>
-						<button class="btn btn-default" id="copy" data-copytarget="#letter"><i class="fa fa-clipboard" aria-hidden="true"></i>Copy to Clipboard</button>
-						<button class="btn btn-default" onclick="responsiveVoice.speak($('#letter').text().trim().toLowerCase()); console.log($('#letter').text().trim().toLowerCase())" type="button" value="Play"><i class="fa fa-play" aria-hidden="true"></i>Play</button>
-					</div>
-				</div>
-			</div>
-
-			<div id ="canvasDiv">
-				<h3>Dots/Dashes</h3>
-				<canvas id="liveStreamCanvas" width="1000" height="60" ></canvas>
-
-				<h3>All Signals</h3>
-				<canvas id="myCanvas" width="1000" height="120"></canvas>
-			</div>
-
-			<br/>
-			<br/>
-
-			<table class="legend">
-				<tr>
-					<td class="color" id="blue"></td>
-					<td>Dot</td>
-					<td class="color" id="pink"></td>
-					<td>Dash</td>
-					<td class="color" id="red"></td>
-					<td>Element Space</td>
-					<td class="color" id="green"></td>
-					<td>Character Space</td>
-					<td class="color" id="black"></td>
-					<td>Unclassified Signal</td>
-				</tr>
-			</table>
+		<h4> Morse Input </h4>
+		<div class="input-group">
+			<textarea id="text" class="form-control custom-control" rows="3" style="resize:none"></textarea>     
+			<span id="calibrateBtn" class="input-group-addon btn btn-primary">Calibrate</span>
 		</div>
 
+		<br/>
+
+		<h4> English Translation </h4>
+		<div class="input-group">
+			<textarea id="translation" class="form-control custom-control" rows="3" style="resize:none"></textarea>     
+			<span id="playBtn" class="input-group-addon btn btn-primary">Play</span>
+		</div>
+		
+		<input id="testbox" type="text">	
+		<h4> Suggestions </h4>
+		<div id="suggestionBox"></div>
+
+	</div>
 	</body>
 </html>
 
-<script>
-function hello() {
-	responsiveVoice.speak("hello world");
-	console.log('hi')
+<!--<script>
+/* this function handles the data */
+function myAmazingFunction(data){
+document.getElementById('output').innerHTML = data;
 }
-</script>
+
+/* this variable will hold the script tag with your desired data */
+var myScript = '';
+
+/* this section handles what happens after a key is pressed inside your input text box */
+document.getElementById('searchbox').onkeyup = function(){
+
+/* this variable stores whatever is in the input text box */
+var stuff_in_text_box = document.getElementById('searchbox').value;
+
+/* this is the script that will hold the data we're trying to get */
+myScript = document.createElement('script');
+
+/* this sets the src of the script equal to the url of the data */
+myScript.src = 'https://api.datamuse.com/sug?s=' + stuff_in_text_box + '&callback=myAmazingFunction'
+
+/* this attaches the script to the body of the page */
+document.body.appendChild(myScript);
+};
+
+</script>-->

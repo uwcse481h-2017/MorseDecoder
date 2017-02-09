@@ -9,7 +9,8 @@ var userSchema = mongoose.Schema({
         email: String, 
         password: String, 
         image: String
-    }
+    },
+    trainingCompleted: Boolean 
 });
 
 // Method for generating a hash
