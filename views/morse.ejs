@@ -29,7 +29,6 @@
 	</head>
 
 	<body>
-	<audio id="audio" src="../data/beep.wav"></audio>
 
     <!-- Nav -->
     <nav id="mynav" class="navbar">
@@ -72,7 +71,7 @@
 
 		<h4> Morse Input </h4>
 		<div class="input-group">
-			<textarea id="text" class="form-control custom-control" rows="3" style="resize:none"></textarea>     
+			<textarea id="text" class="form-control custom-control" rows="1" style="resize:none"></textarea>     
 			<span id="calibrateBtn" class="input-group-addon btn btn-primary">Calibrate</span>
 		</div>
 
@@ -80,41 +79,15 @@
 
 		<h4> English Translation </h4>
 		<div class="input-group">
-			<textarea id="translation" class="form-control custom-control" rows="3" style="resize:none"></textarea>     
+			<textarea id="translation" class="form-control custom-control" rows="1" style="resize:none"></textarea>     
 			<span id="playBtn" class="input-group-addon btn btn-primary">Play</span>
 		</div>
+
+		<br/>
 		
-		<input id="testbox" type="text">	
 		<h4> Suggestions </h4>
 		<div id="suggestionBox"></div>
 
 	</div>
 	</body>
 </html>
-
-<!--<script>
-/* this function handles the data */
-function myAmazingFunction(data){
-document.getElementById('output').innerHTML = data;
-}
-
-/* this variable will hold the script tag with your desired data */
-var myScript = '';
-
-/* this section handles what happens after a key is pressed inside your input text box */
-document.getElementById('searchbox').onkeyup = function(){
-
-/* this variable stores whatever is in the input text box */
-var stuff_in_text_box = document.getElementById('searchbox').value;
-
-/* this is the script that will hold the data we're trying to get */
-myScript = document.createElement('script');
-
-/* this sets the src of the script equal to the url of the data */
-myScript.src = 'https://api.datamuse.com/sug?s=' + stuff_in_text_box + '&callback=myAmazingFunction'
-
-/* this attaches the script to the body of the page */
-document.body.appendChild(myScript);
-};
-
-</script>-->

@@ -41,6 +41,7 @@ var BACKSPACE = 8
 var DOT = 32
 var DASH = 13 
 
+var ELEMENT_SPACE;
 var CHAR_SPACE;
 var WORD_SPACE;
 
@@ -49,72 +50,102 @@ var spaceTimer = null;
 var timerIsRunning = false; 
 var idleTime = 0;
 
-var wordStarted = false;
-var breakStarted = false; 
+var breakStarted = false;
+var letterBreakStarted = false; 
+var wordBreakStarted = false;  
+
+var letterTimeout = null;
+var wordTimeout = null;
 
 var train = true;
+var word = ""
 
-var wait = true;
 $(document).ready(function() {
 	var userId = $('#uid').text().trim()
+
 	$.get("/getAverageSpaces/" + userId, function(data) {
-		var aveCharSpace = Number(JSON.stringify(data.aveCharSpace))
-		var aveWordSpace = Number(JSON.stringify(data.aveWordSpace))
-
-		CHAR_SPACE = aveCharSpace + (aveWordSpace - aveCharSpace)/2
-		// WORD_SPACE = CHAR_SPACE
-		WORD_SPACE = aveWordSpace
-
-		console.log('ave char space: ' + aveCharSpace)
-		console.log('ave word space: ' + aveWordSpace)
-		console.log('char space is anything < ' + CHAR_SPACE)
-		console.log('word space is anything >= ' + WORD_SPACE)
-	}).then(function() {
+		CHAR_SPACE = Number(JSON.stringify(data.aveCharSpace))
+		WORD_SPACE = Number(JSON.stringify(data.aveWordSpace))
+	})
+	.then(function() {
 		spaceTimer = new Stopwatch();
-		var idleInterval = setInterval(timerIncrement, WORD_SPACE);
 
-		/*
-		Listens for switch inputs. 
+		// after some time, translate the letter 
+		// letterTimeout = setInterval(function() {
+		// 	// if (!breakStarted) {
+		// 		$('#text').append("/");
+		// 		$('#translation').append(morseDictionary[word]);
+		// 		getSuggestions();
+		// 		word = "";
+				
+		// 		// breakStarted = true 
+		// 	// }
+		// }, CHAR_SPACE);
+
+		// wordTimeout = setInterval(function() {
+		// 	// if (!breakStarted) {
+		// 		$('#text').append("_");
+		// 		$('#translation').append(" ");
+		// 		getSuggestions();
+
+		// 		// breakStarted = true
+		// 	// }
+		// }, WORD_SPACE);
+
+		// var idleInterval = setInterval(timerIncrement, 1);
+
+		/* 
+		Listen for switch inputs 
 		*/
-		var word = "";
 		document.addEventListener("keydown", function(event) {
 			idleTime = 0 ;
 			breakStarted = false;
-			wordStarted = true;
 
 			//start timer 
 			spaceTimer.start();
-			if (timeout != null) {
-				timerIsRunning = true;
-				clearTimeout(timeout);
+			// if (timeout != null) {
+			// 	timerIsRunning = true;
+			// 	clearTimeout(timeout);
+			// }
+
+			if (letterTimeout != null) {
+				clearTimeout(letterTimeout)
 			}
 
-			// delete last character
+			if (wordTimeout != null) {
+				clearTimeout(wordTimeout)
+			}
+
+			// only listen to 3 inputs: delete, dot, and dash 
 			if (event.which == BACKSPACE) {
-				// do not allow backspacing of individual dots or dashes, only whole letters or word spaces 
-				var sentence = $('#text').val();
-				if (sentence.length > 0) {
-					if (sentence[sentence.length-1] == '/' || sentence[sentence.length-1] == '_') {
-						backspace();
-						return 
-					}
-				} 
-			}
-
-			// only translate dots and dashes 
-			if (event.which == DOT) {
-				word = appendAndRecord(word, ".");
+				backspace()
+			} else if (event.which == DOT) {
+				word = append(word, ".");
 			} else if (event.which == DASH) {
-				word = appendAndRecord(word, "-");
+				word = append(word, "-");
 			}
 
 			// after some time, translate the letter 
-			timeout = setTimeout(function() {
-				$('#text').append("/");
-				$('#translation').append(morseDictionary[word]);
-				word = "";
-				getSuggestions()
+			letterTimeout = setTimeout(function() {
+				if (!breakStarted) {
+					$('#text').append("/");
+					$('#translation').append(morseDictionary[word]);
+					getSuggestions();
+					word = "";
+					
+					breakStarted = true 
+				}
 			}, CHAR_SPACE);
+
+			wordTimeout = setTimeout(function() {
+				// if (!breakStarted) {
+					$('#text').append("_");
+					$('#translation').append(" ");
+					getSuggestions();
+
+					// breakStarted = true
+				// }
+			}, WORD_SPACE);
 		});
 
 		/*
@@ -122,8 +153,8 @@ $(document).ready(function() {
 		*/ 
 		$('#playBtn').click(function() {
 			var sentence = $('#translation').text().trim().toLowerCase();
-			console.log(sentence)
-			responsiveVoice.speak(getFullWord(userId, sentence)); 
+			responsiveVoice.speak(sentence)
+			// responsiveVoice.speak(getFullWord(userId, sentence)); 
 		});
 
 		/*
@@ -132,78 +163,55 @@ $(document).ready(function() {
 		$('textarea').on('keydown', function (e) {
 			e.preventDefault();
 		});
-
-		// $('#translation').on('change keyup input', function() {
-		// 	alert('hi')
-		// 	var text = $('#translation').val();
-		// 	console.log(text);
-		// 	var url = "https://api.datamuse.com/sug?s=" + text 
-		// 	console.log(url)
-		// 	$.get(url, function(data) {
-		// 		var html = "<ul>"
-		// 		for (var i = 0; i < data.length; i++) {
-		// 			html += "<li> " + data[i].word + "</li>"
-		// 		}
-		// 		html += "<ul>"
-		// 		$('#suggestionBox').html(html);
-		// 	});
-		// });
-
 	});
 });
 
-function getSuggestions() {
-	var text = $('#translation').val();
-	console.log(text);
-	var url = "https://api.datamuse.com/sug?s=" + text 
-	console.log(url)
-	$.get(url, function(data) {
-		var html = "<ul>"
-		for (var i = 0; i < data.length; i++) {
-			html += "<li> " + data[i].word + "</li>"
-		}
-		html += "<ul>"
-		$('#suggestionBox').html(html);
-	});
-}
-
-function getFullSentence(uid, sentence) {
-	var newSentence = ""
-	var words = sentence.split()
-	console.log(words);
-	for (var i = 0; i < words.length; i++) {
-		var word = words[i];
-		newSentence += getFullWord(uid, word);
-	}
-	return newSentence;
-}
-
-function getFullWord(uid, abbr) {
-	$.ajax({
-		async: false,
-		type: 'GET',
-		url: "/checkAbbreviation/" + uid + "/" + abbr,
-		success: function(data) {
-			if (data.exists) {
-				return data.full;
-			} else {
-				return abbr; 
-			}
-		}
-	});
-}
+// TIMING ////////////////////////////////////////////////////////////////
 
 function timerIncrement() {
-	idleTime += 1; 
-	if (wordStarted && idleTime >= 2 && !breakStarted) {
-		$('#text').append("_");
-		$('#translation').append(" ");
-		breakStarted = true;
+	if (timerIsRunning) {
+		idleTime += 1; 
+		var word_space = checkWordSpace()
+		if (!word_space) {
+			checkLetterSpace();
+		}
 	}
 }
 
+// Track when enough time has passed for a letter space 
+function checkLetterSpace() {
+	if (!breakStarted && idleTime >= CHAR_SPACE) {
+		breakStarted = true;
+		$('#text').append("/");
+		$('#translation').append(morseDictionary[word]);
+		word = "" 
+	}
+}
+
+// For tracking when enough time has passed for a word space 
+function checkWordSpace() {
+	if (!breakStarted && idleTime >= WORD_SPACE) {
+		breakStarted = true;
+		$('#text').append("/_");
+		$('#translation').append(" ");
+		return true 
+	} 
+}
+
+// BACKSPACE /////////////////////////////////////////////////////////////
+
 function backspace() {
-	// backspace text 
+	// do not allow backspacing of individual dots or dashes, only whole letters or word spaces 
+	var sentence = $('#text').val();
+	if (sentence.length > 0) {
+		if (sentence[sentence.length-1] == '/' || sentence[sentence.length-1] == '_') {
+			backspaceText();
+			backspaceTranslation();
+			getSuggestions();
+		}
+	} 
+}
+function backspaceText() {
 	var origText = $('#text').text();
 	if (origText.length > 0) {
 		// if last character was a word space, just delete the word space (_)
@@ -223,8 +231,9 @@ function backspace() {
 		}
 		$('#text').html(newText);
 	}
+}
 
-	// backspace translation 
+function backspaceTranslation() {
 	var origTranslation = $('#translation').text();
 	if (origTranslation.length > 0) {
 		var newTranslation = origTranslation.slice(0, origTranslation.length - 1);
@@ -232,30 +241,58 @@ function backspace() {
 	}
 }
 
-/*
-Inserts "." or "-" to the textarea
-@param morseCode
-	String containing either ".", "-", " ", or "/"
-@effects 
-	Inserts "." or "-" to the textarea
-*/
-function appendAndRecord(word, input) {
-	recordSpacetime();
+// TEXT SUGGESTIONS //////////////////////////////////////////////////////
 
-	if (train) {
-		$("#calibrate").append(input);
-	}
-	
-	$('#text').append(input);
-	return word += input;
+// Suggest words/phrases to the user depending on what they have written so far 
+function getSuggestions() {
+	var text = $('#translation').val();
+	console.log(text);
+	var url = "https://api.datamuse.com/sug?s=" + text 
+	console.log(url)
+	$.get(url, function(data) {
+		var html = "<ul>"
+		for (var i = 0; i < data.length; i++) {
+			html += "<li> " + data[i].word + "</li>"
+		}
+		html += "<ul>"
+		$('#suggestionBox').html(html);
+	});
 }
 
-function recordSpacetime() {
-	//gets information about the time between inputs
-	if(timerIsRunning == true) {
-		var time = spaceTimer.stop();
-		console.log(time);
-		$("#time").append(time.totalMs + " ");
-		spaceTimer.reset();
-	} 
+// ABBREVIATIONS /////////////////////////////////////////////////////////
+
+// Translate the written sentence into a sentence containing the full-length versions of the abbreviations 
+function getFullSentence(uid, sentence) {
+	var newSentence = ""
+	var words = sentence.split()
+	console.log(words);
+	for (var i = 0; i < words.length; i++) {
+		var word = words[i];
+		newSentence += getFullWord(uid, word);
+	}
+	return newSentence;
+}
+
+// Get the full-length version of an abbreviation 
+function getFullWord(uid, abbr) {
+	$.ajax({
+		async: false,
+		type: 'GET',
+		url: "/checkAbbreviation/" + uid + "/" + abbr,
+		success: function(data) {
+			if (data.exists) {
+				return data.full;
+			} else {
+				return abbr; 
+			}
+		}
+	});
+}
+
+// HELPER FUNCTIONS //////////////////////////////////////////////////////
+
+// Take the user's input and add it onto the word they are writing  
+function append(word, input) {
+	$('#text').append(input);
+	return word += input;
 }
