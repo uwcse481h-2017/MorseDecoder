@@ -41,7 +41,7 @@ var BACKSPACE = 8
 var DOT = 32
 var DASH = 13 
 
-var ELEMENT_SPACE;
+var EL_SPACE;
 var CHAR_SPACE;
 var WORD_SPACE;
 
@@ -56,9 +56,11 @@ $(document).ready(function() {
 	var userId = $('#uid').text().trim()
 
 	$.get("/getAverageSpaces/" + userId, function(data) {
+		EL_SPACE = Number(JSON.stringify(data.aveElSpace))
 		CHAR_SPACE = Number(JSON.stringify(data.aveCharSpace))
 		WORD_SPACE = Number(JSON.stringify(data.aveWordSpace))
 
+		console.log("el space: " + EL_SPACE)
 		console.log("char space: " + CHAR_SPACE)
 		console.log("word space: " + WORD_SPACE)
 	})

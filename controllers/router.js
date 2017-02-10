@@ -127,24 +127,34 @@ module.exports = function(app, passport) {
                     res.send(err);
                 }
                 
-                var shortSum = 0 
-                var longSum = 0
-                var numShorts = 0
-                var numLongs = 0
+                var elSum = 0 
+                var numEls = 0 
+
+                var charSum = 0 
+                var numChars = 0 
+
+                var wordSum = 0 
+                var numWords = 0 
+
                 for (var i = 0; i < info.length; i++) {
                     var space = info[i];
-                    if (space.isShort) {
-                        shortSum += space.time;
-                        numShorts += 1;
-                    } else { // !space.isShort --> space is long
-                        longSum += space.time;
-                        numLongs += 1;
+                    var type = space.type; 
+                    if (type == 'es') {
+                        elSum += space.time;
+                        numEls += 1 
+                    } else if (type == 'cs') {
+                        charSum += space.time;
+                        numChars += 1
+                    } else if (type == 'ws') {
+                        wordSum += space.time 
+                        numWords += 1 
                     }
                 }
 
                 res.json({
-                    "aveCharSpace": shortSum/(numShorts * 1.0),
-                    "aveWordSpace": longSum/(numLongs * 1.0)
+                    "aveElSpace": elSum/(numEls * 1.0),
+                    "aveCharSpace": charSum/(numChars * 1.0),
+                    "aveWordSpace": wordSum/(numWords * 1.0)
                 });
             });
         });
