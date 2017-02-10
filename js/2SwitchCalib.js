@@ -226,7 +226,7 @@ function visual() {
 function sendToServer(uid, spacetimeArr) {
 	for(var i = 0; i < spaceTimeArr.length; i++) {
 
-		var apiCall = 'api/v1/addTrainingInfo/'+uid+'/'+spaceTimeArr[i].time+'/'+spaceTimeArr[i].isShort;
+		var apiCall = 'api/v1/addTrainingInfo/'+uid+'/'+spaceTimeArr[i].time+'/'+spaceTimeArr[i].type;
 		//console.log(apiCall);
 
 		$.post(apiCall, function() {
@@ -243,6 +243,9 @@ function restart() {
 	$('#translation').text('');
 }
 
+/*
+Shows the menu. 
+*/
 function showMenu() {
 
     if(menuVisible) {
@@ -259,6 +262,10 @@ function showMenu() {
     } 
 }
 
+/**
+ 
+Scrolls through the menu
+*/
 function scroll() {
 
 	if(menuCurrItem == items.length) {
@@ -284,6 +291,9 @@ function scroll() {
 
 }
 
+/**
+Selects underlined item in the menu.. must be scrolling
+*/
 function select() {
 
 	console.log("menuCurrItem: " + menuCurrItem);
