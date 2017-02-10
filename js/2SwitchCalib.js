@@ -50,10 +50,13 @@ var cs = false;
 var ws = false;
 var menuVisible = false;
 var menuCurrItem;
+var items;
 
 $(document).ready(function(){
 	
 	menuCurrItem = 0;
+
+	items = document.getElementsByClassName("menuItem");
 
 	var userId = $('#uid').text().trim()
 
@@ -101,7 +104,7 @@ $(document).ready(function(){
 
 			spaceTimeArr.push(timeObj);
 
-			console.log(spaceTimeArr);
+			//console.log(spaceTimeArr);
 			spaceTimer.reset();
 			spaceTimerRunning = null;
 			document.getElementById("spaceVisual").style.backgroundColor = "blue";
@@ -114,8 +117,8 @@ $(document).ready(function(){
 		// only translate dots and dashes 
 		if (event.which == DOT) {
 			if(menuVisible) {
-				console.log("dot dash menuCurrItem:" + menuCurrItem);
-				scroll(menuCurrItem);
+				//console.log("dot dash menuCurrItem:" + menuCurrItem);
+				scroll();
 			} else {
 				word = appendAndRecord(word, ".");
 				spaceTimer.start();
@@ -125,8 +128,8 @@ $(document).ready(function(){
 			
 		} else if (event.which == DASH) {
 			if(menuVisible) {
-				console.log("dot dash menuCurrItem:" + menuCurrItem);
-				scroll(menuCurrItem);
+				//console.log("dot dash menuCurrItem:" + menuCurrItem);
+				select();
 			} else {
 				word = appendAndRecord(word, "-");
 				spaceTimer.start();
@@ -167,7 +170,7 @@ $(document).ready(function(){
 				sendToServer(userId, spaceTimeArr);
 				var url = '/api/v1/markTrainingCompleted/' + userId;
 				$.post(url, function() {
-					console.log("call to " + url + " completed");
+					//console.log("call to " + url + " completed");
 				}).then(function() {
 					$.get('/')
 
@@ -181,8 +184,8 @@ $(document).ready(function(){
 
 		}
 
-		console.log("calibNumb: " + calibNum);
-		console.log("string length : " + string.length);
+		//console.log("calibNumb: " + calibNum);
+		//console.log("string length : " + string.length);
 
 		
 	});
@@ -224,10 +227,10 @@ function sendToServer(uid, spacetimeArr) {
 	for(var i = 0; i < spaceTimeArr.length; i++) {
 
 		var apiCall = 'api/v1/addTrainingInfo/'+uid+'/'+spaceTimeArr[i].time+'/'+spaceTimeArr[i].isShort;
-		console.log(apiCall);
+		//console.log(apiCall);
 
 		$.post(apiCall, function() {
-			console.log("api call finished");
+			//console.log("api call finished");
 		});
 	}
 }
@@ -251,7 +254,6 @@ function showMenu() {
     	
     	menuVisible = true;
 
-    	var items = document.getElementsByClassName("menuItem");
 
 
     } 
@@ -259,24 +261,33 @@ function showMenu() {
 
 function scroll() {
 
-
-	var items = document.getElementsByClassName("menuItem");
+	if(menuCurrItem == items.length) {
+		menuCurrItem = 0;
+	}
 
 	for(var i = 0; i < items.length; i++) {
 
 		if(menuCurrItem == i) {
-			
-			items[menuCurrItem].style.backgroundColor = "black";
+			items[menuCurrItem].style.textDecoration = "underline";
 
+			if(menuCurrItem > 0) {
+				items[menuCurrItem - 1].style.textDecoration = "none";
+ 
+			} else if(menuCurrItem == 0) {
+				items[items.length - 1].style.textDecoration = "none";
 
+			}
 		}
-
 	}
 
 	menuCurrItem++;
-	console.log("menuCurrItem updated: " + menuCurrItem);
 
-	
+}
+
+function select() {
+
+	console.log("menuCurrItem: " + menuCurrItem);
+	items[menuCurrItem - 1].style.backgroundColor = "black";
 
 }
 
