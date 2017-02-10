@@ -105,12 +105,12 @@ module.exports = function(app, passport) {
     });
 
     // Add spacetime to training data 
-    app.route('/api/v1/addTrainingInfo/:uid/:time/:isShort')
+    app.route('/api/v1/addTrainingInfo/:uid/:time/:type')
 		.post(function(req, res) {
             var spacetime = new Spacetime();
             spacetime.uid = req.params.uid;
             spacetime.time = req.params.time;
-            spacetime.isShort = req.params.isShort; 
+            spacetime.type = req.params.type; 
 
             spacetime.save(function(err) {
                 if (err) {

@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var spacetimeSchema = mongoose.Schema({
     uid: String, 
     time: Number, 
-    isShort: Boolean 
+    type: String 
 });
 
 // Create the model for space times and expose it to our app
