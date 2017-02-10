@@ -39,7 +39,8 @@ var morseDictionary = {
 
 
 var DOT = 32
-var DASH = 13 
+var DASH = 13
+var MENU = 39
 
 var calibNum;
 var spaceTimerRunning = null;
@@ -47,10 +48,17 @@ var spaceTimeArr = [];
 var es = false;
 var cs = false;
 var ws = false;
+var menuVisible = false;
+var menuCurrItem;
 
 $(document).ready(function(){
+	
+	menuCurrItem = 0;
+
 	var userId = $('#uid').text().trim()
-	visual();
+
+
+	//visual();
 
 	$('#restart').click(function () {
 		restart();
@@ -105,17 +113,30 @@ $(document).ready(function(){
 
 		// only translate dots and dashes 
 		if (event.which == DOT) {
-			word = appendAndRecord(word, ".");
-			spaceTimer.start();
-			spaceTimerRunning = true;
-			es = true;
-
+			if(menuVisible) {
+				console.log("dot dash menuCurrItem:" + menuCurrItem);
+				scroll(menuCurrItem);
+			} else {
+				word = appendAndRecord(word, ".");
+				spaceTimer.start();
+				spaceTimerRunning = true;
+				es = true;
+			}
 			
 		} else if (event.which == DASH) {
-			word = appendAndRecord(word, "-");
-			spaceTimer.start();
-			spaceTimerRunning = true;
-			es = true;
+			if(menuVisible) {
+				console.log("dot dash menuCurrItem:" + menuCurrItem);
+				scroll(menuCurrItem);
+			} else {
+				word = appendAndRecord(word, "-");
+				spaceTimer.start();
+				spaceTimerRunning = true;
+				es = true;
+			}
+
+		} else if(event.which == MENU) {
+
+			showMenu();
 
 		}
 
@@ -209,7 +230,6 @@ function sendToServer(uid, spacetimeArr) {
 			console.log("api call finished");
 		});
 	}
-
 }
 
 function restart() {
@@ -218,6 +238,46 @@ function restart() {
 	spaceTimer = new Stopwatch();
 	$('#text').text('');
 	$('#translation').text('');
+}
+
+function showMenu() {
+
+    if(menuVisible) {
+    	document.getElementById("menu").style.visibility = "hidden";
+    	menuVisible = false;
+
+    } else {
+    	document.getElementById("menu").style.visibility = "visible";
+    	
+    	menuVisible = true;
+
+    	var items = document.getElementsByClassName("menuItem");
+
+
+    } 
+}
+
+function scroll() {
+
+
+	var items = document.getElementsByClassName("menuItem");
+
+	for(var i = 0; i < items.length; i++) {
+
+		if(menuCurrItem == i) {
+			
+			items[menuCurrItem].style.backgroundColor = "black";
+
+
+		}
+
+	}
+
+	menuCurrItem++;
+	console.log("menuCurrItem updated: " + menuCurrItem);
+
+	
+
 }
 
 
