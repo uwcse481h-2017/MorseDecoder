@@ -176,34 +176,34 @@ $(document).ready(function() {
 			
 		});
 
-		document.addEventListener("keyup", function(event) {
+		// document.addEventListener("keyup", function(event) {
 			
-			if(event.which == DOT || event.which == DASH || event.which == BACKSPACE) {
+		// 	if(event.which == DOT || event.which == DASH || event.which == BACKSPACE) {
 
-				if(event.which != BACKSPACE) {
-					spaceTimer.reset();
-					spaceTimer.start();
-					timerRunning = true;
+		// 		if(event.which != BACKSPACE) {
+		// 			spaceTimer.reset();
+		// 			spaceTimer.start();
+		// 			timerRunning = true;
 
 
-					timeouts.push(setTimeout(function(){ translate(false); $('#text').append("/"); }, ESCSDIVIDE));
-					timeouts.push(setTimeout(function(){ translate(true); $('#text').append("_"); }, CSWSDIVIDE));
+		// 			timeouts.push(setTimeout(function(){ translate(false); $('#text').append("/"); }, ESCSDIVIDE));
+		// 			timeouts.push(setTimeout(function(){ translate(true); $('#text').append("_"); }, CSWSDIVIDE));
 
-					if (event.which == DOT) {
-						morseCode = append(morseCode, ".");
-					} else if (event.which == DASH) {
-						morseCode = append(morseCode, "-");
-					}
+		// 			if (event.which == DOT) {
+		// 				morseCode = append(morseCode, ".");
+		// 			} else if (event.which == DASH) {
+		// 				morseCode = append(morseCode, "-");
+		// 			}
 
-				} else {
-					backspace();
-				}
+		// 		} else {
+		// 			backspace();
+		// 		}
 				
-				// only listen to 3 inputs: delete, dot, and dash 
+		// 		// only listen to 3 inputs: delete, dot, and dash 
 				
-			}	
+		// 	}	
 			
-		});
+		// });
 
 		/*
 		Add functions to buttons.
