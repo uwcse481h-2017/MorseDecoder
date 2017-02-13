@@ -8,7 +8,7 @@ var Abbreviation = require('../models/abbreviation.js');
 module.exports = function(app, passport) {
 	// redirect default root to morse page
     app.get('/', function(req, res){
-        res.render('welcome.html');
+        res.render('index.html');
     });
 
     app.get('/switch', function(req, res) {
