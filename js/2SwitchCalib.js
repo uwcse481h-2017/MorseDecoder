@@ -256,9 +256,6 @@ function showMenu() {
     	document.getElementById("menu").style.visibility = "visible";
     	
     	menuVisible = true;
-
-
-
     } 
 }
 

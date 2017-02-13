@@ -1,14 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Lora|Open+Sans:400,700,800');
+
 body {
-	background-color: #25b6b4;
+	background-color: #333333;
+  font-family: 'Lora', 'Times New Roman', serif;
+}
+
+#header a h1 {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 800 !important;
+  color: white;
 }
 
 .wrapper {
-	margin: 30px 0 10px 0;
+	margin: 50px 0 30px 0;
 }
 
 #brand {
 	color: white;
-    font-size: 20pt;
+  font-size: 20pt;
 }
 
 #brand:hover, #brand:active {
@@ -17,11 +26,34 @@ body {
 
 .user-form {
 	background-color: white;
-	border: 1px solid #e7e7e7;
-	border-radius: 5px;
-	padding: 20px;
+	padding: 40px;
 }
 
 #btn-login {
 	width: 100%;
+}
+
+.btn {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  border-radius: 0;
+  padding: 15px 25px;
+}
+.btn-lg {
+  font-size: 16px;
+  padding: 25px 35px;
+}
+.btn-default:hover,
+.btn-default:focus {
+  background-color: #0085A1;
+  border: 1px solid #0085A1;
+  color: white;
+}
+
+#logo {
+  height: 100px;
+  margin: -30px;
 }

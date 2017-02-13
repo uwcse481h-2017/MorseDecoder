@@ -14,45 +14,146 @@
 		<!-- FONT AWESOME -->
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
+		<!-- THEME --> 
+		<link href="../css/clean-blog.css" rel="stylesheet">
+		<script src="../js/clean-blog.js"></script>
+		<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
 		<!-- PERSONAL -->
 		<!-- CSS --> 
-		<link rel="stylesheet" type="text/css" href="../css/morse.css">
+		<!--<link rel="stylesheet" type="text/css" href="../css/morse.css">-->
+		<link rel="stylesheet" type="text/css" href="../css/welcome.css"/>
 		<!-- ICON -->
     	<link rel="shortcut icon" href="../data/tap.png">
 	</head>
 
-	<body>
-        
-    <!-- Nav -->
-    <nav id="mynav" class="navbar">
+	<body>    
+
+	<!-- Navigation Bar -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/"><img id="logo" src="../data/tap.png" alt="Tap"></a>
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
                 <a class="navbar-brand" href="/">Morse Decoder</a>
             </div>
-            <div class="collapse navbar-collapse">
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/signin">Sign In</a></li>
-                    <li><a href="/signup">Sign Up</a></li>
+                    <li>
+                        <a href="/signin">Sign In</a>
+                    </li>
+                    <li>
+                        <a href="/signup">Sign Up</a>
+                    </li>
                 </ul>
             </div>
+        </div>
     </nav>
-    <!-- /.Nav -->
 
-	<div class="container-fluid">
-		<div class="jumbotron">
-			<h1 class="display-3">Welcome to Morse Decoder!</h1>
-			<hr class="my-4">
-			<p class="lead">People with mobility impairments may have difficulties with communication and operating electronic devices such as phones and computers. Fortunately, there are assistive technologies available to help people with mobility impairments effectively use technology. </p>
-			<p class="lead"> Certain types of mobility impairments limit the types of actions that the user can execute. For example, individuals experiencing Repetitive Stress Injury (RSI) may "...require assistive technologies in order to use a computer without pain". Impairments such as RSI can prevent the use of standard input devices, such as a keyboard or mouse.</p>
-			<hr class="my-4">
-			<p>By utilizing a machine learning algorithm, Morse Decode provides an interface for mobility impaired users to communicate using Morse code input.</p>
-			<p class="lead">
-				<a class="btn btn-primary btn-lg" href="https://github.com/uwcse481h-2017/MorseDecoder" role="button">Learn more</a>
-			</p>
-		</div>
-	</div>
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+	<header class="intro-header cta" style="background-image: url('../data/marble.jpg')">
+        <div class="cta-content">
+            <div class="container">
+				<div class="row">
+					<div class="col-md-7">
+						<div class="site-heading">
+							<div class="header-content">
+								<div class="header-content-inner">
+									<h1>A mobile solution for communication</h1>
+									<span class="subheading">Morse Decoder is a portable AAC device that lets you communicate anywhere, anytime.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="signup" class="col-md-5">
+						<form action="/signup" method="post">
+							<div class="form-group">
+								<label>Username</label>
+								<input type="text" class="form-control" name="username">
+							</div>
+							<div class="form-group">
+								<label>Email</label>
+								<input type="text" class="form-control" name="email">
+							</div>
+							<div class="form-group">
+								<label>Password</label>
+								<input type="password" class="form-control" name="password">
+							</div>
+
+							<button type="submit" id="btn-signup" class="btn btn-default">Sign up for Morse Decoder</button>
+						</form>
+					</div>
+				</div>
+            </div>
+        </div>
+        <div class="overlay"></div>
+    </header>
+
+	<section id="mission" class="text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="section-heading">Our Mission</h2>
+                    <p>People with mobility impairments may have difficulties with communication and operating electronic devices such as phones and computers. Fortunately, there are assistive technologies available to help people with mobility impairments effectively use technology.</p>
+					<p>Certain types of mobility impairments limit the types of actions that the user can execute. For example, individuals experiencing Repetitive Stress Injury (RSI) may "...require assistive technologies in order to use a computer without pain". Impairments such as RSI can prevent the use of standard input devices, such as a keyboard or mouse.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+	<section class="cta" style="background-image: url('https://www.prentrom.com/assets/prc/img/advantage.jpg')">
+        <div class="cta-content">
+            <div class="container">
+                <h2 class="section-heading">Our Solution</h2>
+				<p> By utilizing a machine learning algorithm, Morse Decode provides an interface for mobility impaired users to communicate using Morse code input.</p>
+            </div>
+        </div>
+        <div class="overlay"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <a href="#">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/uwcse481h-2017/MorseDecoder">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted">Copyright &copy; Morse Decoder 2017</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 	</body>
 </html>

@@ -37,24 +37,41 @@ var morseDictionary = {
 	"-----": "0"
 };
 
+// Switch constants 
 var BACKSPACE = 8 
 var DOT = 32
 var DASH = 13 
+var MENU = 39 
 
+// User's timing for different spacing 
 var EL_SPACE;
 var CHAR_SPACE;
 var WORD_SPACE;
 
+// Timing variables 
 var spaceTimer = null;
 var letterTimeout = null;
 var wordTimeout = null;
 var breakStarted = false;
 
+// Calibration 
+var calibNum;
+var spaceTimerRunning = null;
+var spaceTimeArr = [];
+var es = false;
+var cs = false;
+var ws = false;
+
+// Menu variables 
+var menuVisible = false;
+var menuCurrItem;
+var items;
+
+// Keep track of word 
 var word = ""
 
 $(document).ready(function() {
 	var userId = $('#uid').text().trim()
-
 	$.get("/getAverageSpaces/" + userId, function(data) {
 		EL_SPACE = Number(JSON.stringify(data.aveElSpace))
 		CHAR_SPACE = Number(JSON.stringify(data.aveCharSpace))
@@ -66,6 +83,9 @@ $(document).ready(function() {
 	})
 	.then(function() {
 		spaceTimer = new Stopwatch();
+	
+		menuCurrItem = 0;
+		items = $('.menuItem')
 
 		/* 
 		Listen for switch inputs 
@@ -85,15 +105,22 @@ $(document).ready(function() {
 			if (event.which == BACKSPACE) {
 				backspace()
 				breakStarted = false;
-				
 			} else if (event.which == DOT) {
-				word = append(word, ".");
-				breakStarted = false;
-				
+				if(menuVisible) {
+					scroll();
+				} else {
+					word = append(word, ".");
+					breakStarted = false;
+				}
 			} else if (event.which == DASH) {
-				word = append(word, "-");
-				breakStarted = false;
-				
+				if(menuVisible) {
+					select();
+				} else {
+					word = append(word, "-");
+					breakStarted = false;
+				}
+			} else if (event.which == MENU) {
+				showMenu();
 			}
 
 			// after some time, translate the letter 
@@ -114,10 +141,9 @@ $(document).ready(function() {
 		/*
 		Add functions to buttons.
 		*/ 
-		$('#playBtn').click(function() {
-			var sentence = $('#translation').text().trim().toLowerCase();
-			responsiveVoice.speak(sentence)
-			// responsiveVoice.speak(getFullWord(userId, sentence)); 
+		$('#btn-play').click(function() {
+			play($('#translation').text().trim().toLowerCase());
+			
 		});
 
 		/*
@@ -144,6 +170,12 @@ function translateWord() {
 	$('#translation').append(" ");
 	getSuggestions();
 	breakStarted = true
+}
+
+// PLAY //////////////////////////////////////////////////////////////////
+
+function play(sentence) {
+	responsiveVoice.speak(sentence)
 }
 
 // BACKSPACE /////////////////////////////////////////////////////////////
@@ -216,18 +248,74 @@ function backspaceTranslation() {
 
 // Suggest words/phrases to the user depending on what they have written so far 
 function getSuggestions() {
-	var text = $('#translation').val();
-	console.log(text);
+	var text = $('#translation').val().split("[")[0];
 	var url = "https://api.datamuse.com/sug?s=" + text 
-	console.log(url)
 	$.get(url, function(data) {
-		var html = "<ul>"
-		for (var i = 0; i < data.length; i++) {
-			html += "<li> " + data[i].word + "</li>"
+		if (data.length > 0) {
+			var topSuggestion = data[0].word;
+			var complete = topSuggestion.slice(text.length);
+			var html = "<ul> <li> " + topSuggestion + "</li>"
+			for (var i = 1; i < data.length; i++) {
+				html += "<li> " + data[i].word + "</li>"
+			}
+			html += "<ul>"
+			$('#suggestionBox').html(html);
+			$('#btn-suggest a').text("Take Top Suggestion: " + topSuggestion.toUpperCase());
 		}
-		html += "<ul>"
-		$('#suggestionBox').html(html);
 	});
+}
+
+// MENU //////////////////////////////////////////////////////////////////
+
+/*
+Shows the menu. 
+*/
+function showMenu() {
+    if(menuVisible) {
+    	menuVisible = false;
+		$('#menu-btn').removeClass('open');
+    } else {
+    	menuVisible = true;		
+		$('#menu-btn').addClass('open');
+    } 
+}
+
+/**
+Scrolls through the menu
+*/
+function scroll() {
+	if(menuCurrItem == items.length) {
+		menuCurrItem = 0;
+	}
+	menuCurrItem++;
+
+	var mod = menuCurrItem % 3; 
+	if (mod == 1) {
+		$('.btn-option a').removeClass('active');
+		$('#btn-play a').addClass('active');
+	} else if (mod == 2) {
+		$('.btn-option a').removeClass('active');		
+		$('#btn-delete a').addClass('active');
+	} else if (mod == 0) {
+		$('.btn-option a').removeClass('active');		
+		$('#btn-suggest a').addClass('active');
+	}
+}
+
+/**
+Selects underlined item in the menu.. must be scrolling
+*/
+function select() {
+	var mod = menuCurrItem % 3; 
+	if (mod == 1) {
+		play($('#translation').text().trim().toLowerCase())
+	} else if (mod == 2) {
+		backspace();
+	} else if (mod == 0) {
+		var sentence = $('#btn-suggest a').text().slice(21)
+		console.log(sentence)
+		play(sentence)
+	}
 }
 
 // ABBREVIATIONS /////////////////////////////////////////////////////////

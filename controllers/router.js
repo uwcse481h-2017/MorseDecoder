@@ -7,15 +7,13 @@ var Abbreviation = require('../models/abbreviation.js');
 // Expose API routes
 module.exports = function(app, passport) {
 	// redirect default root to morse page
-    app.get('/', function (req, res){
-        res.render('morse.ejs', {
-            user : req.user // get the user out of session and pass to template
-        });
+    app.get('/', function(req, res){
+        res.render('welcome.html');
     });
 
-    // app.get('/switch', function(req, res) {
-    //     res.render('2Switch.html', { user: req.user });
-    // });
+    app.get('/switch', function(req, res) {
+        res.render('morse.ejs', {user: req.user});
+    });
 
     app.get('/switchCalib', function(req, res) {
         res.render('2SwitchCalib.ejs', { user: req.user } );
@@ -45,7 +43,7 @@ module.exports = function(app, passport) {
                 }
                 console.log(JSON.stringify(user))
                 if (user.trainingCompleted == true) {
-                    return res.redirect('/')
+                    return res.redirect('/switch')
                 } else {
                     return res.redirect('/switchCalib')
                 }
