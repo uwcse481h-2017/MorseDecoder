@@ -47,12 +47,14 @@ var MENU = 39
 var EL_SPACE;
 var CHAR_SPACE;
 var WORD_SPACE;
+var ESCSDIVIDE;
+var CSWSDIVIDE;
 
 // Timing variables 
 var spaceTimer = null;
-var letterTimeout = null;
-var wordTimeout = null;
-var breakStarted = false;
+var timerRunning = false;
+var morseCode = "";
+var timeouts = [];
 
 // Calibration 
 var calibNum;
@@ -73,13 +75,24 @@ var word = ""
 $(document).ready(function() {
 	var userId = $('#uid').text().trim()
 	$.get("/getAverageSpaces/" + userId, function(data) {
-		EL_SPACE = Number(JSON.stringify(data.aveElSpace))
-		CHAR_SPACE = Number(JSON.stringify(data.aveCharSpace))
-		WORD_SPACE = Number(JSON.stringify(data.aveWordSpace))
+		var EL_SPACE = Number(JSON.stringify(data.aveElSpace))
+		var CHAR_SPACE = Number(JSON.stringify(data.aveCharSpace))
+		var WORD_SPACE = Number(JSON.stringify(data.aveWordSpace))
 
-		console.log("el space: " + EL_SPACE)
-		console.log("char space: " + CHAR_SPACE)
-		console.log("word space: " + WORD_SPACE)
+		ESCSDIVIDE = (EL_SPACE + CHAR_SPACE) / 2;
+		CSWSDIVIDE = (CHAR_SPACE + WORD_SPACE) / 2;
+
+		//ESCSDIVIDE = 1000;
+		//CSWSDIVIDE = 1500;
+
+		console.log("el space: " + EL_SPACE);
+		console.log("char space: " + CHAR_SPACE);
+		console.log("word space: " + WORD_SPACE);
+
+		console.log("ESCSDIVIDE: " + ESCSDIVIDE);
+		console.log("CSWSDIVIDE: " + CSWSDIVIDE);
+
+
 	})
 	.then(function() {
 		spaceTimer = new Stopwatch();
@@ -91,51 +104,105 @@ $(document).ready(function() {
 		Listen for switch inputs 
 		*/
 		document.addEventListener("keydown", function(event) {
-			spaceTimer.start();
+			
 
-			if (letterTimeout != null) {
-				clearTimeout(letterTimeout)
-			}
+			if(timerRunning & (event.which == DOT || event.which == DASH)) {
 
-			if (wordTimeout != null) {
-				clearTimeout(wordTimeout)
-			}
+				for (var i=0; i<timeouts.length; i++) {
+			  		clearTimeout(timeouts[i]);
+				}
 
-			// only listen to 3 inputs: delete, dot, and dash 
-			if (event.which == BACKSPACE) {
-				backspace()
-				breakStarted = false;
-			} else if (event.which == DOT) {
-				if(menuVisible) {
-					scroll();
-				} else {
-					word = append(word, ".");
+				// only listen to 3 inputs: delete, dot, and dash 
+				if (event.which == BACKSPACE) {
+					backspace()
 					breakStarted = false;
+				} else if (event.which == DOT) {
+					if(menuVisible) {
+						scroll();
+					} else {
+						word = append(word, ".");
+						breakStarted = false;
+					}
+				} else if (event.which == DASH) {
+					if(menuVisible) {
+						select();
+					} else {
+						word = append(word, "-");
+						breakStarted = false;
+					}
+				} else if (event.which == MENU) {
+					showMenu();
+					var spaceMs = spaceTimer.stop();
+					console.log(spaceMs.totalMs);
+					timerRunning = false;	
 				}
-			} else if (event.which == DASH) {
-				if(menuVisible) {
-					select();
-				} else {
-					word = append(word, "-");
-					breakStarted = false;
-				}
-			} else if (event.which == MENU) {
-				showMenu();
 			}
 
-			// after some time, translate the letter 
-			letterTimeout = setTimeout(function() {
-				if (!breakStarted) {
-					translateLetter();
-				}
-			}, CHAR_SPACE);
+				//console.log("type: " + determineSpaceType(spaceMs.totalMs));
 
-			// after more time, translate the word (insert a space) 
-			wordTimeout = setTimeout(function() {
-				if (!breakStarted) {
-					translateWord();
+				/* 
+
+				var spaceType = determineSpaceType(spaceMs.totalMs);
+
+
+				if(spaceType == "es") {
+					var needSpace = false;
+
+					//console.log("morseCode: " + morseCode);
+					//console.log("needSpace: " + needSpace);
+
+					//translate(morseCode, needSpace);
+
+				} else if(spaceType == "cs") {
+					
+					var needSpace = false;
+
+					//console.log("morseCode: " + morseCode);
+					//console.log("needSpace: " + needSpace);
+
+					//translate(needSpace);
+
+					
+
+				} else if(spaceType == "ws") {
+					var needSpace = true;
+
+					//console.log("morseCode: " + morseCode);
+					//console.log("needSpace: " + needSpace);
+
+					//translate(needSpace);
+
+				} */
+			
+		});
+
+		document.addEventListener("keyup", function(event) {
+			
+			if(event.which == DOT || event.which == DASH || event.which == BACKSPACE) {
+
+				if(event.which != BACKSPACE) {
+					spaceTimer.reset();
+					spaceTimer.start();
+					timerRunning = true;
+
+
+					timeouts.push(setTimeout(function(){ translate(false); $('#text').append("/"); }, ESCSDIVIDE));
+					timeouts.push(setTimeout(function(){ translate(true); $('#text').append("_"); }, CSWSDIVIDE));
+
+					if (event.which == DOT) {
+						morseCode = append(morseCode, ".");
+					} else if (event.which == DASH) {
+						morseCode = append(morseCode, "-");
+					}
+
+				} else {
+					backspace();
 				}
-			}, WORD_SPACE);
+				
+				// only listen to 3 inputs: delete, dot, and dash 
+				
+			}	
+			
 		});
 
 		/*
@@ -157,7 +224,7 @@ $(document).ready(function() {
 
 // TRANSLATION ///////////////////////////////////////////////////////////
 
-function translateLetter() {
+/*function translateLetter() {
 	$('#text').append("/");
 	$('#translation').append(morseDictionary[word]);
 	getSuggestions();
@@ -170,7 +237,7 @@ function translateWord() {
 	$('#translation').append(" ");
 	getSuggestions();
 	breakStarted = true
-}
+}*/
 
 // PLAY //////////////////////////////////////////////////////////////////
 
@@ -181,66 +248,38 @@ function play(sentence) {
 // BACKSPACE /////////////////////////////////////////////////////////////
 
 function backspace() {
-	// do not allow backspacing of individual dots or dashes, only whole letters or word spaces 
-	var sentence = $('#text').val();
-	if (sentence.length > 0) {
-		var origText = $('#text').text();
-		var origTranslation = $('#translation').text();
 
-		var lastChar = sentence[sentence.length-1];
-		if (lastChar == '_') {
-			$('#text').html(origText.slice(0, origText.length - 1));
-			$('#translation').html(origTranslation.slice(0, origTranslation.length - 1));
-			getSuggestions();
-			breakStarted = true;
-		} else if (lastChar == '/') {
-			var idx = sentence.length - 2; 
-			while (idx >= 0 && sentence[idx] != '/') {
-				idx--; 
-			}
-			$('#text').html(origText.slice(0, idx+1))
-			$('#translation').html(origTranslation.slice(0, origTranslation.length - 1));
-			getSuggestions();	
+	var entireTranslatedString = $("#translation").text();
+	var entireMorseString = $("#text").text();
+
+	var lastCharacter = entireTranslatedString.charAt(entireTranslatedString.length - 1);
+	console.log(lastCharacter);
+
+	//delete from translation
+	$("#translation").text(entireTranslatedString.substring(0, entireTranslatedString.length - 1));
+
+	//delete from morse code
+	if(lastCharacter == " ") {
+		$("#text").text(entireMorseString.substring(0, entireMorseString.length - 2));
+
+	} else /*last character is a letter*/{
+
+		/*for (var code in morseDictionary) {
+		    
+		    if(morseDictionary[code] == lastCharacter) {
+		    	console.log("deleting from morse input");
+		    	$("#text").text(entireMorseString.substring(0, entireMorseString.length - (code.length)));
+		    }
+		} */
+
+		for (var key in morseDictionary) {
+		  //alert();
+
+		  if(morseDictionary[key] == lastCharacter)
+		  	var length = key.length + 1;
+
+		  	$("#text").text(entireMorseString.substring(0, entireMorseString.length - length));
 		}
-		// if (sentence[sentence.length-1] == '/') {
-		// 	backspaceTranslation();
-		// } else if (sentence[sentence.length-1])
-
-		// if (sentence[sentence.length-1] == '/' || sentence[sentence.length-1] == '_') {
-		// 	backspaceText();
-		// 	backspaceTranslation();
-		// 	getSuggestions();
-		// 	breakStarted = false;
-	} 
-	// breakStarted = false;
-}
-function backspaceText() {
-	var origText = $('#text').text();
-	if (origText.length > 0) {
-		for (var i = origText.length - 1; i >= 0; i--) {
-			// if last character was a word space, just delete the word space (_)
-			if (origText[i] == '_') {
-				var newText = origText.slice(0, origText.length - 1);
-				break;
-			// if last character was a letter, then delete the letter and the letter space (/)
-			} else if (origText[i] == '/') {
-				for (var j = i; j >= 0; j--) {
-					if (origText[j] == '/') {
-						var newText = origText.slice(0, j + 1);
-						break;
-					}
-				}
-			}
-		}
-		$('#text').html(newText);
-	}
-}
-
-function backspaceTranslation() {
-	var origTranslation = $('#translation').text();
-	if (origTranslation.length > 0) {
-		var newTranslation = origTranslation.slice(0, origTranslation.length - 1);
-		$('#translation').html(newTranslation);
 	}
 }
 
@@ -321,6 +360,7 @@ function select() {
 // ABBREVIATIONS /////////////////////////////////////////////////////////
 
 // Translate the written sentence into a sentence containing the full-length versions of the abbreviations 
+/*
 function getFullSentence(uid, sentence) {
 	var newSentence = ""
 	var words = sentence.split()
@@ -346,12 +386,35 @@ function getFullWord(uid, abbr) {
 			}
 		}
 	});
-}
+} */
 
 // HELPER FUNCTIONS //////////////////////////////////////////////////////
 
 // Take the user's input and add it onto the word they are writing  
-function append(word, input) {
+function append(morseCode, input) {
 	$('#text').append(input);
-	return word += input;
+	return morseCode += input;
+}
+
+function translate(needSpace) {
+
+	$('#translation').append(morseDictionary[morseCode]);
+	if(needSpace) {
+		$('#translation').append(" ");
+	}
+	morseCode = "";
+
+}
+
+function determineSpaceType(ms) {
+	if(ms < ESCSDIVIDE) {
+		return "es";
+
+	} else if(ms >= ESCSDIVIDE && ms < CSWSDIVIDE) {
+		return "cs";
+
+	} else {
+		return "ws";
+
+	}
 }
