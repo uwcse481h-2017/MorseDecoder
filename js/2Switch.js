@@ -64,6 +64,9 @@ var items;
 // Keep track of word 
 var word = ""
 
+// Keep track of backspacing
+var menuOpen = false;
+
 $(document).ready(function() {
 	var userId = $('#uid').text().trim()
 
@@ -73,6 +76,9 @@ $(document).ready(function() {
 		WORD_SPACE = Number(JSON.stringify(data.aveWordSpace))
 		ESCS_DIVIDE = (EL_SPACE + CHAR_SPACE) / 2.0;
 		CSWS_DIVIDE = (CHAR_SPACE + WORD_SPACE) / 2.0;
+
+		//ESCS_DIVIDE = 1000;
+		//CSWS_DIVIDE = 2000;
 
 		console.log("el space: " + EL_SPACE);
 		console.log("char space: " + CHAR_SPACE);
@@ -103,22 +109,37 @@ $(document).ready(function() {
 
 		document.addEventListener("keyup", function(event) { 
 			if (event.which == DOT) {
-				resetTime();
+
+				//resetTime();
 				if(menuVisible) {
 					scroll();
 				} else {
 					word = append(word, ".");
 					breakStarted = false;
+					if(!menuOpen) {
+						resetTime();
+					}
+					
 				}
 			} else if (event.which == DASH) {
-				resetTime();				
+				//resetTime();				
 				if(menuVisible) {
 					select();
 				} else {
 					word = append(word, "-");
 					breakStarted = false;
+					if(!menuOpen) {
+						resetTime();
+					}
+					
 				}
 			} else if (event.which == MENU) {
+				if(menuOpen) {
+					menuOpen = false;
+				} else {
+					menuOpen = true;
+				}
+
 				toggleMenu();
 				// var spaceMs = spaceTimer.stop();
 				// console.log(spaceMs.totalMs);
@@ -336,6 +357,7 @@ function append(morseCode, input) {
 function resetTime() {
 	spaceTimer.reset();
 	spaceTimer.start();
+	startProgressBar();
 	timerRunning = true; 
 
 	timeouts.push(setTimeout(function() { 
@@ -356,3 +378,18 @@ function determineSpaceType(ms) {
 		return "ws";
 	}
 }
+
+function startProgressBar() {
+
+	
+
+
+
+
+}
+
+
+
+
+
+
