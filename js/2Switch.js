@@ -56,14 +56,6 @@ var timerRunning = false;
 var morseCode = "";
 var timeouts = [];
 
-// Calibration 
-var calibNum;
-var spaceTimerRunning = null;
-var spaceTimeArr = [];
-var es = false;
-var cs = false;
-var ws = false;
-
 // Menu variables 
 var menuVisible = false;
 var menuCurrItem;

@@ -21,6 +21,28 @@
   width: 100%;
 }
 
+#btn-restart {
+  width: 100%;
+}
+
 .active {
   background-color: #eee;
+}
+
+@media only screen and (max-width: 768px) {
+    #text {
+      margin-bottom: 20px;
+    }
+
+    #translation {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 12pt;
+    }
+
+    h3 {
+      font-size: 20px;
+    }
 }

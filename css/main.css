@@ -4,6 +4,7 @@ body {
   font-family: 'Lora', 'Times New Roman', serif;
   font-size: 20px;
   color: #333333;
+  margin-top: 70px !important;
 }
 
 h1, h2, h3 {
@@ -11,8 +12,8 @@ h1, h2, h3 {
   font-weight: 800;
 }
 
-.content {
-    margin-top: 70px !important;
+textarea {
+  font-size: 20pt !important;
 }
 
 .navbar-custom {

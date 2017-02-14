@@ -32,8 +32,6 @@
 	<link rel="shortcut icon" href="../data/logo_square_fill.png">
 </head>
 
-<body>
-
 <!-- Navigation Bar -->
 <nav class="navbar nav navbar-default navbar-custom navbar-fixed-top">
 	<div class="container-fluid">
@@ -51,7 +49,7 @@
 				<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i><%= user.general.username %> <span class="caret"></span></a>
 				<ul class="dropdown-menu">
-					<li><a href="/profile">My Profile</a></li>                        
+					<li><a href="/profile">My Profile</a></li>                    
 					<li><a href="/signout">Sign Out</a></li>
 				</ul>
 			</li>
@@ -60,28 +58,22 @@
 	</div>
 </nav>
 
+<body>
+
 <!-- Hidden div for storing user id --> 
 <% if(locals.user){ %>
 <div id="uid" class="hidden"><%= user._id %></div>
 <% } %>
 
 <div class="container-fluid content">
-	<!--<div class="row">
-		<div class="col-md-6">
-			<h4> Morse Input </h4>
-		</div>
-		<div class="col-md-6">
-			<h4> English Translation </h4>
-		</div>
-	</div>-->
 	<div class="row">
 		<div class="col-md-6">
 			<label for="text">Morse Input</label>
-			<textarea id="text" class="form-control custom-control" rows="5" style="resize:none"></textarea>  
+			<textarea id="text" class="form-control custom-control" rows="3" style="resize:none"></textarea>  
 		</div>
 		<div class="col-md-6">
 			<label for="translation">English Translation</label>
-			<textarea id="translation" class="form-control custom-control" rows="5" style="resize:none"></textarea> 
+			<textarea id="translation" class="form-control custom-control" rows="3" style="resize:none"></textarea> 
 		</div>
 	</div>
 	<div class="row">

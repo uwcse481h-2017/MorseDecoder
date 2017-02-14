@@ -37,157 +37,97 @@ var morseDictionary = {
 	"-----": "0"
 };
 
-
+// Switch constants 
 var DOT = 32
 var DASH = 13
-var MENU = 39
 
+// Calibration constants 
+var STRING = "HELLO HELLO";
+
+// Calibration/timing variables 
 var calibNum;
 var spaceTimerRunning = null;
 var spaceTimeArr = [];
+
+// Type of space
 var es = false;
 var cs = false;
 var ws = false;
-var menuVisible = false;
-var menuCurrItem;
-var items;
+
+// Keep track of word 
+var word = "";
 
 $(document).ready(function(){
-	
-	menuCurrItem = 0;
-
-	items = document.getElementsByClassName("menuItem");
-
 	var userId = $('#uid').text().trim()
 
-
-	//visual();
-
-	$('#restart').click(function () {
-		restart();
-	});
-
-	$('#calibMsg').show();
 	calibNum = 0;
-
 
 	spaceTimer = new Stopwatch();
 
 	/*
 	Listens for switch inputs. 
 	*/
-	var word = "";
 	document.addEventListener("keydown", function(event) {
-
-
-		if(spaceTimerRunning != null) {
+		if (spaceTimerRunning != null) {
 			var timeOfSpace = spaceTimer.stop().totalMs;
-
+			
 			var type = null;
-
-			if(ws) {
-
+			if (ws) {
 				type = "ws";
-			} else if(cs) {
+			} else if (cs) {
 				type = "cs";
-
-			} else if(es) {
-
+			} else if (es) {
 				type = "es";
 			}
 			
 			var timeObj = {
-
 				time: timeOfSpace,
 				type: type
 			}
-
 			spaceTimeArr.push(timeObj);
 
-			//console.log(spaceTimeArr);
-			spaceTimer.reset();
-			spaceTimerRunning = null;
-			document.getElementById("spaceVisual").style.backgroundColor = "blue";
-			es = false;
-			cs = false;
-			ws = false;
+			reset();
 		}
-
 
 		// only translate dots and dashes 
 		if (event.which == DOT) {
-			if(menuVisible) {
-				//console.log("dot dash menuCurrItem:" + menuCurrItem);
-				scroll();
-			} else {
-				word = appendAndRecord(word, ".");
-				spaceTimer.start();
-				spaceTimerRunning = true;
-				es = true;
-			}
-			
+			word = append(word, ".");
+			start();
+			es = true;
 		} else if (event.which == DASH) {
-			if(menuVisible) {
-				//console.log("dot dash menuCurrItem:" + menuCurrItem);
-				select();
-			} else {
-				word = appendAndRecord(word, "-");
-				spaceTimer.start();
-				spaceTimerRunning = true;
-				es = true;
-			}
+			word = append(word, "-");
+			start();
+			es = true;
+		} 
 
-		} else if(event.which == MENU) {
-
-			showMenu();
-
-		}
-
-
-		var string = "HELLO HELLO";
-		
-		if(morseDictionary[word] == string.charAt(calibNum)) {
-			
+		if (STRING.charAt(calibNum) == morseDictionary[word]) {
 			$('#translation').append(morseDictionary[word]);
 			word = ""
-			spaceTimer.start();
-			spaceTimerRunning = true;
-			document.getElementById("spaceVisual").style.backgroundColor = "green";
+			start();
 			calibNum++;
 
-			if(string.charAt(calibNum) == " ") {
-				$('#text').append("  7 ");
+			if (STRING.charAt(calibNum) == " ") {
+				$('#text').append("_");
 				ws = true;
-
-			} else if(calibNum < string.length) {
-
-				$('#text').append("  3 ");
+			} else if (calibNum < STRING.length) {
+				$('#text').append("/");
 				cs = true;
 			}
 
-			if(calibNum == string.length) {
-				alert('calibration complete');
-				sendToServer(userId, spaceTimeArr);
-				var url = '/api/v1/markTrainingCompleted/' + userId;
-				$.post(url, function() {
-					//console.log("call to " + url + " completed");
-				}).then(function() {
-					$.get('/')
-
-				})
+			if (calibNum == STRING.length) {
+				completeCalibration(userId);
 			}	
-
-
-		} else if(string.charAt(calibNum) == " ") {
+		} else if (STRING.charAt(calibNum) == " ") {
 			$('#translation').append(" ");
 			calibNum++;
-
 		}
+	});
 
-		//console.log("calibNumb: " + calibNum);
-		//console.log("string length : " + string.length);
-
-		
+	/*
+	Add functions to buttons.
+	*/ 
+	$('#btn-restart').click(function () {
+		restart();
 	});
 
 	/*
@@ -198,105 +138,54 @@ $(document).ready(function(){
 	});
 });
 
-/*
-Inserts "." or "-" to the textarea
+// CALIBRATION FUNCTIONS /////////////////////////////////////////////////
 
-@param morseCode
-	String containing either ".", "-", " ", or "/"
-
-@effects 
-	Inserts "." or "-" to the textarea
-
-*/
-function appendAndRecord(word, input) {
-
-	$('#text').append(input);
-	return word += input;
+function completeCalibration(userId) {
+	alert("Calibration complete!")
+	sendToServer(userId, spaceTimeArr);
+	var url = '/api/v1/markTrainingCompleted/' + userId;
+	$.post(url).then(function() {
+		window.location.href = "/switch";
+	})
 }
-
-function visual() {
-
-	document.getElementById("spaceVisual").style.backgroundColor = "blue";
-	document.getElementById("spaceVisual").style.width = "300px";
-	document.getElementById("spaceVisual").style.height = "300px";
-
-}
-
 
 function sendToServer(uid, spacetimeArr) {
 	for(var i = 0; i < spaceTimeArr.length; i++) {
-
-		var apiCall = 'api/v1/addTrainingInfo/'+uid+'/'+spaceTimeArr[i].time+'/'+spaceTimeArr[i].type;
-		//console.log(apiCall);
-
-		$.post(apiCall, function() {
-			//console.log("api call finished");
-		});
+		var apiCall = 'api/v1/addTrainingInfo/' + uid + '/' + spaceTimeArr[i].time + '/' + spaceTimeArr[i].type;
+		$.post(apiCall);
 	}
 }
 
+// TIMER FUNCTIONS ///////////////////////////////////////////////////////
+
+function start() {
+	spaceTimer.start();
+	spaceTimerRunning = true;
+}
+
 function restart() {
+	reset();
 
 	calibNum = 0;
 	spaceTimer = new Stopwatch();
+	spaceTimerRunning = null;
+	spaceTimeArr = [];
+	
 	$('#text').text('');
 	$('#translation').text('');
 }
 
-/*
-Shows the menu. 
-*/
-function showMenu() {
-
-    if(menuVisible) {
-    	document.getElementById("menu").style.visibility = "hidden";
-    	menuVisible = false;
-
-    } else {
-    	document.getElementById("menu").style.visibility = "visible";
-    	
-    	menuVisible = true;
-    } 
+function reset() {
+	spaceTimer.reset();
+	spaceTimerRunning = null;
+	es = false;
+	cs = false;
+	ws = false;
 }
 
-/**
- 
-Scrolls through the menu
-*/
-function scroll() {
+// HELPER FUNCTIONS //////////////////////////////////////////////////////
 
-	if(menuCurrItem == items.length) {
-		menuCurrItem = 0;
-	}
-
-	for(var i = 0; i < items.length; i++) {
-
-		if(menuCurrItem == i) {
-			items[menuCurrItem].style.textDecoration = "underline";
-
-			if(menuCurrItem > 0) {
-				items[menuCurrItem - 1].style.textDecoration = "none";
- 
-			} else if(menuCurrItem == 0) {
-				items[items.length - 1].style.textDecoration = "none";
-
-			}
-		}
-	}
-
-	menuCurrItem++;
-
+function append(word, input) {
+	$('#text').append(input);
+	return word += input;
 }
-
-/**
-Selects underlined item in the menu.. must be scrolling
-*/
-function select() {
-
-	console.log("menuCurrItem: " + menuCurrItem);
-	items[menuCurrItem - 1].style.backgroundColor = "black";
-
-}
-
-
-
