@@ -58,3 +58,21 @@ body {
 #logo {
   height: 100px;
 }
+
+@media only screen and (max-width: 768px) {
+  #header a h1 {
+    font-size: 20pt;
+  }
+
+  .user-form {
+    padding: 20px 30px;
+  }
+
+  #logo {
+    height: 50px;
+  }
+
+  h3 {
+    font-size: 14pt;
+  }
+}

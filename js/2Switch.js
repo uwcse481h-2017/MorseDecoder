@@ -208,12 +208,11 @@ function play(sentence) {
 // BACKSPACE /////////////////////////////////////////////////////////////
 
 function backspace() {
-
 	var entireTranslatedString = $("#translation").text();
 	var entireMorseString = $("#text").text();
 
 	var lastCharacter = entireTranslatedString.charAt(entireTranslatedString.length - 1);
-	console.log(lastCharacter);
+	// console.log(lastCharacter);
 
 	//delete from translation
 	$("#translation").text(entireTranslatedString.substring(0, entireTranslatedString.length - 1));
@@ -294,7 +293,7 @@ function scroll() {
 		menuCurrItem = 0;
 	}
 	menuCurrItem++;
-	console.log(menuCurrItem)
+
 	var mod = menuCurrItem % 3; 
 	if (mod == 1) {
 		$('.btn-option a').removeClass('active');
@@ -319,7 +318,7 @@ function select() {
 		backspace();
 	} else if (mod == 0) {
 		var sentence = $('#btn-suggest a').text().slice(21)
-		console.log(sentence)
+		$('#translation').text(sentence)
 		play(sentence)
 	}
 }
