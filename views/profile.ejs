@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Morse Decode</title>
+    <title>Morse Decoder</title>
 
     <!-- BOOTSTRAP -->
     <!-- Latest compiled and minified CSS -->
@@ -11,73 +11,72 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    
-    <!-- ANGULAR -->
-    <!-- Angular -->
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 
     <!-- FONT AWESOME -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <!-- PERSONAL -->
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/morse.css">
-    <!-- JS -->
-
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../css/profile.css">
     <!-- ICON -->
-    <link rel="shortcut icon" href="../data/tap.png">
+    <link rel="shortcut icon" href="../data/logo_square_fill.png">
     
 </head>
 
 <body>
-    <!-- Nav -->
-    <nav id="mynav" class="navbar">
+    <!-- Navigation Bar -->
+	<nav class="navbar nav navbar-default navbar-custom navbar-fixed-top">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <a class="navbar-brand" href="/"><img id="logo" src="../data/tap.png" alt="Tap"></a>
-                <a class="navbar-brand" href="/">Morse Decode</a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="/">Morse Decoder</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <% if(user){ %>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
+                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i><%= user.general.username %> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="/profile">My Profile</a></li>                        
                         <li><a href="/signout">Sign Out</a></li>
                     </ul>
                 </li>
-            </ul>
-            <% } else{ %>  
-                <div class="collapse navbar-collapse" id="rightnav">
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="/signin">Sign In</a></li>
-						<li><a href="/signup">Sign Up</a></li>
-					</ul>
-				</div>
-            <% } %>
+                </ul>
+            </div>
         </div>
     </nav>
-    <!-- /.Nav -->
 
-    <div class="container">
+    <div class="container content">
         <div class="row">
             <div class="col-md-3">
-                <img src="<%= user.general.image %>"/>
+                <img class="img-circle" src="<%= user.general.image %>"/>
             </div>  
             <div class="col-md-9">
                 <h3> General Information </h3>
-                <p>
-                    <b> ID: </b> <%= user._id %> <br/>
-                    <b> Username: </b> <%= user.general.username %> <br/>
-                    <b> Email: </b> <%= user.general.email %> <br/>
-                    <b> Password: </b> <%= user.general.password %> 
-                </p>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                        <th>ID</th>
+                            <td><%= user._id %></td>
+                        </tr>
+                        <tr>
+                        <th>Username</th>
+                            <td><%= user.general.username %></td>
+                        </tr>
+                        <tr>
+                        <th>Email</th>
+                            <td><%= user.general.email %></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
     
 </body>
-
 </html>

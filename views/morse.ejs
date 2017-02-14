@@ -1,111 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>Morse Decoder</title>
+<head>
+	<title>Morse Decoder</title>
 
-		<!-- BOOTSTRAP --> 
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-		<!-- jQuery library -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-		<!-- Latest compiled JavaScript -->
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<!-- BOOTSTRAP --> 
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-		<!-- FONT AWESOME -->
-	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<!-- FONT AWESOME -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-		<!-- RESPONSIVE VOICE (TTS) -->
-		<script src="http://code.responsivevoice.org/responsivevoice.js"></script>
+	<!-- RESPONSIVE VOICE (TTS) -->
+	<script src="http://code.responsivevoice.org/responsivevoice.js"></script>
 
-		<!-- PERSONAL -->
-		<!-- CSS --> 
-		<link rel="stylesheet" type="text/css" href="../css/main.css">		
-		<link rel="stylesheet" type="text/css" href="../css/morse.css">
-		<link href="../css/2Switch.css" type="text/css" rel="stylesheet" />
-		
-		<!-- JS --> 
-		<script src="../js/2Switch.js" type="text/javascript"></script>
-		<script src="../js/stopwatch.js" type="text/javascript"></script>
-		<!--<script src="../js/menu.js" type="text/javascript"></script>
-		<script src="../js/convertInput.js" type="text/javascript"></script>-->
-		<!-- ICON -->
-    	<link rel="shortcut icon" href="../data/logo_square_fill.png">
-	</head>
+	<!-- PERSONAL -->
+	<!-- CSS --> 
+	<link rel="stylesheet" type="text/css" href="../css/main.css">		
+	<link rel="stylesheet" type="text/css" href="../css/morse.css">
+	
+	<!-- JS --> 
+	<script src="../js/2Switch.js" type="text/javascript"></script>
+	<script src="../js/stopwatch.js" type="text/javascript"></script>
+	<!-- ICON -->
+	<link rel="shortcut icon" href="../data/logo_square_fill.png">
+</head>
 
-	<body>
+<body>
 
-    <!-- Nav -->
-
-	    <nav class="navbar nav navbar-default navbar-custom navbar-fixed-top">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    Menu <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand" href="/">Morse Decoder</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                   <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i><%= user.general.username %> <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/profile">My Profile</a></li>                        
-                        <li><a href="/signout">Sign Out</a></li>
-                    </ul>
-                </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- /.Nav -->
-
-	<!-- Hidden div for storing user id --> 
-	<% if(locals.user){ %>
-	<div id="uid" class="hidden"><%= user._id %></div>
-	<% } %>
-
-	<div class="container-fluid content">
-		<div class="row">
-			<div class="col-md-6">
-				<h4> Morse Input </h4>
-			</div>
-			<div class="col-md-6">
-				<h4> English Translation </h4>
-			</div>
+<!-- Navigation Bar -->
+<nav class="navbar nav navbar-default navbar-custom navbar-fixed-top">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				Menu <i class="fa fa-bars"></i>
+			</button>
+			<a class="navbar-brand" href="/">Morse Decoder</a>
 		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="input-group">
-					<textarea id="text" class="form-control custom-control" rows="3" style="resize:none"></textarea>  
-					<span class="input-group-addon">=</span>
-					<textarea id="translation" class="form-control custom-control" rows="3" style="resize:none"></textarea> 
-				</div>
-			</div>
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i><%= user.general.username %> <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="/profile">My Profile</a></li>                        
+					<li><a href="/signout">Sign Out</a></li>
+				</ul>
+			</li>
+			</ul>
 		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<div id="menu-btn"  class="btn-group">
-					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Menu Options <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li id="btn-play" class="text-center btn-option"><a href="#">Play</a></li>
-						<li id="btn-delete" class="text-center btn-option"><a href="#">Delete</a></li>
-						<li id="btn-suggest" class="text-center btn-option"><a href="#">Take Top Suggestion</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		
-		<!--<h4> Suggestions </h4>
-		<div id="suggestionBox"></div>-->
-
 	</div>
+</nav>
 
-	</body>
+<!-- Hidden div for storing user id --> 
+<% if(locals.user){ %>
+<div id="uid" class="hidden"><%= user._id %></div>
+<% } %>
 
+<div class="container-fluid content">
+	<div class="row">
+		<div class="col-md-6">
+			<h4> Morse Input </h4>
+		</div>
+		<div class="col-md-6">
+			<h4> English Translation </h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<textarea id="text" class="form-control custom-control" rows="5" style="resize:none"></textarea>  
+		</div>
+		<div class="col-md-6">
+			<textarea id="translation" class="form-control custom-control" rows="5" style="resize:none"></textarea> 
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div id="menu-btn"  class="btn-group">
+				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Menu Options <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li id="btn-play" class="text-center btn-option"><a href="#">Play</a></li>
+					<li id="btn-delete" class="text-center btn-option"><a href="#">Delete</a></li>
+					<li id="btn-suggest" class="text-center btn-option"><a href="#" style="display: none;">Take Top Suggestion</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<!--<h4> Suggestions </h4>
+	<div id="suggestionBox"></div>-->
+
+</div>
+
+</body>
 </html>

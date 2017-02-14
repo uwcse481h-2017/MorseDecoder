@@ -38,17 +38,17 @@ var morseDictionary = {
 };
 
 // Switch constants 
-var BACKSPACE = 8 
-var DOT = 32
-var DASH = 13 
-var MENU = 39 
+var DOT = 32;
+var DASH = 13; 
+var MENU = 39;
+var BACKSPACE = 9;
 
 // User's timing for different spacing 
 var EL_SPACE;
 var CHAR_SPACE;
 var WORD_SPACE;
-var ESCSDIVIDE;
-var CSWSDIVIDE;
+var ESCS_DIVIDE;
+var CSWS_DIVIDE;
 
 // Timing variables 
 var spaceTimer = null;
@@ -74,136 +74,65 @@ var word = ""
 
 $(document).ready(function() {
 	var userId = $('#uid').text().trim()
+
 	$.get("/getAverageSpaces/" + userId, function(data) {
-		var EL_SPACE = Number(JSON.stringify(data.aveElSpace))
-		var CHAR_SPACE = Number(JSON.stringify(data.aveCharSpace))
-		var WORD_SPACE = Number(JSON.stringify(data.aveWordSpace))
-
-		ESCSDIVIDE = (EL_SPACE + CHAR_SPACE) / 2;
-		CSWSDIVIDE = (CHAR_SPACE + WORD_SPACE) / 2;
-
-		//ESCSDIVIDE = 1000;
-		//CSWSDIVIDE = 1500;
+		EL_SPACE = Number(JSON.stringify(data.aveElSpace))
+		CHAR_SPACE = Number(JSON.stringify(data.aveCharSpace))
+		WORD_SPACE = Number(JSON.stringify(data.aveWordSpace))
+		ESCS_DIVIDE = (EL_SPACE + CHAR_SPACE) / 2.0;
+		CSWS_DIVIDE = (CHAR_SPACE + WORD_SPACE) / 2.0;
 
 		console.log("el space: " + EL_SPACE);
 		console.log("char space: " + CHAR_SPACE);
 		console.log("word space: " + WORD_SPACE);
-
-		console.log("ESCSDIVIDE: " + ESCSDIVIDE);
-		console.log("CSWSDIVIDE: " + CSWSDIVIDE);
-
-
+		console.log("ESCSDIVIDE: " + ESCS_DIVIDE);
+		console.log("CSWSDIVIDE: " + CSWS_DIVIDE);
 	})
 	.then(function() {
 		spaceTimer = new Stopwatch();
 	
 		menuCurrItem = 0;
-		items = $('.menuItem')
+		items = $('.menuItem');
 
 		/* 
 		Listen for switch inputs 
 		*/
 		document.addEventListener("keydown", function(event) {
-			
-
-			if(timerRunning & (event.which == DOT || event.which == DASH)) {
-
-				for (var i=0; i<timeouts.length; i++) {
+			if (timerRunning && (event.which == DOT || event.which == DASH)) {
+				for (var i = 0; i < timeouts.length; i++) {
 			  		clearTimeout(timeouts[i]);
 				}
 
-				// only listen to 3 inputs: delete, dot, and dash 
-				if (event.which == BACKSPACE) {
-					backspace()
-					breakStarted = false;
-				} else if (event.which == DOT) {
-					if(menuVisible) {
-						scroll();
-					} else {
-						word = append(word, ".");
-						breakStarted = false;
-					}
-				} else if (event.which == DASH) {
-					if(menuVisible) {
-						select();
-					} else {
-						word = append(word, "-");
-						breakStarted = false;
-					}
-				} else if (event.which == MENU) {
-					showMenu();
-					var spaceMs = spaceTimer.stop();
-					console.log(spaceMs.totalMs);
-					timerRunning = false;	
-				}
+				var spaceMs = spaceTimer.stop();
+				console.log(spaceMs.totalMs);
+				timerRunning = false;
 			}
-
-				//console.log("type: " + determineSpaceType(spaceMs.totalMs));
-
-				/* 
-
-				var spaceType = determineSpaceType(spaceMs.totalMs);
-
-
-				if(spaceType == "es") {
-					var needSpace = false;
-
-					//console.log("morseCode: " + morseCode);
-					//console.log("needSpace: " + needSpace);
-
-					//translate(morseCode, needSpace);
-
-				} else if(spaceType == "cs") {
-					
-					var needSpace = false;
-
-					//console.log("morseCode: " + morseCode);
-					//console.log("needSpace: " + needSpace);
-
-					//translate(needSpace);
-
-					
-
-				} else if(spaceType == "ws") {
-					var needSpace = true;
-
-					//console.log("morseCode: " + morseCode);
-					//console.log("needSpace: " + needSpace);
-
-					//translate(needSpace);
-
-				} */
-			
 		});
 
-		// document.addEventListener("keyup", function(event) {
-			
-		// 	if(event.which == DOT || event.which == DASH || event.which == BACKSPACE) {
-
-		// 		if(event.which != BACKSPACE) {
-		// 			spaceTimer.reset();
-		// 			spaceTimer.start();
-		// 			timerRunning = true;
-
-
-		// 			timeouts.push(setTimeout(function(){ translate(false); $('#text').append("/"); }, ESCSDIVIDE));
-		// 			timeouts.push(setTimeout(function(){ translate(true); $('#text').append("_"); }, CSWSDIVIDE));
-
-		// 			if (event.which == DOT) {
-		// 				morseCode = append(morseCode, ".");
-		// 			} else if (event.which == DASH) {
-		// 				morseCode = append(morseCode, "-");
-		// 			}
-
-		// 		} else {
-		// 			backspace();
-		// 		}
-				
-		// 		// only listen to 3 inputs: delete, dot, and dash 
-				
-		// 	}	
-			
-		// });
+		document.addEventListener("keyup", function(event) { 
+			if (event.which == DOT) {
+				resetTime();
+				if(menuVisible) {
+					scroll();
+				} else {
+					word = append(word, ".");
+					breakStarted = false;
+				}
+			} else if (event.which == DASH) {
+				resetTime();				
+				if(menuVisible) {
+					select();
+				} else {
+					word = append(word, "-");
+					breakStarted = false;
+				}
+			} else if (event.which == MENU) {
+				toggleMenu();
+				// var spaceMs = spaceTimer.stop();
+				// console.log(spaceMs.totalMs);
+				// timerRunning = false;	
+			}
+		});
 
 		/*
 		Add functions to buttons.
@@ -224,12 +153,22 @@ $(document).ready(function() {
 
 // TRANSLATION ///////////////////////////////////////////////////////////
 
-/*function translateLetter() {
+function translate(needSpace) {
+	$('#translation').append(morseDictionary[word]);
+	
+	if(needSpace) {
+		$('#translation').append(" ");
+	}
+	
+	getSuggestions();	
+	word = "";
+}
+
+function translateLetter() {
 	$('#text').append("/");
 	$('#translation').append(morseDictionary[word]);
 	getSuggestions();
 	word = "";
-	
 }
 
 function translateWord() {
@@ -237,7 +176,7 @@ function translateWord() {
 	$('#translation').append(" ");
 	getSuggestions();
 	breakStarted = true
-}*/
+}
 
 // PLAY //////////////////////////////////////////////////////////////////
 
@@ -298,8 +237,12 @@ function getSuggestions() {
 				html += "<li> " + data[i].word + "</li>"
 			}
 			html += "<ul>"
+
 			$('#suggestionBox').html(html);
+			$('#btn-suggest a').show();
 			$('#btn-suggest a').text("Take Top Suggestion: " + topSuggestion.toUpperCase());
+		} else {
+			$('#btn-suggest a').hide()
 		}
 	});
 }
@@ -307,12 +250,15 @@ function getSuggestions() {
 // MENU //////////////////////////////////////////////////////////////////
 
 /*
-Shows the menu. 
+Toggles the menu. 
 */
-function showMenu() {
+function toggleMenu() {
     if(menuVisible) {
     	menuVisible = false;
 		$('#menu-btn').removeClass('open');
+		
+		$('.btn-option a').removeClass('active');
+		menuCurrItem = 0;
     } else {
     	menuVisible = true;		
 		$('#menu-btn').addClass('open');
@@ -327,7 +273,7 @@ function scroll() {
 		menuCurrItem = 0;
 	}
 	menuCurrItem++;
-
+	console.log(menuCurrItem)
 	var mod = menuCurrItem % 3; 
 	if (mod == 1) {
 		$('.btn-option a').removeClass('active');
@@ -396,25 +342,26 @@ function append(morseCode, input) {
 	return morseCode += input;
 }
 
-function translate(needSpace) {
+function resetTime() {
+	spaceTimer.reset();
+	spaceTimer.start();
+	timerRunning = true; 
 
-	$('#translation').append(morseDictionary[morseCode]);
-	if(needSpace) {
-		$('#translation').append(" ");
-	}
-	morseCode = "";
+	timeouts.push(setTimeout(function() { 
+		translate(false); $('#text').append("/"); 
+	}, ESCS_DIVIDE));
 
+	timeouts.push(setTimeout(function() { 
+		translate(true); $('#text').append("_"); 
+	}, CSWS_DIVIDE));
 }
 
 function determineSpaceType(ms) {
 	if(ms < ESCSDIVIDE) {
 		return "es";
-
 	} else if(ms >= ESCSDIVIDE && ms < CSWSDIVIDE) {
 		return "cs";
-
 	} else {
 		return "ws";
-
 	}
 }
