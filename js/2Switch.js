@@ -67,6 +67,9 @@ var word = ""
 // Keep track of backspacing
 var menuOpen = false;
 
+var LANGUAGE;
+
+var timeoutId = 0;
 $(document).ready(function() {
 	var userId = $('#uid').text().trim()
 
@@ -82,6 +85,13 @@ $(document).ready(function() {
 		console.log("word space: " + WORD_SPACE);
 		console.log("ESCSDIVIDE: " + ESCS_DIVIDE);
 		console.log("CSWSDIVIDE: " + CSWS_DIVIDE);
+	})
+	.then(function() {
+		$.get("/api/v1/getLanguage/" + userId, function(data) {
+			LANGUAGE = String(JSON.stringify(data.language));
+			LANGUAGE = LANGUAGE.slice(1, LANGUAGE.length-1)
+			console.log("language: " + LANGUAGE);
+		});
 	})
 	.then(function() {
 		spaceTimer = new Stopwatch();
@@ -128,8 +138,9 @@ $(document).ready(function() {
 					if(!menuOpen) {
 						resetTime();
 					}
-					
 				}
+				
+
 			} else if (event.which == MENU) {
 				if(menuOpen) {
 					menuOpen = false;
@@ -195,7 +206,7 @@ function translateWord() {
 // PLAY //////////////////////////////////////////////////////////////////
 
 function play(sentence) {
-	responsiveVoice.speak(sentence)
+	responsiveVoice.speak(sentence, LANGUAGE)
 }
 
 // BACKSPACE /////////////////////////////////////////////////////////////

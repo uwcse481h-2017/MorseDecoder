@@ -257,6 +257,35 @@ module.exports = function(app, passport) {
             });
         });
 
+    // LANGUAGE
+    app.route('/api/v1/selectLanguage/:uid/:language')
+        .post(function(req, res) {
+            User.findById(req.params.uid, function(err, user) {
+                if (err) {
+                    res.send(err);
+                }
+
+                user.language = req.params.language;
+
+                user.save(function(err) {
+                    if (err) {
+                        res.send(err);
+                    }
+                    res.json(user);
+                });
+            });
+        });
+
+    app.get('/api/v1/getLanguage/:uid', function(req, res) {
+        User.findById(req.params.uid, function(err, user) {
+            if (err) {
+                res.send(err);
+            }
+
+            res.json({language: user.language})
+        });
+    });
+
 }
 
 // Route middleware to make sure a user is logged in

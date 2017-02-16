@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
     <title>Morse Decoder</title>
 
     <!-- BOOTSTRAP -->
@@ -53,17 +55,17 @@
 
     <div class="container content">
         <div class="row">
-            <div class="col-md-3">
-                <img class="img-circle" src="<%= user.general.image %>"/>
+            <div id="profilePicWrapper" class="col-md-3">
+                <img id="profilePic" class="img-circle" src="<%= user.general.image %>"/>
             </div>  
             <div class="col-md-9">
                 <h3> General Information </h3>
-                <table class="table">
+                <table id="infoTable" class="table">
                     <tbody>
-                        <tr>
+                        <!--<tr>
                         <th>ID</th>
                             <td><%= user._id %></td>
-                        </tr>
+                        </tr>-->
                         <tr>
                         <th>Username</th>
                             <td><%= user.general.username %></td>
@@ -76,7 +78,94 @@
                 </table>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form id="selectLanguageForm" role="form">
+                    <div class="form-group">
+                        <input id="uid" class="form-control" name="uid" value="<%= user._id %>"/>
+                        <label for="language"><h3>Speech Language</h3></label>
+                        <select class="form-control" id="language" name="language" value="language">
+                            <option>UK English Female</option>
+                            <option>UK English Male</option>
+                            <option>US English Female</option>
+                            <option>Spanish Female</option>
+                            <option>French Female</option>
+                            <option>Deutsch Female</option>
+                            <option>Italian Female</option>
+                            <option>Greek Female</option>
+                            <option>Hungarian Female</option>
+                            <option>Turkish Female</option>
+                            <option>Russian Female</option>
+                            <option>Dutch Female</option>
+                            <option>Swedish Female</option>
+                            <option>Norwegian Female</option>
+                            <option>Japanese Female</option>
+                            <option>Korean Female</option>
+                            <option>Chinese Female</option>
+                            <option>Hindi Female</option>
+                            <option>Serbian Male</option>
+                            <option>Croatian Male</option>
+                            <option>Bosnian Male</option>
+                            <option>Romanian Male</option>
+                            <option>Catalan Male</option>
+                            <option>Australian Female</option>
+                            <option>Finnish Female</option>
+                            <option>Afrikaans Male</option>
+                            <option>Albanian Male</option>
+                            <option>Arabic Male</option>
+                            <option>Armenian Male</option>
+                            <option>Czech Female</option>
+                            <option>Danish Female</option>
+                            <option>Esperanto Male</option>
+                            <option>Hatian Creole Female</option>
+                            <option>Icelandic Male</option>
+                            <option>Indonesian Female</option>
+                            <option>Latin Female</option>
+                            <option>Latvian Male</option>
+                            <option>Macedonian Male</option>
+                            <option>Moldavian Male</option>
+                            <option>Montenegrin Male</option>
+                            <option>Polish Female</option>
+                            <option>Brazilian Portuguese Female</option>
+                            <option>Portuguese Female</option>
+                            <option>Serbo-Croatian Male</option>
+                            <option>Slovak Female</option>
+                            <option>Spanish Latin American Female</option>
+                            <option>Swahili Male</option>
+                            <option>Tamil Male</option>
+                            <option>Thai Female</option>
+                            <option>Vietnamese Male</option>
+                            <option>Welsh Male</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-default">Select Language</button>
+                </form>
+            </div>
+
+        </div>
     </div>
     
 </body>
 </html>
+
+<script>
+$('#selectLanguageForm').submit(function() {
+        var uid =  $('#uid').val();
+        var lang = $('#language').val();
+        
+        $.ajax({
+            type: "POST",
+            url: 'api/v1/selectLanguage' + '/' + uid + '/' + lang,
+            data: { uid: uid, lang: lang },
+            success: function(res) {
+                console.log('it worked!')
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        });
+        
+        return false;
+    });
+</script>

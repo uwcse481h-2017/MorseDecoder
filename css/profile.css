@@ -1,0 +1,11 @@
+
+
+@media only screen and (max-width: 768px) {
+    #profilePicWrapper {
+        text-align: center;
+    }
+    
+    #infoTable {
+        font-size: 14pt;
+    }
+}

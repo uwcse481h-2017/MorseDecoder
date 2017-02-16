@@ -58,6 +58,7 @@ module.exports = function(passport) {
                 newUser.general.password = newUser.generateHash(password);
                 newUser.general.image = generateGravatar(email);
                 newUser.trainingCompleted = false;
+                newUser.language = "UK English Female";
 
                 // save the user
                 newUser.save(function(err) {
