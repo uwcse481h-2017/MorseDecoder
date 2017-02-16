@@ -105,7 +105,11 @@ textarea {
 }
 
 footer {
-  padding: 50px 0 65px;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
 }
 footer .list-inline {
   margin: 0;
@@ -118,4 +122,29 @@ footer .copyright {
 }
 footer a {
   color: #333333;
+}
+
+@media only screen and (max-width: 768px) {
+    #text {
+      margin-bottom: 20px;
+    }
+
+    #translationWrapper {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 12pt;
+    }
+
+    h3 {
+      font-size: 20px;
+    }
+}
+
+
+/* Switch Calib */
+
+#btn-restart {
+  width: 100%;
 }

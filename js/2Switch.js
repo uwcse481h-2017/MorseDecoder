@@ -77,9 +77,6 @@ $(document).ready(function() {
 		ESCS_DIVIDE = (EL_SPACE + CHAR_SPACE) / 2.0;
 		CSWS_DIVIDE = (CHAR_SPACE + WORD_SPACE) / 2.0;
 
-		//ESCS_DIVIDE = 1000;
-		//CSWS_DIVIDE = 2000;
-
 		console.log("el space: " + EL_SPACE);
 		console.log("char space: " + CHAR_SPACE);
 		console.log("word space: " + WORD_SPACE);
@@ -140,10 +137,7 @@ $(document).ready(function() {
 					menuOpen = true;
 				}
 
-				toggleMenu();
-				// var spaceMs = spaceTimer.stop();
-				// console.log(spaceMs.totalMs);
-				// timerRunning = false;	
+				toggleMenu();	
 			}
 		});
 
@@ -152,7 +146,14 @@ $(document).ready(function() {
 		*/ 
 		$('#btn-play').click(function() {
 			play($('#translation').text().trim().toLowerCase());
-			
+		});
+
+		$('#btn-delete').click(function() {
+			backspace();
+		});
+
+		$('#btn-suggest').click(function() {
+			takeSuggestion();
 		});
 
 		/*
@@ -243,20 +244,28 @@ function getSuggestions() {
 	$.get(url, function(data) {
 		if (data.length > 0) {
 			var topSuggestion = data[0].word;
-			var complete = topSuggestion.slice(text.length);
+
 			var html = "<ul> <li> " + topSuggestion + "</li>"
 			for (var i = 1; i < data.length; i++) {
 				html += "<li> " + data[i].word + "</li>"
 			}
 			html += "<ul>"
 
-			$('#suggestionBox').html(html);
 			$('#btn-suggest a').show();
-			$('#btn-suggest a').text("Take Top Suggestion: " + topSuggestion.toUpperCase());
+			$('#suggestionBox').html(topSuggestion)
 		} else {
 			$('#btn-suggest a').hide()
+			$('#suggestionBox').html("  ")
 		}
 	});
+}
+
+function takeSuggestion() {
+	var sentence = $('#suggestionBox').text().toUpperCase() + " ";
+	console.log(sentence);
+	$('#translation').text(sentence);
+	$('#text').text(getMorseTranslation(sentence));
+	play(sentence);
 }
 
 // MENU //////////////////////////////////////////////////////////////////
@@ -309,9 +318,7 @@ function select() {
 	} else if (mod == 2) {
 		backspace();
 	} else if (mod == 0) {
-		var sentence = $('#btn-suggest a').text().slice(21)
-		$('#translation').text(sentence)
-		play(sentence)
+		takeSuggestion();
 	}
 }
 
@@ -357,7 +364,7 @@ function append(morseCode, input) {
 function resetTime() {
 	spaceTimer.reset();
 	spaceTimer.start();
-	startProgressBar();
+	// startProgressBar();
 	timerRunning = true; 
 
 	timeouts.push(setTimeout(function() { 
@@ -379,17 +386,25 @@ function determineSpaceType(ms) {
 	}
 }
 
-function startProgressBar() {
-
-	
-
-
-
-
+function getMorseTranslation(sentence) {
+	var morse = ""
+	for (var i = 0; i < sentence.length; i++) {
+		var char = sentence[i];
+		if (char == " ") {
+			morse += "_"
+		} else {
+			morse += getMorse(char) + "/";
+		}
+	}
+	return morse
 }
 
-
-
-
-
-
+function getMorse(char) {
+	for (var key in morseDictionary) {
+		var val = morseDictionary[key];
+		if (val == char) {
+			return key;
+		}
+	}
+	return "ERROR";
+}

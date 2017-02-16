@@ -21,28 +21,26 @@
   width: 100%;
 }
 
-#btn-restart {
-  width: 100%;
-}
-
 .active {
   background-color: #eee;
 }
 
-@media only screen and (max-width: 768px) {
-    #text {
-      margin-bottom: 20px;
-    }
+#translation {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none;
+}
 
-    #translation {
-      margin-bottom: 20px;
-    }
+#suggestionBox {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 4px;
+  border-left: 1px solid #ccc;
+  text-align: left;
+  font-size: 18pt;
+  color: #555;
+}
 
-    label {
-      font-size: 12pt;
-    }
-
-    h3 {
-      font-size: 20px;
-    }
+.uppercase {
+  text-transform: uppercase;
 }

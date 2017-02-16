@@ -72,8 +72,11 @@
 			<textarea id="text" class="form-control custom-control" rows="3" style="resize:none"></textarea>  
 		</div>
 		<div class="col-md-6">
-			<label for="translation">English Translation</label>
-			<textarea id="translation" class="form-control custom-control" rows="3" style="resize:none"></textarea> 
+			<div id="translationWrapper">
+				<label for="translation">English Translation</label>
+				<textarea id="translation" class="form-control custom-control" rows="2" style="resize:none"></textarea> 
+				<span id="suggestionBox" class="input-group-addon uppercase">Text Suggestion</span>
+			</div>
 		</div>
 	</div>
 	<div class="row">
@@ -90,48 +93,19 @@
 			</div>
 		</div>
 	</div>
-	
-	<!--<h4> Suggestions </h4>
-	<div id="suggestionBox"></div>-->
 
 </div>
 
 <!-- Footer -->
-<!--<footer>
+<footer>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    <li>
-                        <a href="#">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/uwcse481h-2017/MorseDecoder">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                </ul>
                 <p class="copyright text-muted">Copyright &copy; Morse Decoder 2017</p>
             </div>
         </div>
     </div>
-</footer>-->
+</footer>
 
 </body>
 

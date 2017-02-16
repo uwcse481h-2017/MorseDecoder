@@ -126,8 +126,12 @@ $(document).ready(function(){
 	/*
 	Add functions to buttons.
 	*/ 
-	$('#btn-restart').click(function () {
+	$('#btn-restart').click(function() {
 		restart();
+	});
+
+	$('#btn-close').click(function() {
+		window.location.href = "/switch";
 	});
 
 	/*
@@ -141,19 +145,56 @@ $(document).ready(function(){
 // CALIBRATION FUNCTIONS /////////////////////////////////////////////////
 
 function completeCalibration(userId) {
-	alert("Calibration complete!")
-	sendToServer(userId, spaceTimeArr);
+	averages = sendToServer(userId, spaceTimeArr);
 	var url = '/api/v1/markTrainingCompleted/' + userId;
 	$.post(url).then(function() {
-		window.location.href = "/switch";
-	})
+		alertCalibration(averages[0], averages[1], averages[2]);
+	});
 }
 
 function sendToServer(uid, spacetimeArr) {
+	var elSum = 0 
+	var numEls = 0 
+
+	var charSum = 0 
+	var numChars = 0 
+
+	var wordSum = 0 
+	var numWords = 0 
+
 	for(var i = 0; i < spaceTimeArr.length; i++) {
-		var apiCall = 'api/v1/addTrainingInfo/' + uid + '/' + spaceTimeArr[i].time + '/' + spaceTimeArr[i].type;
+		var type = spaceTimeArr[i].type;
+		var time = spaceTimeArr[i].time; 
+
+		if (type == "es") {
+			elSum += time;
+			numEls += 1;
+		} else if (type == "cs") {
+			charSum += time;
+			numChars += 1; 
+		} else if (type == "ws") {
+			wordSum += time; 
+			numWords += 1; 
+		}
+
+		var apiCall = 'api/v1/addTrainingInfo/' + uid + '/' + time + '/' + type;
 		$.post(apiCall);
 	}
+
+	var averages = [];
+	averages.push(elSum/numEls*1.0);
+	averages.push(charSum/numChars*1.0);
+	averages.push(wordSum/numWords*1.0);
+
+	return averages; 
+}
+
+function alertCalibration(es, cs, ws) {
+	$('#es').html(formatTime(es) + " secs");
+	$('#cs').html(formatTime(cs) + " secs");
+	$('#ws').html(formatTime(ws) + " secs");
+	
+	$('#calibrationInfo').modal('show'); 	
 }
 
 // TIMER FUNCTIONS ///////////////////////////////////////////////////////
@@ -188,4 +229,8 @@ function reset() {
 function append(word, input) {
 	$('#text').append(input);
 	return word += input;
+}
+
+function formatTime(time) {
+	return time.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]
 }
