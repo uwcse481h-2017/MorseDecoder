@@ -156,6 +156,7 @@ $(document).ready(function() {
 		Add functions to buttons.
 		*/ 
 		$('#btn-play').click(function() {
+			getFullSentence(userId, $('#translation').text().trim().toLowerCase());
 			play($('#translation').text().trim().toLowerCase());
 		});
 
@@ -336,16 +337,22 @@ function select() {
 // ABBREVIATIONS /////////////////////////////////////////////////////////
 
 // Translate the written sentence into a sentence containing the full-length versions of the abbreviations 
-/*
 function getFullSentence(uid, sentence) {
-	var newSentence = ""
-	var words = sentence.split()
-	console.log(words);
+	var words = sentence.split();
+	
+	$('#translation').html("");	
 	for (var i = 0; i < words.length; i++) {
 		var word = words[i];
-		newSentence += getFullWord(uid, word);
+		$.get("/checkAbbreviation/" + uid + "/" + word, function(data) {
+			if (data.exists) {
+				word = data.full;
+			}	
+		}).then(function() {
+			var currSentence = $('#translation').text();
+			$('#translation').html(currSentence + word.toUpperCase());
+		});
 	}
-	return newSentence;
+	// $('#translation').text(newSentence);
 }
 
 // Get the full-length version of an abbreviation 
@@ -362,7 +369,7 @@ function getFullWord(uid, abbr) {
 			}
 		}
 	});
-} */
+} 
 
 // HELPER FUNCTIONS //////////////////////////////////////////////////////
 
@@ -378,12 +385,14 @@ function resetTime() {
 	// startProgressBar();
 	timerRunning = true; 
 
-	timeouts.push(setTimeout(function() { 
-		translate(false); $('#text').append("/"); 
+	timeouts.push(setTimeout(function() {
+		translate(false);
+		$('#text').append("/");
 	}, ESCS_DIVIDE));
 
-	timeouts.push(setTimeout(function() { 
-		translate(true); $('#text').append("_"); 
+	timeouts.push(setTimeout(function() {
+		translate(true);
+		$('#text').append("_");
 	}, CSWS_DIVIDE));
 }
 
