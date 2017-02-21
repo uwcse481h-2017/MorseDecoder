@@ -71,6 +71,8 @@ var LANGUAGE;
 
 var timeoutId = 0;
 $(document).ready(function() {
+	$(".progress-bar").addClass("notransition");
+
 	var userId = $('#uid').text().trim()
 
 	$.get("/getAverageSpaces/" + userId, function(data) {
@@ -111,37 +113,48 @@ $(document).ready(function() {
 				var spaceMs = spaceTimer.stop();
 				console.log(spaceMs.totalMs);
 				timerRunning = false;
+				
+				resetProgressBar();
 			}
+			
 		});
 
 		document.addEventListener("keyup", function(event) { 
-			if (event.which == DOT) {
+			if (event.which == DOT || event.which == DASH) {
+				$(".progress-bar").animate({
+				    width: "100%"
+				}, WORD_SPACE);
 
-				//resetTime();
-				if(menuVisible) {
-					scroll();
-				} else {
-					word = append(word, ".");
-					breakStarted = false;
-					if(!menuOpen) {
-						resetTime();
-					}
-					
-				}
-			} else if (event.which == DASH) {
-				//resetTime();				
-				if(menuVisible) {
-					select();
-				} else {
-					word = append(word, "-");
-					breakStarted = false;
-					if(!menuOpen) {
-						resetTime();
-					}
-				}
-				
+				if (event.which == DOT) {
 
-			} else if (event.which == MENU) {
+					//resetTime();
+					if(menuVisible) {
+						scroll();
+					} else {
+						word = append(word, ".");
+						breakStarted = false;
+						if(!menuOpen) {
+							resetTime();
+						}
+						
+					}
+				} else if (event.which == DASH) {
+					//resetTime();				
+					if(menuVisible) {
+						select();
+					} else {
+						word = append(word, "-");
+						breakStarted = false;
+						if(!menuOpen) {
+							resetTime();
+						}
+					}
+				}
+
+			
+			}
+
+			if (event.which == MENU) {
 				if(menuOpen) {
 					menuOpen = false;
 				} else {
@@ -228,21 +241,26 @@ function backspace() {
 
 	} else /*last character is a letter*/{
 
-		/*for (var code in morseDictionary) {
-		    
-		    if(morseDictionary[code] == lastCharacter) {
-		    	console.log("deleting from morse input");
-		    	$("#text").text(entireMorseString.substring(0, entireMorseString.length - (code.length)));
-		    }
-		} */
-
 		for (var key in morseDictionary) {
-		  //alert();
+		  if(morseDictionary[key] == lastCharacter) {
+			//$("#text").text(entireMorseString.substring(0, entireMorseString.length - length));
+			var flipped = flipStr(key);
 
-		  if(morseDictionary[key] == lastCharacter)
-		  	var length = key.length + 1;
+			console.log("flipped: " + flipped);
 
-		  	$("#text").text(entireMorseString.substring(0, entireMorseString.length - length));
+			//delete the "/" and "_"
+
+			console.log("end of morse code: " + $('#text').text().charAt($('#text').text().length - 1));
+			while(false/*$(#text).charAt($(#text).length - 1)*/) {
+
+
+			}
+
+			//then delete the morse code
+			var length = key.length;
+
+			//$("#text").text(entireMorseString.substring(0, entireMorseString.length - length) - 1);
+		  }
 		}
 	}
 }
@@ -394,6 +412,26 @@ function resetTime() {
 		translate(true);
 		$('#text').append("_");
 	}, CSWS_DIVIDE));
+
+	timeouts.push(setTimeout(function() { 
+		translate(false); $('#text').append("/"); 
+		//'background-color': 'red'
+		
+		$(".progress-bar").css({	 
+
+			'background-color': 'yellow'
+		});
+		$("#progressText").text("CharacterSpace");
+	}, ESCS_DIVIDE));
+
+	timeouts.push(setTimeout(function() { 
+		translate(true); $('#text').append("_"); 
+
+		$(".progress-bar").css({	  
+			'background-color': 'red'
+		});
+		$("#progressText").text("WordSpace");
+	}, CSWS_DIVIDE));
 }
 
 function determineSpaceType(ms) {
@@ -427,4 +465,21 @@ function getMorse(char) {
 		}
 	}
 	return "ERROR";
+}
+
+function resetProgressBar() {
+	$(".progress-bar").stop();
+	$(".progress-bar").css({	  
+		'background-color': 'green'
+	});
+
+	$(".progress-bar").animate({
+	    width: "0%"
+	}, 10);
+
+	$("#progressText").text("Element Space");
+}
+
+function flipStr(str) {
+	return str.split('').reverse().join('').trim();
 }
