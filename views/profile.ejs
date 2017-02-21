@@ -21,6 +21,8 @@
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/profile.css">
+    <!-- JS -->
+    <script src="../js/profile.js"></script> 
     <!-- ICON -->
     <link rel="shortcut icon" href="../data/logo_square_fill.png">
     
@@ -62,10 +64,6 @@
                 <h3> General Information </h3>
                 <table id="infoTable" class="table">
                     <tbody>
-                        <!--<tr>
-                        <th>ID</th>
-                            <td><%= user._id %></td>
-                        </tr>-->
                         <tr>
                         <th>Username</th>
                             <td><%= user.general.username %></td>
@@ -82,90 +80,88 @@
             <div class="col-md-12">
                 <form id="selectLanguageForm" role="form">
                     <div class="form-group">
-                        <input id="uid" class="form-control" name="uid" value="<%= user._id %>"/>
+                        <input id="uid" class="form-control" name="uid" value="<%= user._id %>" style="display: none"/>
                         <label for="language"><h3>Speech Language</h3></label>
                         <select class="form-control" id="language" name="language" value="language">
-                            <option>UK English Female</option>
-                            <option>UK English Male</option>
-                            <option>US English Female</option>
-                            <option>Spanish Female</option>
-                            <option>French Female</option>
-                            <option>Deutsch Female</option>
-                            <option>Italian Female</option>
-                            <option>Greek Female</option>
-                            <option>Hungarian Female</option>
-                            <option>Turkish Female</option>
-                            <option>Russian Female</option>
-                            <option>Dutch Female</option>
-                            <option>Swedish Female</option>
-                            <option>Norwegian Female</option>
-                            <option>Japanese Female</option>
-                            <option>Korean Female</option>
-                            <option>Chinese Female</option>
-                            <option>Hindi Female</option>
-                            <option>Serbian Male</option>
-                            <option>Croatian Male</option>
-                            <option>Bosnian Male</option>
-                            <option>Romanian Male</option>
-                            <option>Catalan Male</option>
-                            <option>Australian Female</option>
-                            <option>Finnish Female</option>
-                            <option>Afrikaans Male</option>
-                            <option>Albanian Male</option>
-                            <option>Arabic Male</option>
-                            <option>Armenian Male</option>
-                            <option>Czech Female</option>
-                            <option>Danish Female</option>
-                            <option>Esperanto Male</option>
-                            <option>Hatian Creole Female</option>
-                            <option>Icelandic Male</option>
-                            <option>Indonesian Female</option>
-                            <option>Latin Female</option>
-                            <option>Latvian Male</option>
-                            <option>Macedonian Male</option>
-                            <option>Moldavian Male</option>
-                            <option>Montenegrin Male</option>
-                            <option>Polish Female</option>
-                            <option>Brazilian Portuguese Female</option>
-                            <option>Portuguese Female</option>
-                            <option>Serbo-Croatian Male</option>
-                            <option>Slovak Female</option>
-                            <option>Spanish Latin American Female</option>
-                            <option>Swahili Male</option>
-                            <option>Tamil Male</option>
-                            <option>Thai Female</option>
-                            <option>Vietnamese Male</option>
-                            <option>Welsh Male</option>
+                            <option value="UK English Female">UK English Female</option>
+                            <option value="UK English Male">UK English Male</option>
+                            <option value="US English Female">US English Female</option>
+                            <option value="Spanish Female">Spanish Female</option>
+                            <option value="French Female">French Female</option>
+                            <option value="Deutsch Female">Deutsch Female</option>
+                            <option value="Italian Female">Italian Female</option>
+                            <option value="Greek Female">Greek Female</option>
+                            <option value="Hungarian Female">Hungarian Female</option>
+                            <option value="Turkish Female">Turkish Female</option>
+                            <option value="Russian Female">Russian Female</option>
+                            <option value="Dutch Female">Dutch Female</option>
+                            <option value="Swedish Female">Swedish Female</option>
+                            <option value="Norwegian Female">Norwegian Female</option>
+                            <option value="Japanese Female">Japanese Female</option>
+                            <option value="Korean Female">Korean Female</option>
+                            <option value="Chinese Female">Chinese Female</option>
+                            <option value="Hindi Female">Hindi Female</option>
+                            <option value="Serbian Male">Serbian Male</option>
+                            <option value="Croatian Male">Croatian Male</option>
+                            <option value="Bosnian Male">Bosnian Male</option>
+                            <option value="Romanian Male">Romanian Male</option>
+                            <option value="Catalan Male">Catalan Male</option>
+                            <option value="Australian Female">Australian Female</option>
+                            <option value="Finnish Female">Finnish Female</option>
+                            <option value="Afrikaans Male">Afrikaans Male</option>
+                            <option value="Albanian Male">Albanian Male</option>
+                            <option value="Arabic Male">Arabic Male</option>
+                            <option value="Armenian Male">Armenian Male</option>
+                            <option value="Czech Female">Czech Female</option>
+                            <option value="Danish Female">Danish Female</option>
+                            <option value="Esperanto Male">Esperanto Male</option>
+                            <option value="Hatian Creole Female">Hatian Creole Female</option>
+                            <option value="Icelandic Male">Icelandic Male</option>
+                            <option value="Indoneseian Female">Indonesian Female</option>
+                            <option value="Latin Female">Latin Female</option>
+                            <option value="Latvian Male">Latvian Male</option>
+                            <option value="Macedonian Male">Macedonian Male</option>
+                            <option value="Moldavian Male">Moldavian Male</option>
+                            <option value="Montengrin Male">Montenegrin Male</option>
+                            <option value="Polish Female">Polish Female</option>
+                            <option value="Brazilian Portugese Female">Brazilian Portuguese Female</option>
+                            <option value="Portugese Female">Portuguese Female</option>
+                            <option value="Serbo-Croatian Male">Serbo-Croatian Male</option>
+                            <option value="Slovak Female">Slovak Female</option>
+                            <option value="Spanish Latin American Female">Spanish Latin American Female</option>
+                            <option value="Swahili Male">Swahili Male</option>
+                            <option value="Tamil Male">Tamil Male</option>
+                            <option value="Thai Female">Thai Female</option>
+                            <option value="Vietnamese Male">Vietnamese Male</option>
+                            <option value="Welsh Male">Welsh Male</option>
                         </select>
                     </div>
                     <button class="btn btn-default">Select Language</button>
                 </form>
             </div>
-
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3> Abbreviations </h3>
+
+                <div id="abbreviations"></div>
+                <table id="abbrTable" class="table"> 
+                    <thead> 
+                        <th class="col-md-2">#</th> 
+                        <th style="display: none"> ID </th> 
+                        <th class="col-md-5">Abbreviated Phrase</th> 
+                        <th class="col-md-5">Full Phrase</th> 
+                        <th class="col-md-1"> </th> </tr> 
+                    </thead>
+                    <tbody id="abbrTableBody">
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+
     </div>
     
 </body>
 </html>
-
-<script>
-$('#selectLanguageForm').submit(function() {
-        var uid =  $('#uid').val();
-        var lang = $('#language').val();
-        
-        $.ajax({
-            type: "POST",
-            url: 'api/v1/selectLanguage' + '/' + uid + '/' + lang,
-            data: { uid: uid, lang: lang },
-            success: function(res) {
-                console.log('it worked!')
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                console.log(xhr.status);
-                console.log(thrownError);
-            }
-        });
-        
-        return false;
-    });
-</script>

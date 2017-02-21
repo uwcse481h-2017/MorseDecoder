@@ -25,6 +25,7 @@
 
     <!-- PERSONAL -->
     <!-- CSS --> 
+    
     <link rel="stylesheet" type="text/css" href="../css/index.css"/>
     <!-- ICON -->
     <link rel="shortcut icon" href="../data/logo_square_fill.png">
@@ -46,14 +47,30 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="/signin">Sign In</a>
-                </li>
-                <li>
-                    <a href="/signup">Sign Up</a>
-                </li>
-            </ul>
+            <div class="nav navbar-nav navbar-left">
+                <li><a href="/learn">Learn Morse Code</a></li>
+                <li><a href="/about">About</a></li>
+            </div>
+            <% if(locals.user){ %>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i><%= user.general.username %> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/profile">My Profile</a></li>                        
+                            <li><a href="/signout">Sign Out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            <% } else{ %>  
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/signin">Sign In</a>
+                    </li>
+                    <li>
+                        <a href="/signup">Sign Up</a>
+                    </li>
+                </ul>
+            <% } %>
         </div>
     </div>
 </nav>
@@ -150,7 +167,9 @@
                         </a>
                     </li>
                 </ul>
-                <p class="copyright text-muted">Copyright &copy; Morse Decoder 2017</p>
+                <p class="copyright text-muted">
+                    Copyright &copy; Morse Decoder 2017
+                </p>
             </div>
         </div>
     </div>

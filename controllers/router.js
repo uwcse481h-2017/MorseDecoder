@@ -8,7 +8,7 @@ var Abbreviation = require('../models/abbreviation.js');
 module.exports = function(app, passport) {
 	// redirect default root to morse page
     app.get('/', function(req, res){
-        res.render('index.html');
+        res.render('index.ejs', {user: req.user});
     });
 
     app.get('/switch', function(req, res) {
@@ -17,6 +17,15 @@ module.exports = function(app, passport) {
 
     app.get('/switchCalib', function(req, res) {
         res.render('2SwitchCalib.ejs', { user: req.user } );
+    });
+
+    app.get('/learn', function(req, res){
+        res.render('learn.ejs', {user: req.user});
+    });
+
+
+    app.get('/about', function(req, res){
+        res.render('about.ejs', {user: req.user});
     });
 
     // USER AUTHENTICATION ===============================================
