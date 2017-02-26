@@ -39,8 +39,15 @@
   text-align: left;
   font-size: 18pt;
   color: #555;
+  height: 38px;
 }
 
 .uppercase {
   text-transform: uppercase;
+}
+
+#progressText {
+  text-transform: uppercase;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14pt;
 }

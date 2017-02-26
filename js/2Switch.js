@@ -67,6 +67,8 @@ var word = ""
 // Keep track of backspacing
 var menuOpen = false;
 
+var newSentence; 
+
 var LANGUAGE;
 
 var timeoutId = 0;
@@ -150,8 +152,6 @@ $(document).ready(function() {
 						}
 					}
 				}
-
-			
 			}
 
 			if (event.which == MENU) {
@@ -169,8 +169,9 @@ $(document).ready(function() {
 		Add functions to buttons.
 		*/ 
 		$('#btn-play').click(function() {
-			getFullSentence(userId, $('#translation').text().trim().toLowerCase());
-			play($('#translation').text().trim().toLowerCase());
+			$.when(getFullSentence(userId, $('#translation').text().trim().toLowerCase())).done(function() {
+				play($('#translation').text());
+			});
 		});
 
 		$('#btn-delete').click(function() {
@@ -356,38 +357,49 @@ function select() {
 
 // Translate the written sentence into a sentence containing the full-length versions of the abbreviations 
 function getFullSentence(uid, sentence) {
-	var words = sentence.split();
-	
-	$('#translation').html("");	
+	var defer = $.Deferred();
+	var promises = [];
+
+	var words = sentence.split(" ");
+	newSentence = "";
+
 	for (var i = 0; i < words.length; i++) {
 		var word = words[i];
-		$.get("/checkAbbreviation/" + uid + "/" + word, function(data) {
-			if (data.exists) {
-				word = data.full;
-			}	
-		}).then(function() {
-			var currSentence = $('#translation').text();
-			$('#translation').html(currSentence + word.toUpperCase());
-		});
+		if (word == "") {
+			continue;
+		}
+		promises.push(getFullWord(uid, word, i));
 	}
-	// $('#translation').text(newSentence);
+
+	$.when.apply(null, promises).done(function() { 
+		defer.resolve(); 
+	});
+
+	return defer.promise();
 }
 
 // Get the full-length version of an abbreviation 
-function getFullWord(uid, abbr) {
-	$.ajax({
-		async: false,
-		type: 'GET',
-		url: "/checkAbbreviation/" + uid + "/" + abbr,
-		success: function(data) {
-			if (data.exists) {
-				return data.full;
-			} else {
-				return abbr; 
-			}
+function getFullWord(uid, word, i) {
+	var defer = $.Deferred();
+
+	$.get("/checkAbbreviation/" + uid + "/" + word, function(data) {
+		if (data.exists) {
+			word = data.full;
 		}
+
+		var currSentence = "";
+		if (i != 0) {
+			currSentence = $('#translation').text() + " ";
+		}
+
+		var newSentence = currSentence + word.toUpperCase();
+		$('#translation').text(newSentence);	
+	}).done(function() {
+		defer.resolve();
 	});
-} 
+
+	return defer.promise();
+}
 
 // HELPER FUNCTIONS //////////////////////////////////////////////////////
 
@@ -400,37 +412,26 @@ function append(morseCode, input) {
 function resetTime() {
 	spaceTimer.reset();
 	spaceTimer.start();
-	// startProgressBar();
 	timerRunning = true; 
-
-	timeouts.push(setTimeout(function() {
-		translate(false);
-		$('#text').append("/");
-	}, ESCS_DIVIDE));
-
-	timeouts.push(setTimeout(function() {
-		translate(true);
-		$('#text').append("_");
-	}, CSWS_DIVIDE));
 
 	timeouts.push(setTimeout(function() { 
 		translate(false); $('#text').append("/"); 
-		//'background-color': 'red'
 		
 		$(".progress-bar").css({	 
-
-			'background-color': 'yellow'
+			'background-color': '#3F51B5'
 		});
-		$("#progressText").text("CharacterSpace");
+
+		$("#progressText").text("Character Space");
 	}, ESCS_DIVIDE));
 
 	timeouts.push(setTimeout(function() { 
 		translate(true); $('#text').append("_"); 
 
 		$(".progress-bar").css({	  
-			'background-color': 'red'
+			'background-color': '#F44336'
 		});
-		$("#progressText").text("WordSpace");
+
+		$("#progressText").text("Word Space");
 	}, CSWS_DIVIDE));
 }
 
@@ -470,7 +471,7 @@ function getMorse(char) {
 function resetProgressBar() {
 	$(".progress-bar").stop();
 	$(".progress-bar").css({	  
-		'background-color': 'green'
+		'background-color': '#4CAF50'
 	});
 
 	$(".progress-bar").animate({
