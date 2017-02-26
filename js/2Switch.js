@@ -63,6 +63,7 @@ var items;
 
 // Keep track of word 
 var word = ""
+var variableIndex = 0;
 
 // Keep track of backspacing
 var menuOpen = false;
@@ -406,7 +407,35 @@ function getFullWord(uid, word, i) {
 // Take the user's input and add it onto the word they are writing  
 function append(morseCode, input) {
 	$('#text').append(input);
-	return morseCode += input;
+	morseCode += input;
+	//console.log(morseDictionary[morseCode]);
+	
+	var string = $('#correspondingWord').text();
+	var constantString = string.substring(0, variableIndex);
+
+
+
+	//console.log("constant string:" + constantString);
+
+	//console.log("variable string: " + morseDictionary[morseCode]);
+
+
+
+	$('#correspondingWord').text(constantString + morseDictionary[morseCode]);
+
+	return morseCode ;
+}
+
+function solidifyLetter() {
+	variableIndex++;
+	console.log(variableIndex);
+}
+
+function resetRealTimeText() {
+
+	$('#text').text('');
+	$('#correspondingWord').text('');
+	variableIndex = 0;
 }
 
 function resetTime() {
@@ -415,7 +444,8 @@ function resetTime() {
 	timerRunning = true; 
 
 	timeouts.push(setTimeout(function() { 
-		translate(false); $('#text').append("/"); 
+		translate(false); //$('#text').append("/"); 
+		solidifyLetter(variableIndex);
 		
 		$(".progress-bar").css({	 
 			'background-color': '#3F51B5'
@@ -425,7 +455,9 @@ function resetTime() {
 	}, ESCS_DIVIDE));
 
 	timeouts.push(setTimeout(function() { 
-		translate(true); $('#text').append("_"); 
+
+		resetRealTimeText();
+		translate(true); //$('#text').append("_"); 
 
 		$(".progress-bar").css({	  
 			'background-color': '#F44336'
