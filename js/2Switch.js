@@ -66,6 +66,7 @@ var items;
 
 // Keep track of word 
 var word = ""
+var variableIndex = 0;
 
 // Keep track of backspacing
 var menuOpen = false;
@@ -93,7 +94,9 @@ $(document).ready(function() {
 		$.get("/api/v1/getLanguage/" + userId, function(data) {
 			LANGUAGE = String(JSON.stringify(data.language));
 			LANGUAGE = LANGUAGE.slice(1, LANGUAGE.length-1)
+			//LANGUAGE = undefined;
 			console.log("language: " + LANGUAGE);
+
 		});
 	})
 	.then(function() {
@@ -220,50 +223,27 @@ function translateWord() {
 // PLAY //////////////////////////////////////////////////////////////////
 
 function play(sentence) {
-	responsiveVoice.speak(sentence, LANGUAGE)
+	if (LANGUAGE) {
+		responsiveVoice.speak(sentence, LANGUAGE);
+	} else { 
+		responsiveVoice.speak(sentence);
+	}
+	
 }
 
 // BACKSPACE /////////////////////////////////////////////////////////////
-
 function backspace() {
-	var entireTranslatedString = $("#translation").text();
-	var entireMorseString = $("#text").text();
+	console.log("backspace");
+	var str = $('#translation').text().trim();
+	console.log(str);
 
-	var lastCharacter = entireTranslatedString.charAt(entireTranslatedString.length - 1);
-	// console.log(lastCharacter);
+	var sliced = str.slice(0,-1);
+	console.log(sliced);
 
-	//delete from translation
-	$("#translation").text(entireTranslatedString.substring(0, entireTranslatedString.length - 1));
+	$('#translation').text(sliced);
 
-	//delete from morse code
-	if(lastCharacter == " ") {
-		$("#text").text(entireMorseString.substring(0, entireMorseString.length - 2));
-
-	} else /*last character is a letter*/{
-
-		for (var key in morseDictionary) {
-		  if(morseDictionary[key] == lastCharacter) {
-			//$("#text").text(entireMorseString.substring(0, entireMorseString.length - length));
-			var flipped = flipStr(key);
-
-			console.log("flipped: " + flipped);
-
-			//delete the "/" and "_"
-
-			console.log("end of morse code: " + $('#text').text().charAt($('#text').text().length - 1));
-			while(false/*$(#text).charAt($(#text).length - 1)*/) {
-
-
-			}
-
-			//then delete the morse code
-			var length = key.length;
-
-			//$("#text").text(entireMorseString.substring(0, entireMorseString.length - length) - 1);
-		  }
-		}
-	}
 }
+
 
 // TEXT SUGGESTIONS //////////////////////////////////////////////////////
 
@@ -293,7 +273,7 @@ function getSuggestions() {
 function takeSuggestion() {
 	var sentence = $('#suggestionBox').text().toUpperCase() + " ";
 	$('#translation').text(sentence);
-	$('#text').text(getMorseTranslation(sentence));
+	//$('#text').text(getMorseTranslation(sentence));
 	play(sentence);
 }
 
@@ -387,7 +367,34 @@ function getFullWord(uid, word) {
 // Take the user's input and add it onto the word they are writing  
 function append(morseCode, input) {
 	$('#text').append(input);
-	return morseCode += input;
+	morseCode += input;
+	//console.log(morseDictionary[morseCode]);
+	
+	var string = $('#correspondingWord').text();
+	var constantString = string.substring(0, variableIndex);
+
+	//console.log("constant string:" + constantString);
+
+	//console.log("variable string: " + morseDictionary[morseCode]);
+
+	if(morseDictionary[morseCode]) {
+		$('#correspondingWord').text(constantString + morseDictionary[morseCode]);
+	}
+	
+
+	return morseCode ;
+}
+
+function solidifyLetter() {
+	variableIndex++;
+	console.log(variableIndex);
+}
+
+function resetRealTimeText() {
+
+	$('#text').text('');
+	$('#correspondingWord').text('');
+	variableIndex = 0;
 }
 
 function resetTime() {
@@ -396,7 +403,8 @@ function resetTime() {
 	timerRunning = true; 
 
 	timeouts.push(setTimeout(function() { 
-		translate(false); $('#text').append("/"); 
+		translate(false); //$('#text').append("/"); 
+		solidifyLetter(variableIndex);
 		
 		$(".progress-bar").css({	 
 			'background-color': '#3F51B5'
@@ -406,7 +414,9 @@ function resetTime() {
 	}, ESCS_DIVIDE));
 
 	timeouts.push(setTimeout(function() { 
-		translate(true); $('#text').append("_"); 
+
+		resetRealTimeText();
+		translate(true); //$('#text').append("_"); 
 
 		$(".progress-bar").css({	  
 			'background-color': '#F44336'
