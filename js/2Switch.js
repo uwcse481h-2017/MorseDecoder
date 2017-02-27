@@ -50,6 +50,9 @@ var WORD_SPACE;
 var ESCS_DIVIDE;
 var CSWS_DIVIDE;
 
+// User's chosen speaking voice 
+var LANGUAGE;
+
 // Timing variables 
 var spaceTimer = null;
 var timerRunning = false;
@@ -66,10 +69,6 @@ var word = ""
 
 // Keep track of backspacing
 var menuOpen = false;
-
-var newSentence; 
-
-var LANGUAGE;
 
 var timeoutId = 0;
 $(document).ready(function() {
@@ -293,7 +292,6 @@ function getSuggestions() {
 
 function takeSuggestion() {
 	var sentence = $('#suggestionBox').text().toUpperCase() + " ";
-	console.log(sentence);
 	$('#translation').text(sentence);
 	$('#text').text(getMorseTranslation(sentence));
 	play(sentence);
@@ -308,7 +306,6 @@ function toggleMenu() {
     if(menuVisible) {
     	menuVisible = false;
 		$('#menu-btn').removeClass('open');
-		
 		$('.btn-option a').removeClass('active');
 		menuCurrItem = 0;
     } else {
@@ -345,7 +342,9 @@ Selects underlined item in the menu.. must be scrolling
 function select() {
 	var mod = menuCurrItem % 3; 
 	if (mod == 1) {
-		play($('#translation').text().trim().toLowerCase())
+		$.when(getFullSentence($('#uid').text().trim(), $('#translation').text().trim().toLowerCase())).done(function() {
+			play($('#translation').text());
+		});
 	} else if (mod == 2) {
 		backspace();
 	} else if (mod == 0) {
@@ -358,47 +357,29 @@ function select() {
 // Translate the written sentence into a sentence containing the full-length versions of the abbreviations 
 function getFullSentence(uid, sentence) {
 	var defer = $.Deferred();
-	var promises = [];
 
-	var words = sentence.split(" ");
-	newSentence = "";
+    var promises = sentence.split(" ").map(function(word, i) {
+        return getFullWord(uid, word);
+    });
 
-	for (var i = 0; i < words.length; i++) {
-		var word = words[i];
-		if (word == "") {
-			continue;
-		}
-		promises.push(getFullWord(uid, word, i));
-	}
-
-	$.when.apply(null, promises).done(function() { 
-		defer.resolve(); 
-	});
+    $.when.apply($, promises).then(function() { 
+        var results = Array.prototype.slice.call(arguments);
+        var text = results.join(" ");
+        $('#translation').text(text);
+		defer.resolve();
+    });
 
 	return defer.promise();
 }
 
 // Get the full-length version of an abbreviation 
-function getFullWord(uid, word, i) {
-	var defer = $.Deferred();
-
-	$.get("/checkAbbreviation/" + uid + "/" + word, function(data) {
+function getFullWord(uid, word) {
+    return $.get("/checkAbbreviation/" + uid + "/" + word).then(function(data) {
 		if (data.exists) {
 			word = data.full;
 		}
-
-		var currSentence = "";
-		if (i != 0) {
-			currSentence = $('#translation').text() + " ";
-		}
-
-		var newSentence = currSentence + word.toUpperCase();
-		$('#translation').text(newSentence);	
-	}).done(function() {
-		defer.resolve();
-	});
-
-	return defer.promise();
+        return word.toUpperCase();
+    });
 }
 
 // HELPER FUNCTIONS //////////////////////////////////////////////////////
