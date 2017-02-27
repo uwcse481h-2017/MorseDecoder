@@ -222,7 +222,7 @@ function translateWord() {
 // PLAY //////////////////////////////////////////////////////////////////
 
 function play(sentence) {
-	if (language ) {
+	if (LANGUAGE) {
 		responsiveVoice.speak(sentence, LANGUAGE);
 	} else { 
 		responsiveVoice.speak(sentence);
@@ -232,7 +232,14 @@ function play(sentence) {
 
 // BACKSPACE /////////////////////////////////////////////////////////////
 function backspace() {
-	console.log("hi");
+	console.log("backspace");
+	var str = $('#translation').text().trim();
+	console.log(str);
+
+	var sliced = str.slice(0,-1);
+	console.log(sliced);
+
+	$('#translation').text(sliced);
 
 }
 
@@ -266,7 +273,7 @@ function takeSuggestion() {
 	var sentence = $('#suggestionBox').text().toUpperCase() + " ";
 	console.log(sentence);
 	$('#translation').text(sentence);
-	$('#text').text(getMorseTranslation(sentence));
+	//$('#text').text(getMorseTranslation(sentence));
 	play(sentence);
 }
 
@@ -316,7 +323,7 @@ Selects underlined item in the menu.. must be scrolling
 function select() {
 	var mod = menuCurrItem % 3; 
 	if (mod == 1) {
-		alert("play this: " + $('#translation').text());
+		//alert("play this: " + $('#translation').text());
 		play($('#translation').text().trim().toLowerCase())
 	} else if (mod == 2) {
 		backspace();
@@ -384,15 +391,14 @@ function append(morseCode, input) {
 	var string = $('#correspondingWord').text();
 	var constantString = string.substring(0, variableIndex);
 
-
-
 	//console.log("constant string:" + constantString);
 
 	//console.log("variable string: " + morseDictionary[morseCode]);
 
-
-
-	$('#correspondingWord').text(constantString + morseDictionary[morseCode]);
+	if(morseDictionary[morseCode]) {
+		$('#correspondingWord').text(constantString + morseDictionary[morseCode]);
+	}
+	
 
 	return morseCode ;
 }
