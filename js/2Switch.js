@@ -222,7 +222,12 @@ function translateWord() {
 // PLAY //////////////////////////////////////////////////////////////////
 
 function play(sentence) {
-	responsiveVoice.speak(sentence /*LANGUAGE*/);
+	if (language ) {
+		responsiveVoice.speak(sentence, LANGUAGE);
+	} else { 
+		responsiveVoice.speak(sentence);
+	}
+	
 }
 
 // BACKSPACE /////////////////////////////////////////////////////////////
