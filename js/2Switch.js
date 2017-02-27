@@ -95,7 +95,9 @@ $(document).ready(function() {
 		$.get("/api/v1/getLanguage/" + userId, function(data) {
 			LANGUAGE = String(JSON.stringify(data.language));
 			LANGUAGE = LANGUAGE.slice(1, LANGUAGE.length-1)
+			//LANGUAGE = undefined;
 			console.log("language: " + LANGUAGE);
+
 		});
 	})
 	.then(function() {
