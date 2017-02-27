@@ -222,50 +222,15 @@ function translateWord() {
 // PLAY //////////////////////////////////////////////////////////////////
 
 function play(sentence) {
-	responsiveVoice.speak(sentence, LANGUAGE)
+	responsiveVoice.speak(sentence /*LANGUAGE*/);
 }
 
 // BACKSPACE /////////////////////////////////////////////////////////////
-
 function backspace() {
-	var entireTranslatedString = $("#translation").text();
-	var entireMorseString = $("#text").text();
+	console.log("hi");
 
-	var lastCharacter = entireTranslatedString.charAt(entireTranslatedString.length - 1);
-	// console.log(lastCharacter);
-
-	//delete from translation
-	$("#translation").text(entireTranslatedString.substring(0, entireTranslatedString.length - 1));
-
-	//delete from morse code
-	if(lastCharacter == " ") {
-		$("#text").text(entireMorseString.substring(0, entireMorseString.length - 2));
-
-	} else /*last character is a letter*/{
-
-		for (var key in morseDictionary) {
-		  if(morseDictionary[key] == lastCharacter) {
-			//$("#text").text(entireMorseString.substring(0, entireMorseString.length - length));
-			var flipped = flipStr(key);
-
-			console.log("flipped: " + flipped);
-
-			//delete the "/" and "_"
-
-			console.log("end of morse code: " + $('#text').text().charAt($('#text').text().length - 1));
-			while(false/*$(#text).charAt($(#text).length - 1)*/) {
-
-
-			}
-
-			//then delete the morse code
-			var length = key.length;
-
-			//$("#text").text(entireMorseString.substring(0, entireMorseString.length - length) - 1);
-		  }
-		}
-	}
 }
+
 
 // TEXT SUGGESTIONS //////////////////////////////////////////////////////
 
@@ -346,6 +311,7 @@ Selects underlined item in the menu.. must be scrolling
 function select() {
 	var mod = menuCurrItem % 3; 
 	if (mod == 1) {
+		alert("play this: " + $('#translation').text());
 		play($('#translation').text().trim().toLowerCase())
 	} else if (mod == 2) {
 		backspace();
