@@ -167,6 +167,7 @@ $(document).ready(function() {
 			}
 		});
 
+
 		/*
 		Add functions to buttons.
 		*/ 
@@ -403,7 +404,8 @@ function resetTime() {
 	timerRunning = true; 
 
 	timeouts.push(setTimeout(function() { 
-		translate(false); //$('#text').append("/"); 
+		translate(false); 
+		$('#text').append("/"); 
 		solidifyLetter(variableIndex);
 		
 		$(".progress-bar").css({	 
@@ -416,7 +418,8 @@ function resetTime() {
 	timeouts.push(setTimeout(function() { 
 
 		resetRealTimeText();
-		translate(true); //$('#text').append("_"); 
+		translate(true); 
+		//$('#text').append("_"); 
 
 		$(".progress-bar").css({	  
 			'background-color': '#F44336'

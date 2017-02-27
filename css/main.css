@@ -140,6 +140,11 @@ footer a {
     h3 {
       font-size: 20px;
     }
+
+     .btn-default {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }
 
 
@@ -148,4 +153,3 @@ footer a {
 #btn-restart {
   width: 100%;
 }
-
