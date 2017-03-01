@@ -34,7 +34,8 @@ var morseDictionary = {
 	"--...": "7",
 	"---..": "8",
 	"----.": "9",
-	"-----": "0"
+	"-----": "0",
+	"----" : toggleMenu
 };
 
 // Switch constants 
@@ -42,6 +43,7 @@ var DOT = 32;
 var DASH = 13; 
 var MENU = 39;
 var BACKSPACE = 9;
+var MORSECODEMENU = "----";
 
 // User's timing for different spacing 
 var EL_SPACE;
@@ -186,6 +188,9 @@ $(document).ready(function() {
 			takeSuggestion();
 		});
 
+		$('#btn-close').click(function() {
+			toggleMenu();
+		});
 		/*
 		Disables textarea default action.
 		*/
@@ -198,7 +203,10 @@ $(document).ready(function() {
 // TRANSLATION ///////////////////////////////////////////////////////////
 
 function translate(needSpace) {
-	$('#translation').append(morseDictionary[word]);
+	if(word != MORSECODEMENU) {
+		$('#translation').append(morseDictionary[word]);
+	}
+	
 	
 	if(needSpace) {
 		$('#translation').append(" ");
@@ -305,30 +313,36 @@ function scroll() {
 	}
 	menuCurrItem++;
 
-	var mod = menuCurrItem % 3; 
+	var mod = menuCurrItem % 4; 
 	if (mod == 1) {
 		$('.btn-option a').removeClass('active');
 		$('#btn-play a').addClass('active');
 	} else if (mod == 2) {
 		$('.btn-option a').removeClass('active');		
 		$('#btn-delete a').addClass('active');
-	} else if (mod == 0) {
+	} else if (mod == 3) {
+		$('.btn-option a').removeClass('active');		
+		$('#btn-close a').addClass('active');
+	}else if (mod == 0) {
 		$('.btn-option a').removeClass('active');		
 		$('#btn-suggest a').addClass('active');
-	}
+	} 
 }
 
 /**
 Selects underlined item in the menu.. must be scrolling
 */
 function select() {
-	var mod = menuCurrItem % 3; 
+	var mod = menuCurrItem % 4; 
 	if (mod == 1) {
 		$.when(getFullSentence($('#uid').text().trim(), $('#translation').text().trim().toLowerCase())).done(function() {
 			play($('#translation').text());
 		});
 	} else if (mod == 2) {
 		backspace();
+
+	} else if (mod == 3) {
+		toggleMenu();
 	} else if (mod == 0) {
 		takeSuggestion();
 	}
@@ -380,7 +394,13 @@ function append(morseCode, input) {
 	//console.log("variable string: " + morseDictionary[morseCode]);
 
 	if(morseDictionary[morseCode]) {
+		if(morseCode == MORSECODEMENU) {
+			$('#correspondingWord').text("Menu Opened");
+		} 
+			
 		$('#correspondingWord').text(morseDictionary[morseCode]);
+		
+		
 	}
 	
 
