@@ -386,10 +386,10 @@ function append(morseCode, input) {
 	return morseCode ;
 }
 
-function solidifyLetter() {
+/*function solidifyLetter() {
 	variableIndex++;
 	console.log(variableIndex);
-}
+}*/
 
 function resetRealTimeText() {
 
@@ -407,7 +407,7 @@ function resetTime() {
 		resetRealTimeText();
 		translate(false); 
 		//$('#text').append("/"); 
-		solidifyLetter(variableIndex);
+		//solidifyLetter(variableIndex);
 		
 		$(".progress-bar").css({	 
 			'background-color': '#3F51B5'
