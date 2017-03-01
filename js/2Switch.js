@@ -119,6 +119,7 @@ $(document).ready(function() {
 				timerRunning = false;
 				
 				resetProgressBar();
+
 			}
 			
 		});
@@ -465,14 +466,17 @@ function getMorse(char) {
 }
 
 function resetProgressBar() {
-	$(".progress-bar").stop();
+	//alert("stop");
+	$(".progress-bar").stop(true, false);
 	$(".progress-bar").css({	  
 		'background-color': '#4CAF50'
 	});
 
 	$(".progress-bar").animate({
 	    width: "0%"
-	}, 10);
+	}, 0);
+	$(".progress-bar").stop(true, false);
+
 
 	$("#progressText").text("Element Space");
 }
