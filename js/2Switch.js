@@ -208,7 +208,7 @@ function translate(needSpace) {
 }
 
 function translateLetter() {
-	$('#text').append("/");
+	//$('#text').append("/");
 	$('#translation').append(morseDictionary[word]);
 	getSuggestions();
 	word = "";
@@ -371,15 +371,15 @@ function append(morseCode, input) {
 	morseCode += input;
 	//console.log(morseDictionary[morseCode]);
 	
-	var string = $('#correspondingWord').text();
-	var constantString = string.substring(0, variableIndex);
+	//var string = $('#correspondingWord').text();
+	//var constantString = string.substring(0, variableIndex);
 
 	//console.log("constant string:" + constantString);
 
 	//console.log("variable string: " + morseDictionary[morseCode]);
 
 	if(morseDictionary[morseCode]) {
-		$('#correspondingWord').text(constantString + morseDictionary[morseCode]);
+		$('#correspondingWord').text(morseDictionary[morseCode]);
 	}
 	
 
@@ -404,20 +404,22 @@ function resetTime() {
 	timerRunning = true; 
 
 	timeouts.push(setTimeout(function() { 
+		resetRealTimeText();
 		translate(false); 
-		$('#text').append("/"); 
+		//$('#text').append("/"); 
 		solidifyLetter(variableIndex);
 		
 		$(".progress-bar").css({	 
 			'background-color': '#3F51B5'
 		});
 
+
 		$("#progressText").text("Character Space");
 	}, ESCS_DIVIDE));
 
 	timeouts.push(setTimeout(function() { 
 
-		resetRealTimeText();
+		
 		translate(true); 
 		//$('#text').append("_"); 
 
