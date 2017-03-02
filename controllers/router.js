@@ -23,10 +23,13 @@ module.exports = function(app, passport) {
         res.render('learn.ejs', {user: req.user});
     });
 
-
     app.get('/about', function(req, res){
         res.render('about.ejs', {user: req.user});
     });
+
+    app.get('/abbr', function(req, res) {
+        res.render('abbr.ejs', {user:req.user});
+    })
 
     // USER AUTHENTICATION ===============================================
 

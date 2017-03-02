@@ -76,7 +76,6 @@ var menuOpen = false;
 var timeoutId = 0;
 $(document).ready(function() {
 	$(".progress-bar").addClass("notransition");
-
 	var userId = $('#uid').text().trim()
 
 	$.get("/getAverageSpaces/" + userId, function(data) {
@@ -85,18 +84,11 @@ $(document).ready(function() {
 		WORD_SPACE = Number(JSON.stringify(data.aveWordSpace))
 		ESCS_DIVIDE = (EL_SPACE + CHAR_SPACE) / 2.0;
 		CSWS_DIVIDE = (CHAR_SPACE + WORD_SPACE) / 2.0;
-
-		console.log("el space: " + EL_SPACE);
-		console.log("char space: " + CHAR_SPACE);
-		console.log("word space: " + WORD_SPACE);
-		console.log("ESCSDIVIDE: " + ESCS_DIVIDE);
-		console.log("CSWSDIVIDE: " + CSWS_DIVIDE);
 	})
 	.then(function() {
 		$.get("/api/v1/getLanguage/" + userId, function(data) {
 			LANGUAGE = String(JSON.stringify(data.language));
 			LANGUAGE = LANGUAGE.slice(1, LANGUAGE.length-1)
-			//LANGUAGE = undefined;
 			console.log("language: " + LANGUAGE);
 
 		});
@@ -121,9 +113,7 @@ $(document).ready(function() {
 				timerRunning = false;
 				
 				resetProgressBar();
-
 			}
-			
 		});
 
 		document.addEventListener("keyup", function(event) { 
@@ -133,8 +123,6 @@ $(document).ready(function() {
 				}, WORD_SPACE);
 
 				if (event.which == DOT) {
-
-					//resetTime();
 					if(menuVisible) {
 						scroll();
 					} else {
@@ -146,7 +134,6 @@ $(document).ready(function() {
 						
 					}
 				} else if (event.which == DASH) {
-					//resetTime();				
 					if(menuVisible) {
 						select();
 					} else {
@@ -165,7 +152,6 @@ $(document).ready(function() {
 				} else {
 					menuOpen = true;
 				}
-
 				toggleMenu();	
 			}
 		});
@@ -175,9 +161,7 @@ $(document).ready(function() {
 		Add functions to buttons.
 		*/ 
 		$('#btn-play').click(function() {
-			$.when(getFullSentence(userId, $('#translation').text().trim().toLowerCase())).done(function() {
-				play($('#translation').text());
-			});
+			play($('#translation').text());
 		});
 
 		$('#btn-delete').click(function() {
@@ -191,6 +175,7 @@ $(document).ready(function() {
 		$('#btn-close').click(function() {
 			toggleMenu();
 		});
+
 		/*
 		Disables textarea default action.
 		*/
@@ -207,27 +192,12 @@ function translate(needSpace) {
 		$('#translation').append(morseDictionary[word]);
 	}
 	
-	
 	if(needSpace) {
 		$('#translation').append(" ");
 	}
 	
 	getSuggestions();	
 	word = "";
-}
-
-function translateLetter() {
-	//$('#text').append("/");
-	$('#translation').append(morseDictionary[word]);
-	getSuggestions();
-	word = "";
-}
-
-function translateWord() {
-	$('#text').append("_");
-	$('#translation').append(" ");
-	getSuggestions();
-	breakStarted = true
 }
 
 // PLAY //////////////////////////////////////////////////////////////////
@@ -238,10 +208,10 @@ function play(sentence) {
 	} else { 
 		responsiveVoice.speak(sentence);
 	}
-	
 }
 
 // BACKSPACE /////////////////////////////////////////////////////////////
+
 function backspace() {
 	console.log("backspace");
 	var str = $('#translation').text().trim();
@@ -251,40 +221,68 @@ function backspace() {
 	console.log(sliced);
 
 	$('#translation').text(sliced);
-
 }
-
 
 // TEXT SUGGESTIONS //////////////////////////////////////////////////////
 
 // Suggest words/phrases to the user depending on what they have written so far 
 function getSuggestions() {
-	var text = $('#translation').val().split("[")[0];
-	var url = "https://api.datamuse.com/sug?s=" + text 
-	$.get(url, function(data) {
-		if (data.length > 0) {
-			var topSuggestion = data[0].word;
+	var wordsWritten = $('#translation').val().split(" ");
+	var lastWord = wordsWritten[wordsWritten.length-1];
+	
+	if (lastWord != "") {
+		getSuggestion(lastWord.toLowerCase());
+	}
+}
 
-			var html = "<ul> <li> " + topSuggestion + "</li>"
-			for (var i = 1; i < data.length; i++) {
-				html += "<li> " + data[i].word + "</li>"
-			}
-			html += "<ul>"
-
-			$('#btn-suggest a').show();
-			$('#suggestionBox').html(topSuggestion)
+// If the word written is an abbreviation, then suggest the full version 
+// Otherwise, call the suggestions API to get a suggested word 
+function getSuggestion(word) {
+	var abbrUrl = "/checkAbbreviation/" + $('#uid').text().trim() + "/" + word;
+	$.get(abbrUrl).then(function(data) {
+		if (data.exists) {
+			showSuggestion(data.full);
 		} else {
-			$('#btn-suggest a').hide()
-			$('#suggestionBox').html("  ")
+			var suggUrl = "https://api.datamuse.com/sug?s=" + word 
+			$.get(suggUrl, function(data) {
+				if (data.length > 0) {
+					showSuggestion(data[0].word);
+				} else {
+					hideSuggestion();
+				}
+			});
 		}
-	});
+    });
+}
+
+function showSuggestion(sugg) {
+	$('#btn-suggest a').show();
+	$('#suggestionBox').html(sugg)
+}
+
+function hideSuggestion() {
+	$('#btn-suggest a').hide()
+	$('#suggestionBox').html("  ")	
 }
 
 function takeSuggestion() {
-	var sentence = $('#suggestionBox').text().toUpperCase() + " ";
-	$('#translation').text(sentence);
-	//$('#text').text(getMorseTranslation(sentence));
-	play(sentence);
+	// get the words already written in the sentence box 
+	var wordsWritten = $('#translation').val().trim().split(" ");
+
+	// since the suggestion corresponds to just the late word, take everything 
+	// else to go in the new sentence 
+	var allButLastWord = wordsWritten.slice(0, -1);
+	var newSentence = allButLastWord.join(" ");
+	if (allButLastWord.length > 1) {
+		newSentence += " ";
+	}
+
+	// get the suggested word and add it to the new sentence 
+	var suggestedWord = $('#suggestionBox').text().toUpperCase();
+	newSentence += suggestedWord + " "; 
+
+	// update the textbox with the new sentence
+	$('#translation').text(newSentence);
 }
 
 // MENU //////////////////////////////////////////////////////////////////
@@ -335,47 +333,14 @@ Selects underlined item in the menu.. must be scrolling
 function select() {
 	var mod = menuCurrItem % 4; 
 	if (mod == 1) {
-		$.when(getFullSentence($('#uid').text().trim(), $('#translation').text().trim().toLowerCase())).done(function() {
-			play($('#translation').text());
-		});
+		play($('#translation').text());
 	} else if (mod == 2) {
 		backspace();
-
 	} else if (mod == 3) {
 		toggleMenu();
 	} else if (mod == 0) {
 		takeSuggestion();
 	}
-}
-
-// ABBREVIATIONS /////////////////////////////////////////////////////////
-
-// Translate the written sentence into a sentence containing the full-length versions of the abbreviations 
-function getFullSentence(uid, sentence) {
-	var defer = $.Deferred();
-
-    var promises = sentence.split(" ").map(function(word, i) {
-        return getFullWord(uid, word);
-    });
-
-    $.when.apply($, promises).then(function() { 
-        var results = Array.prototype.slice.call(arguments);
-        var text = results.join(" ");
-        $('#translation').text(text);
-		defer.resolve();
-    });
-
-	return defer.promise();
-}
-
-// Get the full-length version of an abbreviation 
-function getFullWord(uid, word) {
-    return $.get("/checkAbbreviation/" + uid + "/" + word).then(function(data) {
-		if (data.exists) {
-			word = data.full;
-		}
-        return word.toUpperCase();
-    });
 }
 
 // HELPER FUNCTIONS //////////////////////////////////////////////////////
@@ -384,14 +349,6 @@ function getFullWord(uid, word) {
 function append(morseCode, input) {
 	$('#text').append(input);
 	morseCode += input;
-	//console.log(morseDictionary[morseCode]);
-	
-	//var string = $('#correspondingWord').text();
-	//var constantString = string.substring(0, variableIndex);
-
-	//console.log("constant string:" + constantString);
-
-	//console.log("variable string: " + morseDictionary[morseCode]);
 
 	if(morseDictionary[morseCode]) {
 		if(morseCode == MORSECODEMENU) {
@@ -399,21 +356,12 @@ function append(morseCode, input) {
 		} 
 			
 		$('#correspondingWord').text(morseDictionary[morseCode]);
-		
-		
 	}
 	
-
 	return morseCode ;
 }
 
-/*function solidifyLetter() {
-	variableIndex++;
-	console.log(variableIndex);
-}*/
-
 function resetRealTimeText() {
-
 	$('#text').text('');
 	$('#correspondingWord').text('');
 	variableIndex = 0;
@@ -434,13 +382,10 @@ function resetTime() {
 			'background-color': '#3F51B5'
 		});
 
-
 		$("#progressText").text("Character Space");
 	}, ESCS_DIVIDE));
 
 	timeouts.push(setTimeout(function() { 
-
-		
 		translate(true); 
 		//$('#text').append("_"); 
 
@@ -450,39 +395,6 @@ function resetTime() {
 
 		$("#progressText").text("Word Space");
 	}, CSWS_DIVIDE));
-}
-
-function determineSpaceType(ms) {
-	if(ms < ESCSDIVIDE) {
-		return "es";
-	} else if(ms >= ESCSDIVIDE && ms < CSWSDIVIDE) {
-		return "cs";
-	} else {
-		return "ws";
-	}
-}
-
-function getMorseTranslation(sentence) {
-	var morse = ""
-	for (var i = 0; i < sentence.length; i++) {
-		var char = sentence[i];
-		if (char == " ") {
-			morse += "_"
-		} else {
-			morse += getMorse(char) + "/";
-		}
-	}
-	return morse
-}
-
-function getMorse(char) {
-	for (var key in morseDictionary) {
-		var val = morseDictionary[key];
-		if (val == char) {
-			return key;
-		}
-	}
-	return "ERROR";
 }
 
 function resetProgressBar() {
@@ -497,10 +409,5 @@ function resetProgressBar() {
 	}, 0);
 	$(".progress-bar").stop(true, false);
 
-
 	$("#progressText").text("Element Space");
-}
-
-function flipStr(str) {
-	return str.split('').reverse().join('').trim();
 }

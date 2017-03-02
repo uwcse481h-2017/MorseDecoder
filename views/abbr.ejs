@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>Morse Decoder</title>
+
+    <!-- BOOTSTRAP --> 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <!-- PERSONAL -->
+    <!-- CSS --> 
+    <link rel="stylesheet" type="text/css" href="../css/main.css"/>
+    <!-- ICON -->
+    <link rel="shortcut icon" href="../data/logo_square_fill.png">
+</head>
+
+<body>    
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                Menu <i class="fa fa-bars"></i>
+            </button>
+            <% if(locals.user){ %>
+                <a class="navbar-brand" href="/switch">Morse Decoder</a>
+            <% } else{ %>  
+                <a class="navbar-brand" href="/">Morse Decoder</a>  
+            <% } %>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="nav navbar-nav navbar-left">
+                <li><a href="/learn">Learn Morse Code</a></li>
+                <li><a href="/about">About</a></li>
+            </div>
+            <% if(locals.user){ %>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i><%= user.general.username %> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/profile">My Profile</a></li>                        
+                            <li><a href="/signout">Sign Out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            <% } else{ %>  
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/signin">Sign In</a>
+                    </li>
+                    <li>
+                        <a href="/signup">Sign Up</a>
+                    </li>
+                </ul>
+            <% } %>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h1> abbreviation </h1>
+        <h3> noun </h3> 
+        <ol>
+            <li> a shortened or contracted form of a word or phrase </li> 
+            <li> a shortcut for expressing what it is you want to communicate </li> 
+            <li> <b> MorseDecoder's </b> way of making it easier for you to say what you want to say in an efficient manner </li>
+            <li> a feature that makes <b> MorseDecoder </b> more customizable for you</li>
+        </ol>
+        
+        <h2> How to Create Abbreviations </h3>
+        <p> Morse Decoder allows you to </p>
+
+        <h2> How to Delete Abbreviations </h3>
+        <h2> How to Use Abbreviations </h3>
+        
+    </div>
+</div>
+
+</body>
+</html>
