@@ -34,33 +34,57 @@
 </head>
 
 <!-- Navigation Bar -->
-<nav class="navbar nav navbar-default navbar-custom navbar-fixed-top">
-	<div class="container-fluid">
-		<!-- Brand and toggle get grouped for better mobile display -->
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span>
-				Menu <i class="fa fa-bars"></i>
-			</button>
-			<a class="navbar-brand" href="/">Morse Decoder</a>
-		</div>
-		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<div class="nav navbar-nav navbar-left">
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                Menu <i class="fa fa-bars"></i>
+            </button>
+            <% if(locals.user){ %>
+                <a class="navbar-brand" href="/switch">Morse Decoder</a>
+            <% } else{ %>  
+                <a class="navbar-brand" href="/">Morse Decoder</a>  
+            <% } %>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="nav navbar-nav navbar-left">
                 <li><a href="/learn">Learn Morse Code</a></li>
                 <li><a href="/about">About</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Features<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Calibration</a></li>
+                        <li><a href="/abbr">Abbreviations</a></li>
+                        <li><a href="#">Menu Code</a></li>
+                    </ul>
+                </li>
             </div>
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i><%= user.general.username %> <span class="caret"></span></a>
-				<ul class="dropdown-menu">
-					<li><a href="/profile">My Profile</a></li>                    
-					<li><a href="/signout">Sign Out</a></li>
-				</ul>
-			</li>
-			</ul>
-		</div>
-	</div>
+            <% if(locals.user){ %>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i><%= user.general.username %> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/profile">My Profile</a></li>                        
+                            <li><a href="/signout">Sign Out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            <% } else{ %>  
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/signin">Sign In</a>
+                    </li>
+                    <li>
+                        <a href="/signup">Sign Up</a>
+                    </li>
+                </ul>
+            <% } %>
+        </div>
+    </div>
 </nav>
 
 <body>
@@ -71,7 +95,6 @@
 <% } %>
 
 <div class="container-fluid content">
-
 	<div class="row">
 		<div class="col-md-12">
 			<div class="progress">
@@ -83,11 +106,13 @@
 	<div class="row">
 		<div class="col-xs-6">
 			<label for="text">Morse Input</label>
-			<textarea id="text" class="form-control custom-control" rows="1" style="resize:none"></textarea>  
+			<!--<textarea id="text" class="form-control custom-control" rows="1" style="resize:none"></textarea>  -->
+			<div id="text"></div>
 		</div>
 		<div class="col-xs-6">
-			<label for="correspondingWord">Corresponding Word</label>
-			<textarea id="correspondingWord" class="form-control custom-control" rows="1" style="resize:none"></textarea>  
+			<label for="correspondingWord">Corresponding</label>
+			<!--<textarea id="correspondingWord" class="form-control custom-control" rows="1" style="resize:none"></textarea>  -->
+			<div id="correspondingWord"></div>
 		</div>
 	</div>
 	<div class="row">
@@ -110,7 +135,6 @@
 					<li id="btn-delete" class="text-center btn-option"><a href="#">Delete</a></li>
 					<li id="btn-close" class="text-center btn-option"><a href="#">Close Menu</a></li>
 					<li id="btn-suggest" class="text-center btn-option"><a href="#" style="display: none;">Take Top Suggestion</a></li>
-
 				</ul>
 			</div>
 		</div>

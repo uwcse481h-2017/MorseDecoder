@@ -21,7 +21,7 @@ $(document).ready(function() {
             var row = '<tr> <td> <span class="index">' + (i+1) + '</span> </td> <td class="aid" style="display: none">' + d._id + '</td> <td>' + d.abbr + '</td> <td>' + d.full + '</td> <td> <i class="fa fa-minus-square" aria-hidden="true"></i> </td> </tr>'
             html += row
         }
-        var form = '<tr> <td> <span class="index">' + (data.length+1) + '</span> </td> <td style="display: none"> </td> <td> <input id="abbr" type="text" class="form-control" placeholder="New Abbreviated Phrase"> </td> <td> <input id="full" class="form-control" placeholder="New Full Phrase"> </td> <td> <i class="fa fa-plus-square" aria-hidden="true"></i> </td> </tr>';
+        var form = '<tr> <td> <span class="index">' + (data.length+1) + '</span> </td> <td style="display: none"> </td> <td> <input id="abbr" type="text" class="form-control" placeholder="Abbreviation"> </td> <td> <input id="full" class="form-control" placeholder="Full Term"> </td> <td> <i class="fa fa-plus-square" aria-hidden="true"></i> </td> </tr>';
         html += form;
         $('#abbrTableBody').html(html);
     });
@@ -93,7 +93,7 @@ $(document).ready(function() {
                 var newRow = '<tr> <td> <span class="index">' + (index+1) + '</span> </td> <td class="aid" style="display: none">' + res._id + '</td> <td>' + abbr + '</td> <td>' + full + '</td> <td> <i class="fa fa-minus-square" aria-hidden="true"></i> </td> </tr>';
                 $('#abbrTable').append(newRow);
                 
-                var form = '<tr> <td> <span class="index">' + (index+2) + '</span> </td> <td style="display: none"> </td> <td> <input id="abbr" type="text" class="form-control" placeholder="New Abbreviated Phrase"> </td> <td> <input id="full" class="form-control" placeholder="New Full Phrase"> </td> <td> <i class="fa fa-plus-square" aria-hidden="true"></i> </td> </tr>';
+                var form = '<tr> <td> <span class="index">' + (index+2) + '</span> </td> <td style="display: none"> </td> <td> <input id="abbr" type="text" class="form-control" placeholder="Abbreviation"> </td> <td> <input id="full" class="form-control" placeholder="Full Term"> </td> <td> <i class="fa fa-plus-square" aria-hidden="true"></i> </td> </tr>';
                 $('#abbrTable').append(form);
             },
             error: function(xhr, ajaxOptions, thrownError) {

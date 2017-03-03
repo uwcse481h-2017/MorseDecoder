@@ -20,6 +20,7 @@
     <!-- PERSONAL -->
     <!-- CSS --> 
     <link rel="stylesheet" type="text/css" href="../css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/abbr.css"/>
     <!-- ICON -->
     <link rel="shortcut icon" href="../data/logo_square_fill.png">
 </head>
@@ -47,6 +48,14 @@
             <div class="nav navbar-nav navbar-left">
                 <li><a href="/learn">Learn Morse Code</a></li>
                 <li><a href="/about">About</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Features<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Calibration</a></li>
+                        <li><a href="/abbr">Abbreviations</a></li>
+                        <li><a href="#">Menu Code</a></li>
+                    </ul>
+                </li>
             </div>
             <% if(locals.user){ %>
                 <ul class="nav navbar-nav navbar-right">
@@ -80,15 +89,38 @@
             <li> a shortened or contracted form of a word or phrase </li> 
             <li> a shortcut for expressing what it is you want to communicate </li> 
             <li> <b> MorseDecoder's </b> way of making it easier for you to say what you want to say in an efficient manner </li>
-            <li> a feature that makes <b> MorseDecoder </b> more customizable for you</li>
         </ol>
         
-        <h2> How to Create Abbreviations </h3>
-        <p> Morse Decoder allows you to </p>
+        <h2> Adding and Deleting Abbreviations </h2>
+        <div class="row">
+            <div class="col-md-12">
+                <p> Morse Decoder allows you to further customize your communication needs by creating abbreviations. </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <img class="phoneImg" src="../data/phone_myprofile.png"/>
+            </div>
+            <div class="col-md-4">
+                <img class="phoneImg" src="../data/phone_abbrs.png"/>
+            </div>
+            <div class="col-md-4">
+                <p> Navigate to your "My Profile" page to add and delete abbreviations. </p>
+                <p> Add an abbreviation by writing an abbreviated/full-term word or phrase combination and clicking on the plus button. </p>
+                <p> Delete an abbreviation by clicking the minus button by the appropriate combo. </p>
+            </div>
+        </div>
 
-        <h2> How to Delete Abbreviations </h3>
-        <h2> How to Use Abbreviations </h3>
-        
+        <h2> Using Abbreviations </h2>
+        <div class="row"> 
+            <div class="col-md-4">
+                <img class="phoneImg" src="../data/phone_use.png"/>
+            </div>
+            <div class="col-md-8">
+                <p> After you have created an abbreviation, Morse Decoder will recognize them when you write the out. </p>
+                <p> The full-term version will appear as your top suggestion. To replace the abbreviated version with the full-term version, activate the "Take Top Suggestion" button in the menu. </p>
+            </div>
+        </div> 
     </div>
 </div>
 

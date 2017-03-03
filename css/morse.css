@@ -53,6 +53,11 @@
 }
 
 #text, #correspondingWord {
-  /*text-align: center;*/
-  font-size: 24pt !important;
+  height: 100px;
+  text-align: center;
+  font-size: 46pt !important;
+  padding: 10px;
+  background-color: #eee; 
+  border-radius: 4px;
+  /*border: 1px solid #ccc;*/
 }
