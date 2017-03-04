@@ -64,7 +64,7 @@ var menuCurrItem = -1;
 var items = $('.menuItem');
 
 // Keep track of word 
-var word = ""
+var word = "";
 
 // Keep track of backspacing
 var menuOpen = false;
@@ -74,6 +74,7 @@ var suggestionAvailable = false;
 
 $(document).ready(function() {
 	$(".progress-bar").addClass("notransition");
+	
 	$.get("/getAverageSpaces/" + $('#uid').text().trim(), function(data) {
 		EL_SPACE = Number(JSON.stringify(data.aveElSpace))
 		CHAR_SPACE = Number(JSON.stringify(data.aveCharSpace))
@@ -112,26 +113,26 @@ $(document).ready(function() {
 				if (!menuVisible) {
 					startProgressBar();
 				}
-			}
 
-			if (event.which == DOT) {
-				if(menuVisible) {
-					scroll();
-				} else {
-					word = append(word, ".");
-					breakStarted = false;
-					if(!menuOpen) {
-						resetTime();
+				if (event.which == DOT) {
+					if(menuVisible) {
+						scroll();
+					} else {
+						word = append(word, ".");
+						breakStarted = false;
+						if(!menuOpen) {
+							resetTime();
+						}
 					}
-				}
-			} else if (event.which == DASH) {
-				if(menuVisible) {
-					select();
-				} else {
-					word = append(word, "-");
-					breakStarted = false;
-					if(!menuOpen) {
-						resetTime();
+				} else if (event.which == DASH) {
+					if(menuVisible) {
+						select();
+					} else {
+						word = append(word, "-");
+						breakStarted = false;
+						if(!menuOpen) {
+							resetTime();
+						}
 					}
 				}
 			}
