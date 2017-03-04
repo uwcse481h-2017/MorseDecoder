@@ -41,8 +41,6 @@ var morseDictionary = {
 // Switch constants 
 var DOT = 32;
 var DASH = 13; 
-var MENU = 39;
-var BACKSPACE = 9;
 var MORSECODEMENU = "----";
 
 // User's timing for different spacing 
@@ -58,7 +56,6 @@ var LANGUAGE = "UK English Female";
 // Timing variables 
 var spaceTimer = null;
 var timerRunning = false;
-var morseCode = "";
 var timeouts = [];
 
 // Menu variables 
@@ -68,17 +65,16 @@ var items = $('.menuItem');
 
 // Keep track of word 
 var word = ""
-var variableIndex = 0;
 
 // Keep track of backspacing
 var menuOpen = false;
 
-var timeoutId = 0;
+// Keep track of whether suggestion is showing 
+var suggestionAvailable = false;
+
 $(document).ready(function() {
 	$(".progress-bar").addClass("notransition");
-	var userId = $('#uid').text().trim()
-
-	$.get("/getAverageSpaces/" + userId, function(data) {
+	$.get("/getAverageSpaces/" + $('#uid').text().trim(), function(data) {
 		EL_SPACE = Number(JSON.stringify(data.aveElSpace))
 		CHAR_SPACE = Number(JSON.stringify(data.aveCharSpace))
 		WORD_SPACE = Number(JSON.stringify(data.aveWordSpace))
@@ -86,7 +82,7 @@ $(document).ready(function() {
 		CSWS_DIVIDE = (CHAR_SPACE + WORD_SPACE) / 2.0;
 	})
 	.then(function() {
-		$.get("/api/v1/getLanguage/" + userId, function(data) {
+		$.get("/api/v1/getLanguage/" + $('#uid').text().trim(), function(data) {
 			LANGUAGE = (String(JSON.stringify(data.language))).slice(1, -1);
 		});
 	})
@@ -114,9 +110,7 @@ $(document).ready(function() {
 		document.addEventListener("keyup", function(event) { 
 			if (event.which == DOT || event.which == DASH) {
 				if (!menuVisible) {
-					$(".progress-bar").animate({
-						width: "100%"
-					}, WORD_SPACE);
+					startProgressBar();
 				}
 			}
 
@@ -227,12 +221,14 @@ function getSuggestion(word) {
 
 function showSuggestion(sugg) {
 	$('#btn-suggest a').show();
-	$('#suggestionBox').html(sugg)
+	$('#suggestionBox').html(sugg);
+	suggestionAvailable = true;
 }
 
 function hideSuggestion() {
-	$('#btn-suggest a').hide()
-	$('#suggestionBox').html("  ")	
+	$('#btn-suggest a').hide();
+	$('#suggestionBox').html("  ");
+	suggestionAvailable = false;
 }
 
 function takeSuggestion() {
@@ -256,6 +252,12 @@ function takeSuggestion() {
 }
 
 // PROGRESS BAR //////////////////////////////////////////////////////////
+
+function startProgressBar() {
+	$(".progress-bar").animate({
+		width: "100%"
+	}, WORD_SPACE);
+}
 
 function resetProgressBar() {
 	$(".progress-bar").stop(true, false);
@@ -307,7 +309,6 @@ function resetTime() {
 function resetRealTimeText() {
 	$('#text').text('');
 	$('#correspondingWord').text('');
-	variableIndex = 0;
 }
 
 // MENU //////////////////////////////////////////////////////////////////
@@ -326,30 +327,27 @@ function closeMenu() {
 	menuCurrItem = -1;
 
 	resetTime();
-	$(".progress-bar").animate({
-		width: "100%"
-	}, WORD_SPACE);
+	startProgressBar();
 }
 
 /**
 Scrolls through the menu
 */
 function scroll() {
-	if(menuCurrItem == items.length) {
-		menuCurrItem = 0;
-	}
 	menuCurrItem++;
 
-	var mod = menuCurrItem % 4; 
+	// with suggestion, there are 4 menu items; otherwise, there are just 3
+	var mod = suggestionAvailable ? menuCurrItem % 4 : menuCurrItem % 3; 
+	
 	if (mod == 0) {
-		$('.btn-option a').removeClass('active');
-		$('#btn-play a').addClass('active');
-	} else if (mod == 1) {
-		$('.btn-option a').removeClass('active');		
-		$('#btn-delete a').addClass('active');
-	} else if (mod == 2) {
 		$('.btn-option a').removeClass('active');		
 		$('#btn-close a').addClass('active');
+	} else if (mod == 1) {
+		$('.btn-option a').removeClass('active');
+		$('#btn-play a').addClass('active');
+	} else if (mod == 2) {
+		$('.btn-option a').removeClass('active');		
+		$('#btn-delete a').addClass('active');
 	}else if (mod == 3) {
 		$('.btn-option a').removeClass('active');		
 		$('#btn-suggest a').addClass('active');
@@ -360,13 +358,15 @@ function scroll() {
 Selects underlined item in the menu.. must be scrolling
 */
 function select() {
-	var mod = menuCurrItem % 4; 
+	// with suggestion, there are 4 menu items; otherwise, there are just 3
+	var mod = suggestionAvailable ? menuCurrItem % 4 : menuCurrItem % 3; 
+
 	if (mod == 0) {
-		play($('#translation').text());
-	} else if (mod == 1) {
-		backspace();
-	} else if (mod == 2) {
 		closeMenu();
+	} else if (mod == 1) {
+		play($('#translation').text());
+	} else if (mod == 2) {
+		backspace();
 	} else if (mod == 3) {
 		takeSuggestion();
 	}
