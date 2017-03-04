@@ -98,24 +98,34 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="progress">
-				<div id="progressText" class="progress-bar progress-bar-success" role="progressbar" style="width:0%">
+				<div id="progressText" class="progress-bar" role="progressbar" style="width:0%">
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="row">
+		<div class="col-md-12">
+			<div id="progressKey">
+				<div class="keyBox" id="elKey"></div>
+				<div class="keyLabel"><p>Element Space</p></div>
+				<div class="keyBox" id="charKey"></div>
+				<div class="keyLabel"><p>Character Space</p></div>
+				<div class="keyBox" id="wordKey"></div>
+				<div class="keyLabel"><p>Word Space</p></div>			
+			</div>
+		</div>
+	</div>
+	<div class="row input">
 		<div class="col-xs-6">
 			<label for="text">Morse Input</label>
-			<!--<textarea id="text" class="form-control custom-control" rows="1" style="resize:none"></textarea>  -->
 			<div id="text"></div>
 		</div>
 		<div class="col-xs-6">
 			<label for="correspondingWord">Corresponding</label>
-			<!--<textarea id="correspondingWord" class="form-control custom-control" rows="1" style="resize:none"></textarea>  -->
 			<div id="correspondingWord"></div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row input">
 		<div class="col-md-12">
 			<div id="translationWrapper">
 				<label for="translation">Sentence</label>
@@ -124,8 +134,9 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row input">
 		<div class="col-md-12">
+			<p class="text-muted text-very-muted">Open the menu with 4 dashes</p>
 			<div id="menu-btn"  class="btn-group">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				Menu Options <span class="caret"></span>
@@ -139,7 +150,6 @@
 			</div>
 		</div>
 	</div>
-
 </div>
 
 <!-- Footer -->

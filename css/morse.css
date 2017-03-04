@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 #menu-btn {
-  margin-top: 10px;
   width: 100%;
 }
 
@@ -60,4 +59,82 @@
   background-color: #eee; 
   border-radius: 4px;
   /*border: 1px solid #ccc;*/
+}
+
+.input {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.text-very-muted {
+  font-style: italic; 
+  font-size: 10pt;
+}
+
+.progress {
+  margin-bottom: 0;
+}
+
+#progressKey {
+  text-align: center;
+    padding: 10px;
+    font-size: 10pt;
+    border: 1px solid #ccc;
+    width: 500px;
+    margin: 10px auto;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #eee;
+}
+
+.keyBox {
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
+
+.keyLabel {
+  display: inline-block;
+  margin-right: 15px;
+  height: 10px;
+}
+
+#elKey {
+  background-color: #4CAF50;
+}
+
+#charKey {
+  background-color: #3F51B5;
+}
+
+#wordKey {
+  background-color: #F44336;
+}
+
+@media only screen and (max-width: 768px) {
+  #progressKey {
+      font-size: 8pt;
+      width: 100%;
+  }
+
+  .keyBox {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+  }
+
+  .keyLabel {
+    display: inline-block;
+    margin-right: 15px;
+    height: 10px;
+  }
+
+  .input {
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+
+  #text, #correspondingWord {
+      height: 80px;
+      font-size: 28pt !important;
+  }
 }
