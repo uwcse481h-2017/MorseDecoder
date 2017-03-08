@@ -73,9 +73,6 @@ var word = "";
 // Keep track of backspacing
 var menuOpen = false;
 
-// Keep track of whether suggestion is showing 
-var suggestionAvailable = false;
-
 $(document).ready(function() {
 	$(".progress-bar").addClass("notransition");
 	
@@ -179,7 +176,7 @@ $(document).ready(function() {
 // TRANSLATION ///////////////////////////////////////////////////////////
 
 function translate() {
-	if(word != (PLAY || DELETE || SUGGEST)) {
+	if(word != (DELETE || SUGGEST)) {
 		$('#translation').append(morseDictionary[word]);
 	}
 	getSuggestions();	
@@ -193,14 +190,12 @@ function play(sentence) {
 }
 
 function playCurrentText() {
-	console.log('playing curr tet')
 	play($('#translation').text());
 }
 
 // BACKSPACE /////////////////////////////////////////////////////////////
 
 function backspace() {
-	console.log('deleting')
 	$('#translation').text($('#translation').text().slice(0, -1));
 }
 
@@ -242,17 +237,13 @@ function getSuggestion(word) {
 }
 
 function showSuggestion(sugg) {
-	// $('#btn-suggest a').show();
 	$('#btn-suggest').removeClass('disabled');
 	$('#suggestionBox').html(sugg);
-	suggestionAvailable = true;
 }
 
 function hideSuggestion() {
-	// $('#btn-suggest a').hide();
 	$('#btn-suggest').addClass('disabled');
 	$('#suggestionBox').html("  ");
-	suggestionAvailable = false;
 }
 
 function takeSuggestion() {
@@ -334,72 +325,6 @@ function resetTime() {
 function resetRealTimeText() {
 	$('#text').text('');
 	$('#correspondingWord').text('');
-}
-
-// MENU //////////////////////////////////////////////////////////////////
-
-function openMenu() {
-	menuVisible = true;		
-	$('#menu-btn').addClass('open');
-
-	resetProgressBar();
-}
-
-function closeMenu() {
-	menuVisible = false;
-	$('#menu-btn').removeClass('open');
-	$('.btn-option a').removeClass('active');
-	menuCurrItem = -1;
-
-	resetTime();
-	startProgressBar();
-}
-
-/**
-Scrolls through the menu
-*/
-function scroll() {
-	menuCurrItem++;
-
-	// with suggestion, there are 4 menu items; otherwise, there are just 3
-	var mod = suggestionAvailable ? menuCurrItem % 5 : menuCurrItem % 4; 
-	
-	if (mod == 0) {
-		$('.btn-option a').removeClass('active');		
-		$('#btn-close a').addClass('active');
-	} else if (mod == 1) {
-		$('.btn-option a').removeClass('active');
-		$('#btn-play a').addClass('active');
-	} else if (mod == 2) {
-		$('.btn-option a').removeClass('active');		
-		$('#btn-delAll a').addClass('active');
-	} else if (mod == 3) {
-		$('.btn-option a').removeClass('active');		
-		$('#btn-delete a').addClass('active');
-	} else if (mod == 4) {
-		$('.btn-option a').removeClass('active');		
-		$('#btn-suggest a').addClass('active');
-	} 
-}
-
-/**
-Selects underlined item in the menu.. must be scrolling
-*/
-function select() {
-	// with suggestion, there are 4 menu items; otherwise, there are just 3
-	var mod = suggestionAvailable ? menuCurrItem % 5 : menuCurrItem % 4; 
-
-	if (mod == 0) {
-		closeMenu();
-	} else if (mod == 1) {
-		play($('#translation').text());
-	} else if (mod == 2) {
-		deleteAll();
-	} else if (mod == 3) {
-		backspace();
-	} else if (mod == 4) {
-		takeSuggestion();
-	}
 }
 
 // HELPER FUNCTIONS //////////////////////////////////////////////////////
