@@ -163,6 +163,10 @@ $(document).ready(function() {
 			closeMenu();
 		});
 
+		$('#btn-delAll').click(function() {
+			deleteAll();
+		});
+
 		/*
 		Disables textarea default action.
 		*/
@@ -198,6 +202,11 @@ function playCurrentText() {
 function backspace() {
 	console.log('deleting')
 	$('#translation').text($('#translation').text().slice(0, -1));
+}
+
+// Delete All /////////////////////////////////////////////////////////////
+function deleteAll() {
+	$('#translation').text('');
 }
 
 // TEXT SUGGESTIONS //////////////////////////////////////////////////////
@@ -353,7 +362,7 @@ function scroll() {
 	menuCurrItem++;
 
 	// with suggestion, there are 4 menu items; otherwise, there are just 3
-	var mod = suggestionAvailable ? menuCurrItem % 4 : menuCurrItem % 3; 
+	var mod = suggestionAvailable ? menuCurrItem % 5 : menuCurrItem % 4; 
 	
 	if (mod == 0) {
 		$('.btn-option a').removeClass('active');		
@@ -363,8 +372,11 @@ function scroll() {
 		$('#btn-play a').addClass('active');
 	} else if (mod == 2) {
 		$('.btn-option a').removeClass('active');		
+		$('#btn-delAll a').addClass('active');
+	} else if (mod == 3) {
+		$('.btn-option a').removeClass('active');		
 		$('#btn-delete a').addClass('active');
-	}else if (mod == 3) {
+	} else if (mod == 4) {
 		$('.btn-option a').removeClass('active');		
 		$('#btn-suggest a').addClass('active');
 	} 
@@ -375,15 +387,17 @@ Selects underlined item in the menu.. must be scrolling
 */
 function select() {
 	// with suggestion, there are 4 menu items; otherwise, there are just 3
-	var mod = suggestionAvailable ? menuCurrItem % 4 : menuCurrItem % 3; 
+	var mod = suggestionAvailable ? menuCurrItem % 5 : menuCurrItem % 4; 
 
 	if (mod == 0) {
 		closeMenu();
 	} else if (mod == 1) {
 		play($('#translation').text());
 	} else if (mod == 2) {
-		backspace();
+		deleteAll();
 	} else if (mod == 3) {
+		backspace();
+	} else if (mod == 4) {
 		takeSuggestion();
 	}
 }
