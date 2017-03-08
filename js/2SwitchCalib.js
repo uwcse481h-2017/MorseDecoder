@@ -190,9 +190,9 @@ function sendToServer(uid, spacetimeArr) {
 }
 
 function alertCalibration(es, cs, ws) {
-	$('#es').html(formatTime(es) + " secs");
-	$('#cs').html(formatTime(cs) + " secs");
-	$('#ws').html(formatTime(ws) + " secs");
+	$('#es').html(formatTime(es) + " ms");
+	$('#cs').html(formatTime(cs) + " ms");
+	$('#ws').html(formatTime(ws) + " ms");
 	
 	$('#calibrationInfo').modal('show'); 	
 }

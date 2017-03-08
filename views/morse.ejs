@@ -111,17 +111,18 @@
 				<div class="keyBox" id="charKey"></div>
 				<div class="keyLabel"><p>Character Space</p></div>
 				<div class="keyBox" id="wordKey"></div>
-				<div class="keyLabel"><p>Word Space</p></div>			
+				<div class="keyLabel"><p>Word Space</p></div>	
+				<a id="help" class="keyLabel" target="_blank" href="http://www.nu-ware.com/NuCode%20Help/index.html?morse_code_structure_and_timing_.htm"><i class="fa fa-question-circle" aria-hidden="true"></i></a>	
 			</div>
 		</div>
 	</div>
 	<div class="row input">
 		<div class="col-xs-6">
-			<label for="text">Morse Input</label>
+			<label for="text">Morse Code</label>
 			<div id="text"></div>
 		</div>
 		<div class="col-xs-6">
-			<label for="correspondingWord">Corresponding</label>
+			<label for="correspondingWord">Letter</label>
 			<div id="correspondingWord"></div>
 		</div>
 	</div>
@@ -134,7 +135,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row input">
+	<!--<div class="row input">
 		<div class="col-md-12">
 			<p class="text-muted text-very-muted text-center">Open the menu with 4 dashes</p>
 			<div id="menu-btn"  class="btn-group">
@@ -147,6 +148,25 @@
 					<li id="btn-delete" class="text-center btn-option"><a href="#">Delete</a></li>
 					<li id="btn-suggest" class="text-center btn-option"><a href="#" style="display: none;">Take Top Suggestion</a></li>
 				</ul>
+			</div>
+		</div>
+	</div>-->
+	<div class="row input">
+		<div class="col-md-12">
+			<div class="col-sm-4">
+				<button id="btn-play" class="btn btn-labeled btn-primary btn-wide">
+					<i class="fa fa-play" aria-hidden="true"></i> Play <span class="btn-label">---.</span>
+				</button>
+			</div>
+			<div class="col-sm-4">
+				<button id="btn-delete" class="btn btn-labeled btn-danger btn-wide">
+					<i class="fa fa-trash" aria-hidden="true"></i> Delete <span class="btn-label">----</span>
+					</button>
+			</div>
+			<div class="col-sm-4">
+				<button id="btn-suggest" class="btn btn-labeled btn-success btn-wide disabled">
+					<i class="fa fa-check" aria-hidden="true"></i> Take Top Suggestion <span class="btn-label">..--</span>
+				</button>
 			</div>
 		</div>
 	</div>

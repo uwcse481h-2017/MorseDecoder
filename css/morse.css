@@ -110,6 +110,31 @@
   background-color: #F44336;
 }
 
+#help {
+  float: right;
+}
+
+.btn-wide {
+  width: 100%;
+  text-align: left;
+}
+
+.btn-label {
+  margin: 0px;
+}
+
+.btn-label {
+  position: absolute;
+  right: 15px;
+  top: 0;
+  display: inline-block;
+  padding: 16px 25px;
+  background: rgba(0,0,0,0.15);
+}
+
+/*.btn-labeled {padding-top: 0;padding-bottom: 0;}*/
+.btn { margin-bottom:10px; }
+
 @media only screen and (max-width: 768px) {
   #progressKey {
       font-size: 8pt;

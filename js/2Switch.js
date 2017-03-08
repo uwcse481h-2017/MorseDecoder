@@ -35,13 +35,17 @@ var morseDictionary = {
 	"---..": "8",
 	"----.": "9",
 	"-----": "0",
-	"----" : openMenu
+	"---." : playCurrentText,
+	"----": backspace, 	
+	"..--": takeSuggestion
 };
 
 // Switch constants 
 var DOT = 32;
 var DASH = 13; 
-var MORSECODEMENU = "----";
+var PLAY = "---.";
+var DELETE = "----";
+var SUGGEST = "..--";
 
 // User's timing for different spacing 
 var EL_SPACE;
@@ -142,7 +146,7 @@ $(document).ready(function() {
 		Add functions to buttons.
 		*/ 
 		$('#btn-play').click(function() {
-			play($('#translation').text());
+			playCurrentText();
 		});
 
 		$('#btn-delete').click(function() {
@@ -150,7 +154,9 @@ $(document).ready(function() {
 		});
 
 		$('#btn-suggest').click(function() {
-			takeSuggestion();
+			if (!$('#btn-suggest').hasClass('disabled')) {
+				takeSuggestion();
+			}
 		});
 
 		$('#btn-close').click(function() {
@@ -169,7 +175,7 @@ $(document).ready(function() {
 // TRANSLATION ///////////////////////////////////////////////////////////
 
 function translate() {
-	if(word != MORSECODEMENU) {
+	if(word != (PLAY || DELETE || SUGGEST)) {
 		$('#translation').append(morseDictionary[word]);
 	}
 	getSuggestions();	
@@ -182,9 +188,15 @@ function play(sentence) {
 	responsiveVoice.speak(sentence, LANGUAGE);
 }
 
+function playCurrentText() {
+	console.log('playing curr tet')
+	play($('#translation').text());
+}
+
 // BACKSPACE /////////////////////////////////////////////////////////////
 
 function backspace() {
+	console.log('deleting')
 	$('#translation').text($('#translation').text().slice(0, -1));
 }
 
@@ -221,13 +233,15 @@ function getSuggestion(word) {
 }
 
 function showSuggestion(sugg) {
-	$('#btn-suggest a').show();
+	// $('#btn-suggest a').show();
+	$('#btn-suggest').removeClass('disabled');
 	$('#suggestionBox').html(sugg);
 	suggestionAvailable = true;
 }
 
 function hideSuggestion() {
-	$('#btn-suggest a').hide();
+	// $('#btn-suggest a').hide();
+	$('#btn-suggest').addClass('disabled');
 	$('#suggestionBox').html("  ");
 	suggestionAvailable = false;
 }
@@ -235,6 +249,7 @@ function hideSuggestion() {
 function takeSuggestion() {
 	// get the words already written in the sentence box 
 	var wordsWritten = $('#translation').val().trim().split(" ");
+	console.log(wordsWritten)
 
 	// since the suggestion corresponds to just the late word, take everything 
 	// else to go in the new sentence 
@@ -381,17 +396,23 @@ function append(morseCode, input) {
 	morseCode += input;
 
 	if(morseDictionary[morseCode]) {
-		if(morseCode == MORSECODEMENU) {
-			$('#correspondingWord').text("(MENU)");
-		} 
-		$('#correspondingWord').text(morseDictionary[morseCode]);
+		if (morseCode == PLAY) {
+			$('#correspondingWord').text("(PLAY)");
+		} else if (morseCode == DELETE) {
+			$('#correspondingWord').text("(DELETE)");
+		} else if (morseCode == SUGGEST) {
+			$('#correspondingWord').text("(SUGGEST)");
+		} else { 
+			$('#correspondingWord').text(morseDictionary[morseCode]);
+		}
 	}
 	
 	return morseCode;
 }
 
 function addSpace() {
-	if ($('#translation').slice(-1) != " ") {
+	var lastChar = $('#translation').val().slice(-1);
+	if (lastChar != " ") {
 		$('#translation').append(" ")
 	} 
 }
