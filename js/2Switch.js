@@ -37,6 +37,7 @@ var morseDictionary = {
 	"-----": "0",
 	"---." : playCurrentText,
 	"----": backspace, 	
+	".-.-": deleteAll,
 	"..--": takeSuggestion
 };
 
@@ -45,6 +46,7 @@ var DOT = 32;
 var DASH = 13; 
 var PLAY = "---.";
 var DELETE = "----";
+var CLEAR = ".-.-";
 var SUGGEST = "..--";
 
 // User's timing for different spacing 
@@ -176,9 +178,7 @@ $(document).ready(function() {
 // TRANSLATION ///////////////////////////////////////////////////////////
 
 function translate() {
-	if(word != (DELETE || SUGGEST)) {
-		$('#translation').append(morseDictionary[word]);
-	}
+	$('#translation').append(morseDictionary[word]);
 	getSuggestions();	
 	word = "";
 }
@@ -193,13 +193,13 @@ function playCurrentText() {
 	play($('#translation').text());
 }
 
-// BACKSPACE /////////////////////////////////////////////////////////////
+// DELETE  ///////////////////////////////////////////////////////////////
 
 function backspace() {
+	console.log('deletingc')
 	$('#translation').text($('#translation').text().slice(0, -1));
 }
 
-// Delete All /////////////////////////////////////////////////////////////
 function deleteAll() {
 	$('#translation').text('');
 }
@@ -339,6 +339,8 @@ function append(morseCode, input) {
 			$('#correspondingWord').text("(PLAY)");
 		} else if (morseCode == DELETE) {
 			$('#correspondingWord').text("(DELETE)");
+		} else if (morseCode == CLEAR) {
+			$('#correspondingWord').text("(CLEAR");
 		} else if (morseCode == SUGGEST) {
 			$('#correspondingWord').text("(SUGGEST)");
 		} else { 
