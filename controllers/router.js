@@ -31,6 +31,10 @@ module.exports = function(app, passport) {
         res.render('abbr.ejs', {user:req.user});
     })
 
+    app.get('/calibration', function(req, res) {
+        res.render('calibration.ejs', {user:req.user});
+    })
+
     app.get('/menucode', function(req, res) {
         res.render('menucode.ejs', {user:req.user});
     })
