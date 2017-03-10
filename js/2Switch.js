@@ -202,6 +202,7 @@ function backspace() {
 
 function deleteAll() {
 	$('#translation').text('');
+	$('#suggestionBox').text("TEXT SUGGESTION").toUpperCase();
 }
 
 // TEXT SUGGESTIONS //////////////////////////////////////////////////////
@@ -264,7 +265,10 @@ function takeSuggestion() {
 	newSentence += suggestedWord; 
 
 	// update the textbox with the new sentence
-	$('#translation').text(newSentence);
+	if(suggestedWord != "TEXT SUGGESTION") {
+		$('#translation').text(newSentence);
+	}
+	
 }
 
 // PROGRESS BAR //////////////////////////////////////////////////////////
@@ -340,7 +344,7 @@ function append(morseCode, input) {
 		} else if (morseCode == DELETE) {
 			$('#correspondingWord').text("(DELETE)");
 		} else if (morseCode == CLEAR) {
-			$('#correspondingWord').text("(CLEAR");
+			$('#correspondingWord').text("(CLEAR)");
 		} else if (morseCode == SUGGEST) {
 			$('#correspondingWord').text("(SUGGEST)");
 		} else { 
