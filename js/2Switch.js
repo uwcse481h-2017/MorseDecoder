@@ -198,6 +198,9 @@ function playCurrentText() {
 function backspace() {
 	console.log('deletingc')
 	$('#translation').text($('#translation').text().slice(0, -1));
+	if($('#translation').val().length == 0) {
+		$('#suggestionBox').text("TEXT SUGGESTION").toUpperCase();
+	}
 }
 
 function deleteAll() {
