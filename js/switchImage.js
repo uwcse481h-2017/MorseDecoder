@@ -6,11 +6,11 @@ $(document).ready(function(){
 });
 
 function over() {
-	document.getElementById("logo-img").src = "../data/home-color.png";
+	document.getElementById("logoImg").src = "../data/home-color.png";
 
 }
 
 function out() {
-	document.getElementById("logo-img").src = "../data/home.png";
+	document.getElementById("logoImg").src = "../data/home.png";
 
 }
