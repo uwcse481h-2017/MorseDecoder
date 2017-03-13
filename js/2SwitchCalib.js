@@ -49,6 +49,10 @@ var calibNum;
 var spaceTimerRunning = null;
 var spaceTimeArr = [];
 
+// Audio elements
+var dotAudio = document.createElement('audio');
+var dashAudio = document.createElement('audio');
+
 // Type of space
 var es = false;
 var cs = false;
@@ -58,6 +62,15 @@ var ws = false;
 var word = "";
 
 $(document).ready(function(){
+	// Preload audio elements 
+	dotAudio.src = './data/dot.wav'
+	dotAudio.preload='auto';
+	dotAudio.load();
+
+	dashAudio.src = './data/dash.wav'
+	dashAudio.preload='auto';
+	dashAudio.load();
+
 	var userId = $('#uid').text().trim()
 
 	calibNum = 0;
@@ -94,10 +107,12 @@ $(document).ready(function(){
 			word = append(word, ".");
 			start();
 			es = true;
+			playDotSound();
 		} else if (event.which == DASH) {
 			word = append(word, "-");
 			start();
 			es = true;
+			playDashSound();
 		} 
 
 		if (STRING.charAt(calibNum) == morseDictionary[word]) {
@@ -222,6 +237,18 @@ function reset() {
 	es = false;
 	cs = false;
 	ws = false;
+}
+
+// AUDIO /////////////////////////////////////////////////////////////////
+
+function playDotSound() {
+	var dotSound = dotAudio.cloneNode();
+	dotSound.play();
+}
+
+function playDashSound() {
+	var dashSound = dashAudio.cloneNode();
+	dashSound.play();
 }
 
 // HELPER FUNCTIONS //////////////////////////////////////////////////////

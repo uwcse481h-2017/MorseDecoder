@@ -69,6 +69,10 @@ var menuVisible = false;
 var menuCurrItem = -1;
 var items = $('.menuItem');
 
+// Audio elements
+var dotAudio = document.createElement('audio');
+var dashAudio = document.createElement('audio');
+
 // Keep track of word 
 var word = "";
 
@@ -76,6 +80,15 @@ var word = "";
 var menuOpen = false;
 
 $(document).ready(function() {
+	// Preload audio elements 
+	dotAudio.src = './data/dot.wav'
+	dotAudio.preload='auto';
+	dotAudio.load();
+
+	dashAudio.src = './data/dash.wav'
+	dashAudio.preload='auto';
+	dashAudio.load();
+
 	$(".progress-bar").addClass("notransition");
 	
 	$.get("/getAverageSpaces/" + $('#uid').text().trim(), function(data) {
@@ -107,6 +120,14 @@ $(document).ready(function() {
 					}
 					var spaceMs = spaceTimer.stop();
 					timerRunning = false;
+				}
+
+				if (event.which == DOT) {
+					playDotSound();
+				}
+
+				if (event.which == DASH) {
+					playDashSound();
 				}
 			}
 		});
@@ -332,6 +353,18 @@ function resetTime() {
 function resetRealTimeText() {
 	$('#text').text('');
 	$('#correspondingWord').text('');
+}
+
+// AUDIO /////////////////////////////////////////////////////////////////
+
+function playDotSound() {
+	var dotSound = dotAudio.cloneNode();
+	dotSound.play();
+}
+
+function playDashSound() {
+	var dashSound = dashAudio.cloneNode();
+	dashSound.play();
 }
 
 // HELPER FUNCTIONS //////////////////////////////////////////////////////
